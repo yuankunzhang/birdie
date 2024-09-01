@@ -154,7 +154,16 @@ macro_rules! endpoint {
     };
 }
 
+macro_rules! route {
+    ($route:ident, $endpoint:ty) => {
+        pub fn $route(&self) -> $endpoint {
+            <$endpoint>::new(self.client)
+        }
+    };
+}
+
 use endpoint;
+use route;
 
 pub fn serialize_option_vec<S, T>(v: &Option<Vec<T>>, s: S) -> Result<S::Ok, S::Error>
 where
