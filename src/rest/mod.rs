@@ -26,42 +26,89 @@ pub mod trade;
 pub mod vip_loans;
 pub mod wallet;
 
-use bytes::Bytes;
-use reqwest::{header::HeaderMap, Method, StatusCode};
+use reqwest::{Client, Method};
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
+use url::Url;
 
 use crate::errors::BinanceError;
+
+pub struct RestClient {
+    pub(self) client: Client,
+    pub(self) base_url: Url,
+    api_key: String,
+    secret_key: String,
+}
+
+impl RestClient {
+    pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, RestError> {
+        let base_url = Url::parse(base_url)?;
+        Ok(Self {
+            client: Client::new(),
+            base_url,
+            api_key: api_key.to_string(),
+            secret_key: secret_key.to_string(),
+        })
+    }
+
+    pub fn market(&self) -> market::Handler {
+        market::Handler::new(self)
+    }
+
+    pub(self) async fn request<P, R>(
+        &self,
+        method: Method,
+        endpoint: &str,
+        params: P,
+    ) -> Result<R, RestError>
+    where
+        P: Params,
+        R: Response,
+    {
+        let mut url = self.base_url.join(endpoint)?;
+        url.set_query(Some(&params.as_query()?));
+
+        let res = self.client.request(method, url).send().await?;
+        if res.status().is_success() {
+            Ok(res.json().await?)
+        } else {
+            let status = res.status().to_string();
+            let error = res.json::<BinanceError>().await.ok();
+            Err(RestError::Binance(status, error))
+        }
+    }
+}
 
 #[derive(Debug, Error)]
 pub enum RestError {
     #[error("reqwest error: {0}")]
     Reqwest(#[from] reqwest::Error),
-    #[error("json error: {0}")]
+    #[error("url parse error: {0}")]
+    Url(#[from] url::ParseError),
+    #[error("json parse error: {0}")]
     Json(#[from] serde_json::Error),
+    #[error("query string parse error: {0}")]
+    QueryString(#[from] serde_qs::Error),
     #[error("binance error: {0}")]
     Binance(String, Option<BinanceError>),
 }
 
-pub trait Params {
-    fn as_query(&self) -> &str;
+/// Query parameters for a REST API endpoint.
+pub trait Params: Sized + Serialize {
+    fn as_query(&self) -> Result<String, RestError> {
+        Ok(serde_qs::to_string(self)?)
+    }
 }
 
-pub trait Response {
-    type Body;
-
-    fn headers(&self) -> &HeaderMap;
-    fn status(&self) -> StatusCode;
-    fn body(&self) -> Result<&Bytes, RestError>;
-    fn json(&self) -> Result<Self::Body, RestError>;
-}
+/// Response data for a REST API endpoint.
+pub trait Response: Sized + for<'de> Deserialize<'de> {}
 
 #[async_trait::async_trait]
 pub trait Endpoint {
-    type Body;
+    type Params;
     type Response;
 
     fn path(&self) -> &str;
     fn method(&self) -> Method;
-    async fn request(&self) -> Result<Self::Body, RestError>;
-    async fn request2(&self) -> Result<Self::Response, RestError>;
+    async fn request(&self, params: Self::Params) -> Result<Self::Response, RestError>;
 }
