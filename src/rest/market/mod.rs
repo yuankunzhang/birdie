@@ -1,6 +1,8 @@
+mod exchange_info;
 mod ping;
 mod time;
 
+pub use exchange_info::*;
 pub use ping::*;
 pub use time::*;
 
@@ -21,5 +23,9 @@ impl<'r> Handler<'r> {
 
     pub fn time(&self) -> TimeEndpoint {
         TimeEndpoint::new(self.client)
+    }
+
+    pub fn exchange_info(&self) -> ExchangeInfoEndpoint {
+        ExchangeInfoEndpoint::new(self.client)
     }
 }

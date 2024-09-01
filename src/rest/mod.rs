@@ -94,7 +94,7 @@ pub enum RestError {
 }
 
 /// Query parameters for a REST API endpoint.
-pub trait Params: Sized + Serialize {
+pub trait Params: Sized + Send + Serialize {
     fn as_query(&self) -> Result<String, RestError> {
         Ok(serde_qs::to_string(self)?)
     }
@@ -105,10 +105,14 @@ pub trait Response: Sized + for<'de> Deserialize<'de> {}
 
 #[async_trait::async_trait]
 pub trait Endpoint {
-    type Params;
-    type Response;
+    type Params: Params;
+    type Response: Response;
 
+    fn client(&self) -> &RestClient;
     fn path(&self) -> &str;
     fn method(&self) -> Method;
-    async fn request(&self, params: Self::Params) -> Result<Self::Response, RestError>;
+
+    async fn request(&self, params: Self::Params) -> Result<Self::Response, RestError> {
+        self.client().request(Method::GET, self.path(), params).await
+    }
 }

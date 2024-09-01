@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest::{Endpoint, Params, Response, RestClient, RestError};
+use crate::rest::{Endpoint, Params, Response, RestClient};
 
 /// Test connectivity to the Rest API and get the current server time.
 ///
@@ -21,16 +21,16 @@ impl Endpoint for TimeEndpoint<'_> {
     type Params = TimeParams;
     type Response = TimeResponse;
 
+    fn client(&self) -> &RestClient {
+        self.client
+    }
+
     fn path(&self) -> &str {
         "api/v3/time"
     }
 
     fn method(&self) -> Method {
         Method::GET
-    }
-
-    async fn request(&self, params: Self::Params) -> Result<Self::Response, RestError> {
-        self.client.request(Method::GET, self.path(), params).await
     }
 }
 

@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest::{Endpoint, Params, Response, RestClient, RestError};
+use crate::rest::{Endpoint, Params, Response, RestClient};
 
 /// Test connectivity to the Rest API.
 ///
@@ -21,16 +21,16 @@ impl Endpoint for PingEndpoint<'_> {
     type Params = PingParams;
     type Response = PingResponse;
 
+    fn client(&self) -> &RestClient {
+        self.client
+    }
+
     fn path(&self) -> &str {
         "api/v3/ping"
     }
 
     fn method(&self) -> Method {
         Method::GET
-    }
-
-    async fn request(&self, params: Self::Params) -> Result<Self::Response, RestError> {
-        self.client.request(Method::GET, self.path(), params).await
     }
 }
 
