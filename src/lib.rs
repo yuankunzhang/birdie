@@ -1,5 +1,6 @@
-mod enums;
-mod filters;
+pub mod enums;
+pub mod errors;
+pub mod filters;
 
 use serde::Serializer;
 
