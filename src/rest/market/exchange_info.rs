@@ -26,7 +26,8 @@ pub struct ExchangeInfoParams {
     symbol: Option<String>,
     #[serde(serialize_with = "crate::rest::serialize_option_vec")]
     symbols: Option<Vec<String>>,
-    permissions: Option<String>,
+    #[serde(serialize_with = "crate::rest::serialize_option_vec")]
+    permissions: Option<Vec<String>>,
 }
 
 impl Default for ExchangeInfoParams {
@@ -54,8 +55,8 @@ impl ExchangeInfoParams {
         self
     }
 
-    pub fn permissions(mut self, permissions: &str) -> Self {
-        self.permissions = Some(permissions.to_string());
+    pub fn permissions(mut self, permissions: Vec<&str>) -> Self {
+        self.permissions = Some(permissions.iter().map(|s| s.to_string()).collect());
         self
     }
 }
