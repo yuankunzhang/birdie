@@ -1,3 +1,4 @@
+mod enums;
 mod filters;
 
 use serde::Serializer;
