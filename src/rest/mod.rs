@@ -116,3 +116,40 @@ pub trait Endpoint {
         self.client().request(Method::GET, self.path(), params).await
     }
 }
+
+macro_rules! endpoint {
+    ($name:ident, $path:literal, $method:expr, $params:ty, $response:ty) => {
+        impl crate::rest::Params for $params {}
+        impl crate::rest::Response for $response {}
+
+        pub struct $name<'r> {
+            client: &'r crate::rest::RestClient,
+        }
+
+        impl<'r> $name<'r> {
+            pub fn new(client: &'r crate::rest::RestClient) -> Self {
+                Self { client }
+            }
+        }
+
+        #[async_trait::async_trait]
+        impl crate::rest::Endpoint for $name<'_> {
+            type Params = $params;
+            type Response = $response;
+
+            fn client(&self) -> &crate::rest::RestClient {
+                self.client
+            }
+
+            fn path(&self) -> &str {
+                $path
+            }
+
+            fn method(&self) -> reqwest::Method {
+                $method
+            }
+        }
+    };
+}
+
+pub(self) use endpoint;
