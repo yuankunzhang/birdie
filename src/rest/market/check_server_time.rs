@@ -1,7 +1,3 @@
-//! Test connectivity to the Rest API and get the current server time.
-//!
-//! Weight(IP): 1
-
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 

@@ -1,9 +1,3 @@
-//! Exchange Information
-//!
-//! Current exchange trading rules and symbol information.
-//!
-//! Weight(IP): 20
-
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
