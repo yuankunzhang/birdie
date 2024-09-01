@@ -1,4 +1,30 @@
 //! Types and traits for working with Binance's REST API.
+pub mod auto_invest;
+pub mod blvt;
+pub mod c2c;
+pub mod convert;
+pub mod crypto_loans;
+pub mod fiat;
+pub mod futures;
+pub mod futures_algo;
+pub mod gift_card;
+pub mod isolated_margin_stream;
+pub mod margin;
+pub mod margin_stream;
+pub mod market;
+pub mod mining;
+pub mod nft;
+pub mod pay;
+pub mod portfolio_margin;
+pub mod rebase;
+pub mod savings;
+pub mod simple_earn;
+pub mod spot_algo;
+pub mod stream;
+pub mod sub_account;
+pub mod trade;
+pub mod vip_loans;
+pub mod wallet;
 
 use bytes::Bytes;
 use reqwest::{header::HeaderMap, Method, StatusCode};
