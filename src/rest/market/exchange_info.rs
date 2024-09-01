@@ -39,10 +39,41 @@ endpoint!(
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExchangeInfoParams {
-    pub symbol: Option<String>,
+    symbol: Option<String>,
     #[serde(serialize_with = "crate::rest::serialize_option_vec")]
-    pub symbols: Option<Vec<String>>,
-    pub permissions: Option<String>,
+    symbols: Option<Vec<String>>,
+    permissions: Option<String>,
+}
+
+impl Default for ExchangeInfoParams {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl ExchangeInfoParams {
+    pub fn new() -> Self {
+        Self {
+            symbol: None,
+            symbols: None,
+            permissions: None,
+        }
+    }
+
+    pub fn symbol(mut self, symbol: &str) -> Self {
+        self.symbol = Some(symbol.to_string());
+        self
+    }
+
+    pub fn symbols(mut self, symbols: Vec<&str>) -> Self {
+        self.symbols = Some(symbols.iter().map(|s| s.to_string()).collect());
+        self
+    }
+
+    pub fn permissions(mut self, permissions: &str) -> Self {
+        self.permissions = Some(permissions.to_string());
+        self
+    }
 }
 
 #[derive(Debug, Deserialize)]

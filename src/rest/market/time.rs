@@ -19,6 +19,18 @@ endpoint!(
 #[serde(rename_all = "camelCase")]
 pub struct TimeParams {}
 
+impl Default for TimeParams {
+    fn default() -> Self {
+        TimeParams::new()
+    }
+}
+
+impl TimeParams {
+    pub fn new() -> Self {
+        TimeParams {}
+    }
+}
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TimeResponse {

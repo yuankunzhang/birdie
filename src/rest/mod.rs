@@ -152,7 +152,7 @@ macro_rules! endpoint {
     };
 }
 
-pub(self) use endpoint;
+use endpoint;
 
 pub fn serialize_option_vec<S, T>(v: &Option<Vec<T>>, s: S) -> Result<S::Ok, S::Error>
 where

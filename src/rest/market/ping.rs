@@ -19,6 +19,18 @@ endpoint!(
 #[serde(rename_all = "camelCase")]
 pub struct PingParams {}
 
+impl Default for PingParams {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl PingParams {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PingResponse {}
