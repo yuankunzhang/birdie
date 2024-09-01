@@ -1,5 +1,3 @@
-//! Check Server Time
-//!
 //! Test connectivity to the Rest API and get the current server time.
 //!
 //! Weight(IP): 1
@@ -10,32 +8,32 @@ use serde::{Deserialize, Serialize};
 use crate::rest::endpoint;
 
 endpoint!(
-    TimeEndpoint,
     "/api/v3/time",
     Method::GET,
-    TimeParams,
-    TimeResponse
+    CheckServerTimeEndpoint,
+    CheckServerTimeParams,
+    CheckServerTimeResponse
 );
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct TimeParams {}
+pub struct CheckServerTimeParams {}
 
-impl Default for TimeParams {
+impl Default for CheckServerTimeParams {
     fn default() -> Self {
-        TimeParams::new()
+        CheckServerTimeParams::new()
     }
 }
 
-impl TimeParams {
+impl CheckServerTimeParams {
     pub fn new() -> Self {
-        TimeParams {}
+        CheckServerTimeParams {}
     }
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct TimeResponse {
+pub struct CheckServerTimeResponse {
     /// Example: 1499827319559
     pub server_time: i64,
 }

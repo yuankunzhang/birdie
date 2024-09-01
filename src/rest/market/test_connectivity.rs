@@ -1,5 +1,3 @@
-//! Test Connectivity
-//!
 //! Test connectivity to the Rest API.
 //!
 //! Weight(IP): 1
@@ -10,24 +8,24 @@ use serde::{Deserialize, Serialize};
 use crate::rest::endpoint;
 
 endpoint!(
-    PingEndpoint,
     "/api/v3/ping",
     Method::GET,
-    PingParams,
-    PingResponse
+    TestConnectivityEndpoint,
+    TestConnectivityParams,
+    TestConnectivityResponse
 );
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PingParams {}
+pub struct TestConnectivityParams {}
 
-impl Default for PingParams {
+impl Default for TestConnectivityParams {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl PingParams {
+impl TestConnectivityParams {
     pub fn new() -> Self {
         Self {}
     }
@@ -35,4 +33,4 @@ impl PingParams {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PingResponse {}
+pub struct TestConnectivityResponse {}

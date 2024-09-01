@@ -14,9 +14,9 @@ use crate::{
 };
 
 endpoint!(
-    ExchangeInfoEndpoint,
     "/api/v3/exchangeInfo",
     Method::GET,
+    ExchangeInfoEndpoint,
     ExchangeInfoParams,
     ExchangeInfoResponse
 );

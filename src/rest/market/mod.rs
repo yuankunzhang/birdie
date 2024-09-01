@@ -1,11 +1,11 @@
 //! Market Data endpoints
+mod check_server_time;
 mod exchange_info;
-mod ping;
-mod time;
+mod test_connectivity;
 
+pub use check_server_time::*;
 pub use exchange_info::*;
-pub use ping::*;
-pub use time::*;
+pub use test_connectivity::*;
 
 use super::RestClient;
 
@@ -18,12 +18,12 @@ impl<'r> Handler<'r> {
         Handler { client }
     }
 
-    pub fn ping(&self) -> PingEndpoint {
-        PingEndpoint::new(self.client)
+    pub fn test_connectivity(&self) -> TestConnectivityEndpoint {
+        TestConnectivityEndpoint::new(self.client)
     }
 
-    pub fn time(&self) -> TimeEndpoint {
-        TimeEndpoint::new(self.client)
+    pub fn check_server_time(&self) -> CheckServerTimeEndpoint {
+        CheckServerTimeEndpoint::new(self.client)
     }
 
     pub fn exchange_info(&self) -> ExchangeInfoEndpoint {

@@ -120,7 +120,7 @@ pub trait Endpoint {
 }
 
 macro_rules! endpoint {
-    ($name:ident, $path:literal, $method:expr, $params:ty, $response:ty) => {
+    ($path:literal, $method:expr, $name:ident, $params:ty, $response:ty) => {
         impl crate::rest::Params for $params {}
         impl crate::rest::Response for $response {}
 
