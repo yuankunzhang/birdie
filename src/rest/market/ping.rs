@@ -1,3 +1,5 @@
+//! Test Connectivity
+//!
 //! Test connectivity to the Rest API.
 //!
 //! Weight(IP): 1

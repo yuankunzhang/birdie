@@ -1,4 +1,4 @@
-//! Types and traits for working with Binance's REST API.
+//! Binance's REST API.
 pub mod auto_invest;
 pub mod blvt;
 pub mod c2c;
@@ -113,7 +113,9 @@ pub trait Endpoint {
     fn method(&self) -> Method;
 
     async fn request(&self, params: Self::Params) -> Result<Self::Response, RestError> {
-        self.client().request(Method::GET, self.path(), params).await
+        self.client()
+            .request(Method::GET, self.path(), params)
+            .await
     }
 }
 

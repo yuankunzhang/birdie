@@ -1,3 +1,4 @@
+//! Market Data endpoints
 mod exchange_info;
 mod ping;
 mod time;
