@@ -35,7 +35,6 @@ pub trait Endpoint {
     type Response;
 
     fn path(&self) -> &str;
-    fn weight(&self) -> i64;
     fn method(&self) -> Method;
     async fn request(&self) -> Result<Self::Body, RestError>;
     async fn request2(&self) -> Result<Self::Response, RestError>;
