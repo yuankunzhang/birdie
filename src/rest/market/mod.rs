@@ -1,6 +1,8 @@
 mod ping;
+mod time;
 
 pub use ping::*;
+pub use time::*;
 
 use super::RestClient;
 
@@ -15,5 +17,9 @@ impl<'r> Handler<'r> {
 
     pub fn ping(&self) -> PingEndpoint {
         PingEndpoint::new(self.client)
+    }
+
+    pub fn time(&self) -> TimeEndpoint {
+        TimeEndpoint::new(self.client)
     }
 }

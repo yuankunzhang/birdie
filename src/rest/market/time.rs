@@ -3,26 +3,26 @@ use serde::{Deserialize, Serialize};
 
 use crate::rest::{Endpoint, Params, Response, RestClient, RestError};
 
-/// Test connectivity to the Rest API.
+/// Test connectivity to the Rest API and get the current server time.
 ///
 /// Weight(IP): 1
-pub struct PingEndpoint<'r> {
+pub struct TimeEndpoint<'r> {
     client: &'r RestClient,
 }
 
-impl<'r> PingEndpoint<'r> {
+impl<'r> TimeEndpoint<'r> {
     pub fn new(client: &'r RestClient) -> Self {
         Self { client }
     }
 }
 
 #[async_trait::async_trait]
-impl Endpoint for PingEndpoint<'_> {
-    type Params = PingParams;
-    type Response = PingResponse;
+impl Endpoint for TimeEndpoint<'_> {
+    type Params = TimeParams;
+    type Response = TimeResponse;
 
     fn path(&self) -> &str {
-        "api/v3/ping"
+        "api/v3/time"
     }
 
     fn method(&self) -> Method {
@@ -36,12 +36,15 @@ impl Endpoint for PingEndpoint<'_> {
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PingParams {}
+pub struct TimeParams {}
 
-impl Params for PingParams {}
+impl Params for TimeParams {}
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct PingResponse {}
+pub struct TimeResponse {
+    /// Example: 1499827319559
+    pub server_time: i64,
+}
 
-impl Response for PingResponse {}
+impl Response for TimeResponse {}
