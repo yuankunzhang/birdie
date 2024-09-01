@@ -38,7 +38,12 @@ endpoint!(
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct ExchangeInfoParams {}
+pub struct ExchangeInfoParams {
+    pub symbol: Option<String>,
+    #[serde(serialize_with = "crate::rest::serialize_option_vec")]
+    pub symbols: Option<Vec<String>>,
+    pub permissions: Option<String>,
+}
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
