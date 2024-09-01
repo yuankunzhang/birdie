@@ -6,6 +6,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum SymbolFilter {
     PriceFilter(PriceFilter),
     PercentPrice(PercentPrice),
@@ -22,6 +23,7 @@ pub enum SymbolFilter {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum ExchangeFilter {
     ExchangeMaxNumOrders(ExchangeMaxNumOrders),
     ExchangeMaxNumAlgoOrders(ExchangeMaxNumAlgoOrders),

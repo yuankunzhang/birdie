@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{OrderType, RateLimit},
+    filters::ExchangeFilter,
     rest::endpoint,
 };
 
@@ -67,6 +68,7 @@ pub struct ExchangeInfoResponse {
     pub timezone: String,
     pub server_time: u64,
     pub rate_limits: Vec<RateLimit>,
+    pub exchange_filters: Vec<ExchangeFilter>,
     pub symbols: Vec<Symbol>,
 }
 
