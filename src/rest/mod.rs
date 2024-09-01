@@ -27,7 +27,7 @@ pub mod vip_loans;
 pub mod wallet;
 
 use reqwest::{Client, Method};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, Serializer};
 use thiserror::Error;
 use url::Url;
 
@@ -153,3 +153,40 @@ macro_rules! endpoint {
 }
 
 pub(self) use endpoint;
+
+pub fn serialize_option_vec<S, T>(v: &Option<Vec<T>>, s: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+    T: ToString,
+{
+    match v.as_ref() {
+        Some(v) => {
+            let arr: Vec<_> = v.iter().map(|x| x.to_string()).collect();
+            let str = format!("[{}]", arr.join(","));
+            s.serialize_str(&str)
+        }
+        None => s.serialize_none(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn option_vec() {
+        #[derive(serde::Serialize)]
+        struct Test {
+            #[serde(serialize_with = "serialize_option_vec")]
+            v: Option<Vec<String>>,
+        }
+
+        let t = Test { v: None };
+        assert_eq!(serde_qs::to_string(&t).unwrap(), "");
+
+        let t = Test {
+            v: Some(vec!["a".to_string(), "b".to_string()]),
+        };
+        assert_eq!(serde_qs::to_string(&t).unwrap(), "v=%5Ba%2Cb%5D");
+    }
+}
