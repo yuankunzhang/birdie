@@ -40,13 +40,11 @@ pub mod errors;
 pub mod filters;
 pub mod models;
 pub mod rest;
+pub mod web_socket;
 
 use rest::{RestClient, RestError};
 use thiserror::Error;
-
-pub struct Birdie {
-    rest: RestClient,
-}
+use web_socket::WebSocketClient;
 
 #[derive(Debug, Error)]
 pub enum BirdieError {
@@ -54,13 +52,23 @@ pub enum BirdieError {
     Rest(#[from] RestError),
 }
 
+pub struct Birdie {
+    rest: RestClient,
+    web_socket: WebSocketClient,
+}
+
 impl Birdie {
     pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, BirdieError> {
         let rest = RestClient::new(base_url, api_key, secret_key)?;
-        Ok(Self { rest })
+        let web_socket = WebSocketClient::new();
+        Ok(Self { rest, web_socket })
     }
 
     pub fn rest(&self) -> &RestClient {
         &self.rest
+    }
+
+    pub fn web_socket(&self) -> &WebSocketClient {
+        &self.web_socket
     }
 }
