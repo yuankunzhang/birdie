@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{models::Trade, rest::endpoint};
+use crate::{models::AggTrade, rest::endpoint};
 
 endpoint!(
     "/api/v3/aggTrades",
@@ -60,5 +60,5 @@ impl AggregateTradesListParams {
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
 pub enum AggregateTradesListResponse {
-    Trades(Vec<Trade>),
+    Trades(Vec<AggTrade>),
 }

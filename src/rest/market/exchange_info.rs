@@ -45,12 +45,12 @@ impl ExchangeInfoParams {
         self
     }
 
-    pub fn symbols(mut self, symbols: Vec<&str>) -> Self {
+    pub fn symbols(mut self, symbols: &[&str]) -> Self {
         self.symbols = Some(symbols.iter().map(|s| s.to_string()).collect());
         self
     }
 
-    pub fn permissions(mut self, permissions: Vec<&str>) -> Self {
+    pub fn permissions(mut self, permissions: &[&str]) -> Self {
         self.permissions = Some(permissions.iter().map(|s| s.to_string()).collect());
         self
     }

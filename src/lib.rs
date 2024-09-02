@@ -33,13 +33,20 @@ pub mod models;
 pub mod rest;
 
 use rest::{RestClient, RestError};
+use thiserror::Error;
 
 pub struct Birdie {
     rest: RestClient,
 }
 
+#[derive(Debug, Error)]
+pub enum BirdieError {
+    #[error("RestError: {0}")]
+    Rest(#[from] RestError),
+}
+
 impl Birdie {
-    pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, RestError> {
+    pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, BirdieError> {
         let rest = RestClient::new(base_url, api_key, secret_key)?;
         Ok(Self { rest })
     }

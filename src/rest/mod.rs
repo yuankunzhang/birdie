@@ -172,7 +172,7 @@ where
 {
     match v.as_ref() {
         Some(v) => {
-            let arr: Vec<_> = v.iter().map(|x| x.to_string()).collect();
+            let arr: Vec<_> = v.iter().map(|x| format!("\"{}\"", x.to_string())).collect();
             let str = format!("[{}]", arr.join(","));
             s.serialize_str(&str)
         }
@@ -198,6 +198,9 @@ mod tests {
         let t = Test {
             v: Some(vec!["a".to_string(), "b".to_string()]),
         };
-        assert_eq!(serde_qs::to_string(&t).unwrap(), "v=%5Ba%2Cb%5D");
+        assert_eq!(
+            serde_qs::to_string(&t).unwrap(),
+            "v=%5B%22a%22%2C%22b%22%5D"
+        );
     }
 }
