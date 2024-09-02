@@ -30,9 +30,9 @@ impl<'r> OldTradeLookupEndpoint<'r> {
 pub struct OldTradeLookupParams {
     symbol: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    limit: Option<u64>,
+    limit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    from_id: Option<u64>,
+    from_id: Option<i64>,
 }
 
 impl OldTradeLookupParams {
@@ -45,13 +45,13 @@ impl OldTradeLookupParams {
     }
 
     /// Default 500; max 1000.
-    pub fn limit(mut self, limit: u64) -> Self {
+    pub fn limit(mut self, limit: i64) -> Self {
         self.limit = Some(limit);
         self
     }
 
     /// TradeId to fetch from. Default gets most recent trades.
-    pub fn from_id(mut self, from_id: u64) -> Self {
+    pub fn from_id(mut self, from_id: i64) -> Self {
         self.from_id = Some(from_id);
         self
     }

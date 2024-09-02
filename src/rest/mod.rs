@@ -1,4 +1,5 @@
 //! Binance's REST API.
+pub mod account;
 pub mod auto_invest;
 pub mod blvt;
 pub mod c2c;
@@ -62,6 +63,7 @@ impl RestClient {
         })
     }
 
+    handler!(account);
     handler!(general);
     handler!(market);
 

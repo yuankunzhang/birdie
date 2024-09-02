@@ -30,7 +30,7 @@ impl<'r> RecentTradesListEndpoint<'r> {
 pub struct RecentTradesListParams {
     symbol: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    limit: Option<u64>,
+    limit: Option<i64>,
 }
 
 impl RecentTradesListParams {
@@ -42,7 +42,7 @@ impl RecentTradesListParams {
     }
 
     /// Default 500; max 1000.
-    pub fn limit(mut self, limit: u64) -> Self {
+    pub fn limit(mut self, limit: i64) -> Self {
         self.limit = Some(limit);
         self
     }

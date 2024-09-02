@@ -31,13 +31,13 @@ impl<'r> AggregateTradesListEndpoint<'r> {
 pub struct AggregateTradesListParams {
     symbol: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    from_id: Option<u64>,
+    from_id: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    start_time: Option<u64>,
+    start_time: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    end_time: Option<u64>,
+    end_time: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    limit: Option<u64>,
+    limit: Option<i64>,
 }
 
 impl AggregateTradesListParams {
@@ -52,25 +52,25 @@ impl AggregateTradesListParams {
     }
 
     /// ID to get aggregate trades from (inclusive).
-    pub fn from_id(mut self, from_id: u64) -> Self {
+    pub fn from_id(mut self, from_id: i64) -> Self {
         self.from_id = Some(from_id);
         self
     }
 
     /// Timestamp in ms to get aggregate trades from (inclusive).
-    pub fn start_time(mut self, start_time: u64) -> Self {
+    pub fn start_time(mut self, start_time: i64) -> Self {
         self.start_time = Some(start_time);
         self
     }
 
     /// Timestamp in ms to get aggregate trades until (inclusive).
-    pub fn end_time(mut self, end_time: u64) -> Self {
+    pub fn end_time(mut self, end_time: i64) -> Self {
         self.end_time = Some(end_time);
         self
     }
 
     /// Default 500; max 1000.
-    pub fn limit(mut self, limit: u64) -> Self {
+    pub fn limit(mut self, limit: i64) -> Self {
         self.limit = Some(limit);
         self
     }
