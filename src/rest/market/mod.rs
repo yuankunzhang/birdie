@@ -5,6 +5,7 @@ mod kline_data;
 mod old_trade_lookup;
 mod order_book;
 mod recent_trades_list;
+mod ticker_24hr;
 mod ui_klines;
 
 pub use aggregate_trades_list::*;
@@ -13,6 +14,7 @@ pub use kline_data::*;
 pub use old_trade_lookup::*;
 pub use order_book::*;
 pub use recent_trades_list::*;
+pub use ticker_24hr::*;
 pub use ui_klines::*;
 
 use super::{route, RestClient};
@@ -33,4 +35,5 @@ impl<'r> Handler<'r> {
     route!(kline_data, KlineDataEndpoint);
     route!(ui_klines, UiKlinesEndpoint);
     route!(current_average_price, CurrentAveragePriceEndpoint);
+    route!(ticker_24hr, Ticker24hrEndpoint);
 }

@@ -2,8 +2,7 @@ use birdie::{
     models::KlineInterval,
     rest::{
         market::{
-            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams,
-            OldTradeLookupParams, OrderBookParams, RecentTradesListParams, UiKlinesParams,
+            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams, OldTradeLookupParams, OrderBookParams, RecentTradesListParams, Ticker24hrParams, UiKlinesParams
         },
         Endpoint,
     },
@@ -84,6 +83,18 @@ async fn current_average_price() {
         .current_average_price()
         .request(params)
         .await;
-    println!("{:?}", resp);
+    assert!(resp.is_ok());
+}
+
+#[tokio::test]
+async fn ticker_24hr() {
+    let birdie = common::setup();
+    let params = Ticker24hrParams::new().symbol("BTCUSDT");
+    let resp = birdie
+        .rest()
+        .market()
+        .ticker_24hr()
+        .request(params)
+        .await;
     assert!(resp.is_ok());
 }
