@@ -51,21 +51,25 @@ impl AggregateTradesListParams {
         }
     }
 
+    /// ID to get aggregate trades from (inclusive).
     pub fn from_id(mut self, from_id: u64) -> Self {
         self.from_id = Some(from_id);
         self
     }
 
+    /// Timestamp in ms to get aggregate trades from (inclusive).
     pub fn start_time(mut self, start_time: u64) -> Self {
         self.start_time = Some(start_time);
         self
     }
 
+    /// Timestamp in ms to get aggregate trades until (inclusive).
     pub fn end_time(mut self, end_time: u64) -> Self {
         self.end_time = Some(end_time);
         self
     }
 
+    /// Default 500; max 1000.
     pub fn limit(mut self, limit: u64) -> Self {
         self.limit = Some(limit);
         self

@@ -44,11 +44,13 @@ impl OldTradeLookupParams {
         }
     }
 
+    /// Default 500; max 1000.
     pub fn limit(mut self, limit: u64) -> Self {
         self.limit = Some(limit);
         self
     }
 
+    /// TradeId to fetch from. Default gets most recent trades.
     pub fn from_id(mut self, from_id: u64) -> Self {
         self.from_id = Some(from_id);
         self

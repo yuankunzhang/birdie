@@ -29,6 +29,13 @@ impl<'r> ExchangeInfoEndpoint<'r> {
     }
 }
 
+/// ## Notes on parameters
+///
+/// - If the value provided to `symbol` or `symbols` do not exist, the endpoint
+///   will throw [`BinanceErrorCode::BadSymbol`][`crate::errors::BinanceErrorCode::BadSymbol`]
+///   error.
+/// - If permissions parameter not provided, the default values will be
+///   `["SPOT","MARGIN","LEVERAGED"]`.
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExchangeInfoParams {

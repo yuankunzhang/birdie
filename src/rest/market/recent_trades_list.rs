@@ -41,6 +41,7 @@ impl RecentTradesListParams {
         }
     }
 
+    /// Default 500; max 1000.
     pub fn limit(mut self, limit: u64) -> Self {
         self.limit = Some(limit);
         self

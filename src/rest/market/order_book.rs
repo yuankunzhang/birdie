@@ -45,6 +45,8 @@ impl OrderBookParams {
         }
     }
 
+    /// Default 100; max 5000. If limit > 5000. then the response will truncate
+    /// to 5000.
     pub fn limit(mut self, limit: u64) -> Self {
         self.limit = Some(limit);
         self
