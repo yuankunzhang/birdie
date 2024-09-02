@@ -2,7 +2,7 @@ use birdie::{
     models::KlineInterval,
     rest::{
         market::{
-            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams, OldTradeLookupParams, OrderBookParams, RecentTradesListParams, Ticker24hrParams, UiKlinesParams
+            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams, OldTradeLookupParams, OrderBookParams, RecentTradesListParams, Ticker24hrParams, TradingDayTickerParams, UiKlinesParams
         },
         Endpoint,
     },
@@ -94,6 +94,19 @@ async fn ticker_24hr() {
         .rest()
         .market()
         .ticker_24hr()
+        .request(params)
+        .await;
+    assert!(resp.is_ok());
+}
+
+#[tokio::test]
+async fn trading_day_ticker() {
+    let birdie = common::setup();
+    let params = TradingDayTickerParams::new().symbol("BTCUSDT");
+    let resp = birdie
+        .rest()
+        .market()
+        .trading_day_ticker()
         .request(params)
         .await;
     assert!(resp.is_ok());
