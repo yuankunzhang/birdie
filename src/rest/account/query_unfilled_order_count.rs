@@ -33,6 +33,7 @@ impl<'r> QueryUnfilledOrderCountEndpoint<'r> {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QueryUnfilledOrderCountParams {
+    /// The value cannot be greater than `60000`.
     #[serde(skip_serializing_if = "Option::is_none")]
     recv_window: Option<i64>,
     timestamp: i64,

@@ -1,5 +1,5 @@
 use birdie::{errors::{BinanceError, BinanceErrorCode}, rest::{
-    account::{AccountInformationParams, AccountTradeListParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams},
+    account::{AccountInformationParams, AccountTradeListParams, QueryAllocationsParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams},
     Endpoint, RestError,
 }};
 
@@ -70,4 +70,17 @@ async fn query_prevented_matches() {
     };
     assert_eq!(s, "400 Bad Request");
     assert!(matches!(code, BinanceErrorCode::OptionalParamsBadCombo));
+}
+
+#[tokio::test]
+async fn query_allocations() {
+    let birdie = common::setup();
+    let params = QueryAllocationsParams::new("BTCUSDT");
+    let resp = birdie
+        .rest()
+        .account()
+        .query_allocations()
+        .request(params)
+        .await;
+    assert!(resp.is_ok());
 }
