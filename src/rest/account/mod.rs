@@ -1,7 +1,9 @@
 //! Account endpoints
 mod account_information;
+mod account_trade_list;
 
 pub use account_information::*;
+pub use account_trade_list::*;
 
 use super::{route, RestClient};
 
@@ -15,4 +17,5 @@ impl<'r> Handler<'r> {
     }
 
     route!(account_information, AccountInformationEndpoint);
+    route!(account_trade_list, AccountTradeListEndpoint);
 }
