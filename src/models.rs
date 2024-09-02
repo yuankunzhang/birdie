@@ -1296,3 +1296,11 @@ pub type Kline = (
     String, // Taker buy quote asset volume
     String, // Unused field, ignore.
 );
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AveragePrice {
+    pub mins: i64,
+    pub price: String,
+    pub close_time: i64,
+}

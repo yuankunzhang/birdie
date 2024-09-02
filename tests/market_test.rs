@@ -2,8 +2,8 @@ use birdie::{
     models::KlineInterval,
     rest::{
         market::{
-            AggregateTradesListParams, KlineDataParams, OldTradeLookupParams, OrderBookParams,
-            RecentTradesListParams, UiKlinesParams,
+            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams,
+            OldTradeLookupParams, OrderBookParams, RecentTradesListParams, UiKlinesParams,
         },
         Endpoint,
     },
@@ -71,5 +71,19 @@ async fn ui_kline() {
     let birdie = common::setup();
     let params = UiKlinesParams::new("BTCUSDT", KlineInterval::OneHour).limit(10);
     let resp = birdie.rest().market().ui_klines().request(params).await;
+    assert!(resp.is_ok());
+}
+
+#[tokio::test]
+async fn current_average_price() {
+    let birdie = common::setup();
+    let params = CurrentAveragePriceParams::new("BTCUSDT");
+    let resp = birdie
+        .rest()
+        .market()
+        .current_average_price()
+        .request(params)
+        .await;
+    println!("{:?}", resp);
     assert!(resp.is_ok());
 }
