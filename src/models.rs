@@ -1191,3 +1191,18 @@ pub struct UnfilledOrderCount {
     pub rate_limit: RateLimit,
     pub count: i64,
 }
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PreventedMatch {
+    pub symbol: String,
+    pub prevented_match_id: i64,
+    pub taker_order_id: i64,
+    pub maker_symbol: String,
+    pub maker_order_id: i64,
+    pub trade_group_id: i64,
+    pub self_trade_prevention_mode: String,
+    pub price: String,
+    pub maker_prevented_quantity: String,
+    pub transact_time: i64,
+}
