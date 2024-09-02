@@ -25,6 +25,15 @@
 //!   Currently, this is only available via the API. Please refer to the
 //!   [SPOT Testnet page](https://testnet.binance.vision/) for more information
 //!   and how to set up the Testnet API key.
+//!
+//!
+//! ## Important Notes
+//!
+//! - The API specification is subject to change, please refer to the official
+//!   Binance API documentation for the most up-to-date information.
+//! - Since the API specification doesn't specify number sizes or signedness,
+//!   all integer fields are treated as `i64`, all floating point fields are
+//!   treated as `f64`.
 
 pub mod enums;
 pub mod errors;

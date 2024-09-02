@@ -530,7 +530,7 @@ pub struct MarginTrade {
 pub struct MarginTransferDetails {
     pub rows: Vec<MarginTransferRow>,
     /// Example: `1`
-    pub total: i32,
+    pub total: i64,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
