@@ -11,6 +11,24 @@ endpoint!(
     OrderBookResponse
 );
 
+/// Get order book.
+///
+/// - Weight: Adjust based on the limit.
+///     - Limit 1-100: 5
+///     - Limit 101-500: 25
+///     - Limit 501-1000: 50
+///     - Limit 1001-5000: 250
+/// - Data Source: Memory
+pub struct OrderBookEndpoint<'r> {
+    client: &'r crate::rest::RestClient,
+}
+
+impl<'r> OrderBookEndpoint<'r> {
+    pub fn new(client: &'r crate::rest::RestClient) -> Self {
+        Self { client }
+    }
+}
+
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OrderBookParams {

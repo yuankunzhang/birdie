@@ -124,16 +124,6 @@ macro_rules! endpoint {
         impl crate::rest::Params for $params {}
         impl crate::rest::Response for $response {}
 
-        pub struct $name<'r> {
-            client: &'r crate::rest::RestClient,
-        }
-
-        impl<'r> $name<'r> {
-            pub fn new(client: &'r crate::rest::RestClient) -> Self {
-                Self { client }
-            }
-        }
-
         #[async_trait::async_trait]
         impl crate::rest::Endpoint for $name<'_> {
             type Params = $params;

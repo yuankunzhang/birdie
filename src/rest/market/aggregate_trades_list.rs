@@ -11,6 +11,21 @@ endpoint!(
     AggregateTradesListResponse
 );
 
+/// Get compressed, aggregate trades. Trades that fill at the time, from the
+/// same taker order, with the same price will have the quantity aggregated.
+///
+/// - Weight: 2
+/// - Data Source: Database
+pub struct AggregateTradesListEndpoint<'r> {
+    client: &'r crate::rest::RestClient,
+}
+
+impl<'r> AggregateTradesListEndpoint<'r> {
+    pub fn new(client: &'r crate::rest::RestClient) -> Self {
+        Self { client }
+    }
+}
+
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AggregateTradesListParams {

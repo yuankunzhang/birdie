@@ -15,6 +15,20 @@ endpoint!(
     ExchangeInfoResponse
 );
 
+/// Current exchange trading rules and symbol information.
+///
+/// - Weight: 20
+/// - Data Source: Memory
+pub struct ExchangeInfoEndpoint<'r> {
+    client: &'r crate::rest::RestClient,
+}
+
+impl<'r> ExchangeInfoEndpoint<'r> {
+    pub fn new(client: &'r crate::rest::RestClient) -> Self {
+        Self { client }
+    }
+}
+
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExchangeInfoParams {

@@ -11,6 +11,20 @@ endpoint!(
     TestConnectivityResponse
 );
 
+/// Test connectivity to the Rest API.
+///
+/// - Weight: 1
+/// - Data Source: Memory
+pub struct TestConnectivityEndpoint<'r> {
+    client: &'r crate::rest::RestClient,
+}
+
+impl<'r> TestConnectivityEndpoint<'r> {
+    pub fn new(client: &'r crate::rest::RestClient) -> Self {
+        Self { client }
+    }
+}
+
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TestConnectivityParams {}

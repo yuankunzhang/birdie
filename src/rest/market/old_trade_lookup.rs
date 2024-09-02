@@ -11,6 +11,20 @@ endpoint!(
     OldTradeLookupResponse
 );
 
+/// Get older trades.
+///
+/// - Weight: 25
+/// - Data Source: Database
+pub struct OldTradeLookupEndpoint<'r> {
+    client: &'r crate::rest::RestClient,
+}
+
+impl<'r> OldTradeLookupEndpoint<'r> {
+    pub fn new(client: &'r crate::rest::RestClient) -> Self {
+        Self { client }
+    }
+}
+
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OldTradeLookupParams {

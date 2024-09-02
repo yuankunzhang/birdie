@@ -11,6 +11,20 @@ endpoint!(
     RecentTradesListResponse
 );
 
+/// Get recent trades.
+///
+/// - Weight: 25
+/// - Data Source: Memory
+pub struct RecentTradesListEndpoint<'r> {
+    client: &'r crate::rest::RestClient,
+}
+
+impl<'r> RecentTradesListEndpoint<'r> {
+    pub fn new(client: &'r crate::rest::RestClient) -> Self {
+        Self { client }
+    }
+}
+
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RecentTradesListParams {

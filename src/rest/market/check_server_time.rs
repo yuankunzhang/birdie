@@ -11,6 +11,20 @@ endpoint!(
     CheckServerTimeResponse
 );
 
+/// Test connectivity to the Rest API and get the current server time.
+///
+/// - Weight: 1
+/// - Data Source: Memory
+pub struct CheckServerTimeEndpoint<'r> {
+    client: &'r crate::rest::RestClient,
+}
+
+impl<'r> CheckServerTimeEndpoint<'r> {
+    pub fn new(client: &'r crate::rest::RestClient) -> Self {
+        Self { client }
+    }
+}
+
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CheckServerTimeParams {}
