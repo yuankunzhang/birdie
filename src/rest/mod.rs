@@ -26,8 +26,10 @@ pub mod trade;
 pub mod vip_loans;
 pub mod wallet;
 
-use reqwest::{Client, Method};
+use hmac::{Hmac, Mac};
+use reqwest::{Client, Method, RequestBuilder};
 use serde::{Deserialize, Serialize, Serializer};
+use sha2::Sha256;
 use thiserror::Error;
 use url::Url;
 
@@ -68,7 +70,38 @@ impl RestClient {
         let mut url = self.base_url.join(endpoint)?;
         url.set_query(Some(&params.as_query()?));
 
-        let res = self.client.request(method, url).send().await?;
+        let req = self.client.request(method, url);
+        Self::send_request(req).await
+    }
+
+    pub(self) async fn signed_request<P, R>(
+        &self,
+        method: Method,
+        endpoint: &str,
+        params: P,
+    ) -> Result<R, RestError>
+    where
+        P: Params,
+        R: Response,
+    {
+        let mut url = self.base_url.join(endpoint)?;
+        let query = params.as_query()?;
+        let signature = compute_signature(&self.secret_key, &query)?;
+        let query = format!("{query}&signature={signature}");
+        url.set_query(Some(&query));
+
+        let req = self
+            .client
+            .request(method, url)
+            .header("X-MBX-APIKEY", &self.api_key);
+        Self::send_request(req).await
+    }
+
+    async fn send_request<R>(req: RequestBuilder) -> Result<R, RestError>
+    where
+        R: Response,
+    {
+        let res = req.send().await?;
         if res.status().is_success() {
             Ok(res.json().await?)
         } else {
@@ -77,6 +110,12 @@ impl RestClient {
             Err(RestError::Binance(status, error))
         }
     }
+}
+
+fn compute_signature(key: &str, data: &str) -> Result<String, RestError> {
+    let mut mac = Hmac::<Sha256>::new_from_slice(key.as_bytes())?;
+    mac.update(data.as_bytes());
+    Ok(hex::encode(mac.finalize().into_bytes()))
 }
 
 #[derive(Debug, Error)]
@@ -89,8 +128,19 @@ pub enum RestError {
     Json(#[from] serde_json::Error),
     #[error("query string parse error: {0}")]
     QueryString(#[from] serde_qs::Error),
+    #[error("Hmac error: {0}")]
+    Hmac(#[from] hmac::digest::InvalidLength),
     #[error("binance error: {0}")]
     Binance(String, Option<BinanceError>),
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum SecurityType {
+    None,
+    Trade,
+    UserData,
+    UserStream,
 }
 
 /// Query parameters for a REST API endpoint.
@@ -111,11 +161,21 @@ pub trait Endpoint {
     fn client(&self) -> &RestClient;
     fn path(&self) -> &str;
     fn method(&self) -> Method;
+    fn security_type(&self) -> SecurityType;
 
     async fn request(&self, params: Self::Params) -> Result<Self::Response, RestError> {
-        self.client()
-            .request(Method::GET, self.path(), params)
-            .await
+        match self.security_type() {
+            SecurityType::None => {
+                self.client()
+                    .request(Method::GET, self.path(), params)
+                    .await
+            }
+            _ => {
+                self.client()
+                    .signed_request(Method::GET, self.path(), params)
+                    .await
+            }
+        }
     }
 }
 
@@ -139,6 +199,36 @@ macro_rules! endpoint {
 
             fn method(&self) -> reqwest::Method {
                 $method
+            }
+
+            fn security_type(&self) -> $crate::rest::SecurityType {
+                $crate::rest::SecurityType::None
+            }
+        }
+    };
+    ($path:literal, $method:expr, $security:expr, $name:ident, $params:ty, $response:ty) => {
+        impl crate::rest::Params for $params {}
+        impl crate::rest::Response for $response {}
+
+        #[async_trait::async_trait]
+        impl crate::rest::Endpoint for $name<'_> {
+            type Params = $params;
+            type Response = $response;
+
+            fn client(&self) -> &crate::rest::RestClient {
+                self.client
+            }
+
+            fn path(&self) -> &str {
+                $path
+            }
+
+            fn method(&self) -> reqwest::Method {
+                $method
+            }
+
+            fn security_type(&self) -> $crate::rest::SecurityType {
+                $security
             }
         }
     };
@@ -173,6 +263,17 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn signature() {
+        let key = "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j";
+        let data = "symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559";
+        let sig = compute_signature(key, data).unwrap();
+        assert_eq!(
+            sig,
+            "c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71"
+        );
+    }
 
     #[test]
     fn option_vec() {

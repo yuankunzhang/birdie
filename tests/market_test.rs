@@ -1,7 +1,10 @@
 use birdie::{
     errors::{BinanceError, BinanceErrorCode},
     rest::{
-        market::{AggregateTradesListParams, CheckServerTimeParams, ExchangeInfoParams, OldTradeLookupParams, OrderBookParams, RecentTradesListParams, TestConnectivityParams},
+        market::{
+            AggregateTradesListParams, CheckServerTimeParams, ExchangeInfoParams,
+            OldTradeLookupParams, OrderBookParams, RecentTradesListParams, TestConnectivityParams,
+        },
         Endpoint, RestError,
     },
 };
@@ -77,7 +80,9 @@ async fn exchange_info() {
     assert!(matches!(code, BinanceErrorCode::BadSymbol));
 
     // both symbol and symbols param
-    let params = ExchangeInfoParams::new().symbol("BTCUSDT").symbols(&["ETHUSDT"]);
+    let params = ExchangeInfoParams::new()
+        .symbol("BTCUSDT")
+        .symbols(&["ETHUSDT"]);
     let resp = birdie.rest().market().exchange_info().request(params).await;
     assert!(resp.is_err());
     let RestError::Binance(s, Some(BinanceError { code, .. })) = resp.err().unwrap() else {
@@ -91,12 +96,7 @@ async fn exchange_info() {
 async fn order_book() {
     let birdie = common::setup();
     let params = OrderBookParams::new("BTCUSDT").limit(10);
-    let resp = birdie
-        .rest()
-        .market()
-        .order_book()
-        .request(params)
-        .await;
+    let resp = birdie.rest().market().order_book().request(params).await;
     assert!(resp.is_ok());
 }
 
