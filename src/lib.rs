@@ -14,10 +14,12 @@
 pub mod enums;
 pub mod errors;
 pub mod filters;
+pub mod fix;
 pub mod models;
 pub mod rest;
 pub mod web_socket;
 
+use fix::FixClient;
 use rest::{RestClient, RestError};
 use thiserror::Error;
 use web_socket::WebSocketClient;
@@ -29,15 +31,25 @@ pub enum BirdieError {
 }
 
 pub struct Birdie {
+    fix: FixClient,
     rest: RestClient,
     web_socket: WebSocketClient,
 }
 
 impl Birdie {
     pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, BirdieError> {
+        let fix = FixClient::new();
         let rest = RestClient::new(base_url, api_key, secret_key)?;
         let web_socket = WebSocketClient::new();
-        Ok(Self { rest, web_socket })
+        Ok(Self {
+            fix,
+            rest,
+            web_socket,
+        })
+    }
+
+    pub fn fix(&self) -> &FixClient {
+        &self.fix
     }
 
     pub fn rest(&self) -> &RestClient {
