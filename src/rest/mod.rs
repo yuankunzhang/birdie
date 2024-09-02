@@ -7,6 +7,7 @@ pub mod crypto_loans;
 pub mod fiat;
 pub mod futures;
 pub mod futures_algo;
+pub mod general;
 pub mod gift_card;
 pub mod isolated_margin_stream;
 pub mod margin;
@@ -35,6 +36,14 @@ use url::Url;
 
 use crate::errors::BinanceError;
 
+macro_rules! handler {
+    ($name:ident) => {
+        pub fn $name(&self) -> $name::Handler {
+            $name::Handler::new(self)
+        }
+    };
+}
+
 pub struct RestClient {
     pub(self) client: Client,
     pub(self) base_url: Url,
@@ -53,9 +62,8 @@ impl RestClient {
         })
     }
 
-    pub fn market(&self) -> market::Handler {
-        market::Handler::new(self)
-    }
+    handler!(general);
+    handler!(market);
 
     pub(self) async fn request<P, R>(
         &self,
