@@ -1,7 +1,13 @@
-use birdie::{errors::{BinanceError, BinanceErrorCode}, rest::{
-    account::{AccountInformationParams, AccountTradeListParams, QueryAllocationsParams, QueryCommissionRatesParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams},
-    Endpoint, RestError,
-}};
+use birdie::{
+    errors::{BinanceError, BinanceErrorCode},
+    rest::{
+        account::{
+            AccountInformationParams, AccountTradeListParams, QueryAllocationsParams,
+            QueryCommissionRatesParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams,
+        },
+        Endpoint, RestError,
+    },
+};
 
 mod common;
 

@@ -7,11 +7,11 @@ use crate::{
 };
 
 endpoint!(
-    "/api/v3/klines",
+    "/api/v3/uiKlines",
     Method::GET,
-    KlineDataEndpoint,
-    KlineDataParams,
-    KlineDataResponse
+    UiKlinesEndpoint,
+    UiKlinesParams,
+    UiKlinesResponse
 );
 
 /// Kline/candlestick bars for a symbol. Klines are uniquely identified by their
@@ -19,11 +19,11 @@ endpoint!(
 ///
 /// - Weight: 2
 /// - Data Source: Database
-pub struct KlineDataEndpoint<'r> {
+pub struct UiKlinesEndpoint<'r> {
     client: &'r crate::rest::RestClient,
 }
 
-impl<'r> KlineDataEndpoint<'r> {
+impl<'r> UiKlinesEndpoint<'r> {
     pub fn new(client: &'r crate::rest::RestClient) -> Self {
         Self { client }
     }
@@ -31,7 +31,7 @@ impl<'r> KlineDataEndpoint<'r> {
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct KlineDataParams {
+pub struct UiKlinesParams {
     symbol: String,
     interval: KlineInterval,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -44,7 +44,7 @@ pub struct KlineDataParams {
     limit: Option<i64>,
 }
 
-impl KlineDataParams {
+impl UiKlinesParams {
     pub fn new(symbol: &str, interval: KlineInterval) -> Self {
         Self {
             symbol: symbol.to_owned(),
@@ -80,4 +80,4 @@ impl KlineDataParams {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct KlineDataResponse(pub Vec<Kline>);
+pub struct UiKlinesResponse(pub Vec<Kline>);
