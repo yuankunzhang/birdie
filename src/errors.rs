@@ -1,6 +1,7 @@
 //! Error codes for Binance (version 2024-08-16).
 //!
 //! See [docs](https://developers.binance.com/docs/binance-spot-api-docs/errors)
+//! for more information.
 
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;

@@ -1,7 +1,9 @@
-//! Filters define trading rules on a symbol or an exchange. There are two types
-//! of filters: symbol filters and exchange filters.
+//! Filters define trading rules on a symbol or an exchange.
+//!
+//! There are two types of filters: symbol filters and exchange filters.
 //!
 //! See [docs](https://developers.binance.com/docs/binance-spot-api-docs/filters)
+//! for more information.
 
 use serde::{Deserialize, Serialize};
 
