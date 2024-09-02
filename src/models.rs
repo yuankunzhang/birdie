@@ -1225,3 +1225,12 @@ pub struct Allocation {
     pub is_maker: bool,
     pub is_allocator: bool,
 }
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Discount {
+    pub enabled_for_account: bool,
+    pub enabled_for_symbol: bool,
+    pub discount_asset: Option<String>,
+    pub discount: String,
+}

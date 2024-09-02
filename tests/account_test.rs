@@ -1,5 +1,5 @@
 use birdie::{errors::{BinanceError, BinanceErrorCode}, rest::{
-    account::{AccountInformationParams, AccountTradeListParams, QueryAllocationsParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams},
+    account::{AccountInformationParams, AccountTradeListParams, QueryAllocationsParams, QueryCommissionRatesParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams},
     Endpoint, RestError,
 }};
 
@@ -80,6 +80,19 @@ async fn query_allocations() {
         .rest()
         .account()
         .query_allocations()
+        .request(params)
+        .await;
+    assert!(resp.is_ok());
+}
+
+#[tokio::test]
+async fn query_commission_rates() {
+    let birdie = common::setup();
+    let params = QueryCommissionRatesParams::new("BTCUSDT");
+    let resp = birdie
+        .rest()
+        .account()
+        .query_commission_rates()
         .request(params)
         .await;
     assert!(resp.is_ok());
