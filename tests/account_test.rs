@@ -1,5 +1,5 @@
 use birdie::rest::{
-    account::{AccountInformationParams, AccountTradeListParams},
+    account::{AccountInformationParams, AccountTradeListParams, QueryUnfilledOrderCountParams},
     Endpoint,
 };
 
@@ -26,6 +26,19 @@ async fn account_trade_list() {
         .rest()
         .account()
         .account_trade_list()
+        .request(params)
+        .await;
+    assert!(resp.is_ok());
+}
+
+#[tokio::test]
+async fn query_unfilled_order_count() {
+    let birdie = common::setup();
+    let params = QueryUnfilledOrderCountParams::new();
+    let resp = birdie
+        .rest()
+        .account()
+        .query_unfilled_order_count()
         .request(params)
         .await;
     assert!(resp.is_ok());

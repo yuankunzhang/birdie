@@ -1,7 +1,7 @@
 //! Data models.
 use serde::{Deserialize, Serialize};
 
-use crate::enums::OrderType;
+use crate::enums::{OrderType, RateLimit};
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -1182,4 +1182,12 @@ pub struct Symbol {
     pub allow_trailing_stop: bool,
     pub is_spot_trading_allowed: bool,
     pub is_margin_trading_allowed: bool,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UnfilledOrderCount {
+    #[serde(flatten)]
+    pub rate_limit: RateLimit,
+    pub count: i64,
 }
