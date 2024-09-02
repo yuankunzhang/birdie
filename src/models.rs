@@ -1234,3 +1234,65 @@ pub struct Discount {
     pub discount_asset: Option<String>,
     pub discount: String,
 }
+
+#[derive(Debug)]
+pub enum KlineInterval {
+    OneSecond,
+    OneMinute,
+    ThreeMinutes,
+    FiveMinutes,
+    FifteenMinutes,
+    ThirtyMinutes,
+    OneHour,
+    TwoHours,
+    FourHours,
+    SixHours,
+    EightHours,
+    TwelveHours,
+    OneDay,
+    ThreeDays,
+    OneWeek,
+    OneMonth,
+}
+
+impl Serialize for KlineInterval {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::ser::Serializer,
+    {
+        let interval = match self {
+            KlineInterval::OneSecond => "1s",
+            KlineInterval::OneMinute => "1m",
+            KlineInterval::ThreeMinutes => "3m",
+            KlineInterval::FiveMinutes => "5m",
+            KlineInterval::FifteenMinutes => "15m",
+            KlineInterval::ThirtyMinutes => "30m",
+            KlineInterval::OneHour => "1h",
+            KlineInterval::TwoHours => "2h",
+            KlineInterval::FourHours => "4h",
+            KlineInterval::SixHours => "6h",
+            KlineInterval::EightHours => "8h",
+            KlineInterval::TwelveHours => "12h",
+            KlineInterval::OneDay => "1d",
+            KlineInterval::ThreeDays => "3d",
+            KlineInterval::OneWeek => "1w",
+            KlineInterval::OneMonth => "1M",
+        };
+        serializer.serialize_str(interval)
+    }
+}
+
+pub type Kline = (
+    i64,    // Open time
+    String, // Open price
+    String, // High price
+    String, // Low price
+    String, // Close price
+    String, // Volume
+    i64,    // Close time
+    String, // Quote asset volume
+    i64,    // Number of trades
+    String, // Taker buy base asset volume
+    String, // Taker buy quote asset volume
+    String, // Unused field, ignore.
+);

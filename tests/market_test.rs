@@ -1,6 +1,6 @@
 use birdie::rest::{
     market::{
-        AggregateTradesListParams, OldTradeLookupParams, OrderBookParams, RecentTradesListParams,
+        AggregateTradesListParams, KlineDataParams, OldTradeLookupParams, OrderBookParams, RecentTradesListParams
     },
     Endpoint,
 };
@@ -49,6 +49,19 @@ async fn aggregate_trades_list() {
         .rest()
         .market()
         .aggregate_trades_list()
+        .request(params)
+        .await;
+    assert!(resp.is_ok());
+}
+
+#[tokio::test]
+async fn kline_data() {
+    let birdie = common::setup();
+    let params = KlineDataParams::new("BTCUSDT", birdie::models::KlineInterval::OneHour).limit(10);
+    let resp = birdie
+        .rest()
+        .market()
+        .kline_data()
         .request(params)
         .await;
     assert!(resp.is_ok());
