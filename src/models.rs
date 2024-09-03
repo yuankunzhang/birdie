@@ -1,135 +1,10 @@
 //! Data models.
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-use crate::enums::{OrderSide, OrderType, PreventionMode, RateLimit, TimeInForce};
-
-/// Account information.
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Account {
-    /// Example: `15`
-    pub maker_commission: i64,
-    /// Example: `15`
-    pub taker_commission: i64,
-    /// Example: `0`
-    pub buyer_commission: i64,
-    /// Example: `0`
-    pub seller_commission: i64,
-    pub commission_rates: CommissionRate,
-    pub can_trade: bool,
-    pub can_withdraw: bool,
-    pub can_deposit: bool,
-    /// Example: `False`
-    pub brokered: bool,
-    /// Example: `False`
-    pub require_self_trade_prevention: bool,
-    /// Example: `False`
-    pub prevent_sor: bool,
-    /// Example: `123456789`
-    pub update_time: i64,
-    /// Example: `"SPOT"`
-    pub account_type: String,
-    pub balances: Vec<Balance>,
-    pub permissions: Vec<String>,
-    /// Example: `354937868`
-    pub uid: i64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct CommissionRate {
-    /// Example: "0.00150000"
-    pub maker: String,
-    /// Example: "0.00150000"
-    pub taker: String,
-    /// Example: "0.00000000"
-    pub buyer: String,
-    /// Example: "0.00000000"
-    pub seller: String,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Balance {
-    /// Example: `"BTC"`
-    pub asset: String,
-    /// Example: "4723846.89208129"
-    pub free: String,
-    /// Example: "0.00000000"
-    pub locked: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct MyTrade {
-    /// Example: `"BNBBTC"`
-    pub symbol: String,
-    /// Example: `28457`
-    pub id: i64,
-    /// Example: `100234`
-    pub order_id: i64,
-    /// Example: `-1`
-    pub order_list_id: i64,
-    /// Example: `"4.00000100"`
-    pub price: String,
-    /// Example: `"12.00000000"`
-    pub qty: String,
-    /// Example: `"48.000012"`
-    pub quote_qty: String,
-    /// Example: `"10.10000000"`
-    pub commission: String,
-    /// Example: `"BNB"`
-    pub commission_asset: String,
-    /// Example: `1499865549590`
-    pub time: i64,
-    /// Example: `False`
-    pub is_buyer: bool,
-    /// Example: `False`
-    pub is_maker: bool,
-    pub is_best_match: bool,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Allocation {
-    pub symbol: String,
-    pub allocation_id: i64,
-    pub allocation_type: String,
-    pub order_id: i64,
-    pub order_list_id: i64,
-    pub price: String,
-    pub qty: String,
-    pub quote_qty: String,
-    pub commission: String,
-    pub commission_asset: String,
-    pub time: i64,
-    pub is_buyer: bool,
-    pub is_maker: bool,
-    pub is_allocator: bool,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct PreventedMatch {
-    pub symbol: String,
-    pub prevented_match_id: i64,
-    pub taker_order_id: i64,
-    pub maker_symbol: String,
-    pub maker_order_id: i64,
-    pub trade_group_id: i64,
-    pub self_trade_prevention_mode: String,
-    pub price: String,
-    pub maker_prevented_quantity: String,
-    pub transact_time: i64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct UnfilledOrderCount {
-    #[serde(flatten)]
-    pub rate_limit: RateLimit,
-    pub count: i64,
-}
+use crate::{
+    enums::{OrderSide, OrderType, PreventionMode, TimeInForce},
+    rest::account::Balance,
+};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -286,15 +161,6 @@ pub struct Symbol {
     pub allow_trailing_stop: bool,
     pub is_spot_trading_allowed: bool,
     pub is_margin_trading_allowed: bool,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Discount {
-    pub enabled_for_account: bool,
-    pub enabled_for_symbol: bool,
-    pub discount_asset: Option<String>,
-    pub discount: String,
 }
 
 #[derive(Debug, Deserialize)]

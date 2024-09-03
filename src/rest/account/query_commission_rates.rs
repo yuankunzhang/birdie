@@ -2,10 +2,9 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    models::{CommissionRate, Discount},
-    rest::{endpoint, SecurityType},
-};
+use crate::rest::{endpoint, SecurityType};
+
+use super::{CommissionRate, Discount};
 
 endpoint!(
     "/api/v3/account/commission",

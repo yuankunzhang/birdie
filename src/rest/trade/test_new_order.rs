@@ -1,10 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    models::Discount,
-    rest::{endpoint, SecurityType},
-};
+use crate::rest::{account::Discount, endpoint, SecurityType};
 
 use super::NewOrderParams;
 

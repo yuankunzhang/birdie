@@ -1,11 +1,8 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-use crate::{
-    models::Account,
-    rest::{endpoint, SecurityType},
-};
+use crate::rest::{endpoint, SecurityType};
 
 endpoint!(
     "/api/v3/account",
@@ -70,3 +67,68 @@ impl AccountInformationParams {
 }
 
 pub type AccountInformationResponse = Account;
+
+/// Account information.
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Account {
+    /// Example: `15`
+    pub maker_commission: i64,
+    /// Example: `15`
+    pub taker_commission: i64,
+    /// Example: `0`
+    pub buyer_commission: i64,
+    /// Example: `0`
+    pub seller_commission: i64,
+    pub commission_rates: CommissionRate,
+    pub can_trade: bool,
+    pub can_withdraw: bool,
+    pub can_deposit: bool,
+    /// Example: `False`
+    pub brokered: bool,
+    /// Example: `False`
+    pub require_self_trade_prevention: bool,
+    /// Example: `False`
+    pub prevent_sor: bool,
+    /// Example: `123456789`
+    pub update_time: i64,
+    /// Example: `"SPOT"`
+    pub account_type: String,
+    pub balances: Vec<Balance>,
+    pub permissions: Vec<String>,
+    /// Example: `354937868`
+    pub uid: i64,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CommissionRate {
+    /// Example: "0.00150000"
+    pub maker: String,
+    /// Example: "0.00150000"
+    pub taker: String,
+    /// Example: "0.00000000"
+    pub buyer: String,
+    /// Example: "0.00000000"
+    pub seller: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Balance {
+    /// Example: `"BTC"`
+    pub asset: String,
+    /// Example: "4723846.89208129"
+    pub free: String,
+    /// Example: "0.00000000"
+    pub locked: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Discount {
+    pub enabled_for_account: bool,
+    pub enabled_for_symbol: bool,
+    pub discount_asset: Option<String>,
+    pub discount: String,
+}
