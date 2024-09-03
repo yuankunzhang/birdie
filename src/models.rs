@@ -299,6 +299,109 @@ pub struct Discount {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct NewOrderAck {
+    pub symbol: String,
+    pub order_id: i64,
+    pub order_list_id: i64,
+    pub client_order_id: String,
+    pub transact_time: i64,
+    #[serde(flatten)]
+    pub conditional: NewOrderConditionalFields,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewOrderResult {
+    pub symbol: String,
+    pub order_id: i64,
+    pub order_list_id: i64,
+    pub client_order_id: String,
+    pub transact_time: i64,
+    pub price: String,
+    pub orig_qty: String,
+    pub executed_qty: String,
+    pub cummulative_quote_qty: String,
+    pub status: String,
+    pub time_in_force: String,
+    pub r#type: String,
+    pub side: String,
+    pub working_type: i64,
+    pub self_trade_prevention_mode: String,
+    #[serde(flatten)]
+    pub conditional: NewOrderConditionalFields,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewOrderFull {
+    pub symbol: String,
+    pub order_id: i64,
+    pub order_list_id: i64,
+    pub client_order_id: String,
+    pub transact_time: i64,
+    pub price: String,
+    pub orig_qty: String,
+    pub executed_qty: String,
+    pub cummulative_quote_qty: String,
+    pub status: String,
+    pub time_in_force: String,
+    pub r#type: String,
+    pub side: String,
+    pub working_type: i64,
+    pub self_trade_prevention_mode: String,
+    pub fills: Vec<OrderFill>,
+    #[serde(flatten)]
+    pub conditional: NewOrderConditionalFields,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OrderFill {
+    pub price: String,
+    pub qty: String,
+    pub commission: String,
+    pub commission_asset: String,
+    pub trade_id: i64,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewOrderConditionalFields {
+    /// Quantity for the iceberg order. Appears only if the parameter
+    /// `iceberg_qty` was sent in the request.
+    pub iceberg_qty: Option<String>,
+    /// When used in combination with `symbol`, can be used to query a prevented
+    /// match. Appears only if the order exired due to STP.
+    pub prevented_match_id: Option<i64>,
+    /// Order quantity that expired due to STP. Appears only if the order
+    /// expired due to STP.
+    pub prevented_quantity: Option<String>,
+    /// Price when the algorithmic order will be triggered. Appears for
+    /// `StopLoss`, `TakeProfit`, `StopLossLimit` and `TakeProfitLimit` orders.
+    pub stop_price: Option<String>,
+    /// Can be used to label an order that's part of an order strategy. Appears
+    /// if the parameter was populated in the request.
+    pub strategy_id: Option<i64>,
+    /// Can be used to label an order that is using an order strategy. Appears if
+    /// the parameter was populated in the request.
+    pub strategy_type: Option<i64>,
+    /// Delta price change required before order activation. Appears for Trailing
+    /// Stop Orders.
+    pub trailing_delta: Option<i64>,
+    /// Time when the trailing order is now active and tracking price changes.
+    /// Appears only for Trailing Stop Orders.
+    pub trailing_time: Option<i64>,
+    /// Field that determines whether order used SOR. Appears when placing orders
+    /// using SOR.
+    pub used_sor: Option<bool>,
+    /// Field that determines whether the order is being filled by the SOR or by
+    /// the order book the order was submitted to. Appears when placing orders
+    /// using SOR
+    pub working_floor: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CancelOrderDetail {
     pub symbol: String,
     pub orig_client_order_id: String,

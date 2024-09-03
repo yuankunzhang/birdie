@@ -3,29 +3,37 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    enums::{OrderResponseType, OrderSide, OrderType, PreventionMode, TimeInForce},
-    models::{NewOrderAck, NewOrderFull, NewOrderResult},
+    enums::{
+        CancelReplaceMode, CancelRestriction, OrderRateLimitExceededMode, OrderResponseType,
+        OrderSide, OrderType, PreventionMode, TimeInForce,
+    },
     rest::{endpoint, SecurityType},
 };
 
 endpoint!(
-    "/api/v3/order",
+    "/api/v3/cancelReplace",
     Method::POST,
     SecurityType::Trade,
-    NewOrderEndpoint,
-    NewOrderParams,
-    NewOrderResponse
+    CancelReplaceOrderEndpoint,
+    CancelReplaceOrderParams,
+    CancelReplaceOrderResponse
 );
 
-/// Send in a new order.
+/// Cancels an existing order and places a new order on the same symbol.
+///
+/// Filters and Order Count are evaluated before the processing of the
+/// cancellation and order placement occurs.
+///
+/// A new order that was not attempted (i.e. when newOrderResult:
+/// NOT_ATTEMPTED ), will still increase the order count by 1.
 ///
 /// - Weight: 1
 /// - Data Source: Matching Engine
-pub struct NewOrderEndpoint<'r> {
+pub struct CancelReplaceOrderEndpoint<'r> {
     client: &'r crate::rest::RestClient,
 }
 
-impl<'r> NewOrderEndpoint<'r> {
+impl<'r> CancelReplaceOrderEndpoint<'r> {
     pub fn new(client: &'r crate::rest::RestClient) -> Self {
         Self { client }
     }
@@ -33,10 +41,11 @@ impl<'r> NewOrderEndpoint<'r> {
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NewOrderParams {
+pub struct CancelReplaceOrderParams {
     symbol: String,
     side: OrderSide,
     r#type: OrderType,
+    cancel_replace_mode: CancelReplaceMode,
     #[serde(skip_serializing_if = "Option::is_none")]
     time_in_force: Option<TimeInForce>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -45,6 +54,12 @@ pub struct NewOrderParams {
     quote_order_qty: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     price: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    cancel_new_client_order_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    cancel_orig_client_order_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    cancel_order_id: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     new_client_order_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -62,20 +77,33 @@ pub struct NewOrderParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     self_trade_prevention_mode: Option<PreventionMode>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    cancel_restrictions: Option<CancelRestriction>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    order_rate_limit_exceeded_mode: Option<OrderRateLimitExceededMode>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     recv_window: Option<i64>,
     timestamp: i64,
 }
 
-impl NewOrderParams {
-    pub fn new(symbol: &str, side: OrderSide, r#type: OrderType) -> Self {
+impl CancelReplaceOrderParams {
+    pub fn new(
+        symbol: &str,
+        side: OrderSide,
+        r#type: OrderType,
+        cancel_replace_mode: CancelReplaceMode,
+    ) -> Self {
         Self {
             symbol: symbol.to_owned(),
             side,
             r#type,
+            cancel_replace_mode,
             time_in_force: None,
             quantity: None,
             quote_order_qty: None,
             price: None,
+            cancel_new_client_order_id: None,
+            cancel_orig_client_order_id: None,
+            cancel_order_id: None,
             new_client_order_id: None,
             strategy_id: None,
             strategy_type: None,
@@ -84,6 +112,8 @@ impl NewOrderParams {
             iceberg_qty: None,
             new_order_resp_type: None,
             self_trade_prevention_mode: None,
+            cancel_restrictions: None,
+            order_rate_limit_exceeded_mode: None,
             recv_window: None,
             timestamp: Timestamp::now().as_millisecond(),
         }
@@ -109,9 +139,21 @@ impl NewOrderParams {
         self
     }
 
-    /// A unique id among open orders. Automatically generated if not sent.
-    /// Orders with the same `newClientOrderID` can be accepted only when the
-    /// previous one is filled, otherwise the order will be rejected.
+    pub fn cancel_new_client_order_id(mut self, cancel_new_client_order_id: &str) -> Self {
+        self.cancel_new_client_order_id = Some(cancel_new_client_order_id.to_owned());
+        self
+    }
+
+    pub fn cancel_orig_client_order_id(mut self, cancel_orig_client_order_id: &str) -> Self {
+        self.cancel_orig_client_order_id = Some(cancel_orig_client_order_id.to_owned());
+        self
+    }
+
+    pub fn cancel_order_id(mut self, cancel_order_id: i64) -> Self {
+        self.cancel_order_id = Some(cancel_order_id);
+        self
+    }
+
     pub fn new_client_order_id(mut self, new_client_order_id: &str) -> Self {
         self.new_client_order_id = Some(new_client_order_id.to_owned());
         self
@@ -122,48 +164,49 @@ impl NewOrderParams {
         self
     }
 
-    /// The value cannot be less than 1000000.
     pub fn strategy_type(mut self, strategy_type: &str) -> Self {
         self.strategy_type = Some(strategy_type.to_owned());
         self
     }
 
-    /// Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and
-    /// TAKE_PROFIT_LIMIT orders.
     pub fn stop_price(mut self, stop_price: f64) -> Self {
         self.stop_price = Some(stop_price);
         self
     }
 
-    /// Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and
-    /// TAKE_PROFIT_LIMIT orders.
     pub fn trailing_delta(mut self, trailing_delta: f64) -> Self {
         self.trailing_delta = Some(trailing_delta);
         self
     }
 
-    /// Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an
-    /// iceberg order.
     pub fn iceberg_qty(mut self, iceberg_qty: f64) -> Self {
         self.iceberg_qty = Some(iceberg_qty);
         self
     }
 
-    /// Set the response JSON. ACK, RESULT, or FULL; MARKET and LIMIT order types
-    /// default to FULL, all other orders default to ACK.
     pub fn new_order_resp_type(mut self, new_order_resp_type: OrderResponseType) -> Self {
         self.new_order_resp_type = Some(new_order_resp_type);
         self
     }
 
-    /// The allowed enums is dependent on what is configured on the symbol. The
-    /// possible supported values are EXPIRE_TAKER, EXPIRE_MAKER, EXPIRE_BOTH,
-    /// NONE.
     pub fn self_trade_prevention_mode(
         mut self,
         self_trade_prevention_mode: PreventionMode,
     ) -> Self {
         self.self_trade_prevention_mode = Some(self_trade_prevention_mode);
+        self
+    }
+
+    pub fn cancel_restrictions(mut self, cancel_restrictions: CancelRestriction) -> Self {
+        self.cancel_restrictions = Some(cancel_restrictions);
+        self
+    }
+
+    pub fn order_rate_limit_exceeded_mode(
+        mut self,
+        order_rate_limit_exceeded_mode: OrderRateLimitExceededMode,
+    ) -> Self {
+        self.order_rate_limit_exceeded_mode = Some(order_rate_limit_exceeded_mode);
         self
     }
 
@@ -176,8 +219,4 @@ impl NewOrderParams {
 
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
-pub enum NewOrderResponse {
-    Ack(Box<NewOrderAck>),
-    Result(Box<NewOrderResult>),
-    Full(Box<NewOrderFull>),
-}
+pub enum CancelReplaceOrderResponse {}

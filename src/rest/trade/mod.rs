@@ -2,12 +2,14 @@ use super::{route, RestClient};
 
 mod cancel_all_open_orders;
 mod cancel_order;
+mod cancel_replace_order;
 mod new_order;
 mod query_order;
 mod test_new_order;
 
 pub use cancel_all_open_orders::*;
 pub use cancel_order::*;
+pub use cancel_replace_order::*;
 pub use new_order::*;
 pub use query_order::*;
 pub use test_new_order::*;

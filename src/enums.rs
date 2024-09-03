@@ -113,6 +113,13 @@ pub enum OrderResponseType {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum OrderRateLimitExceededMode {
+    DoNothing,
+    CancelOnly,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum WorkingFloor {
     Exchange,
     Sor,
@@ -181,6 +188,13 @@ pub enum StpModes {
 pub enum CancelRestriction {
     OnlyNew,
     OnlyPartiallyFilled,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum CancelReplaceMode {
+    StopOnFailure,
+    AllowFailure,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
