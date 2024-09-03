@@ -102,41 +102,6 @@ pub struct Discount {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Order {
-    /// Example: `"BNBBTC"`
-    pub symbol: String,
-    /// Example: `"msXkySR3u5uYwpvRMFsi3u"`
-    pub orig_client_order_id: String,
-    /// Example: `28`
-    pub order_id: i64,
-    /// Example: `-1`
-    pub order_list_id: i64,
-    /// Example: `"6gCrw2kRUAF9CvJDGP16IP"`
-    pub client_order_id: String,
-    /// Example: `1507725176595`
-    pub transact_time: i64,
-    /// Example: `"1.00000000"`
-    pub price: String,
-    /// Example: `"10.00000000"`
-    pub orig_qty: String,
-    /// Example: `"10.00000000"`
-    pub executed_qty: String,
-    /// Example: `"10.00000000"`
-    pub cummulative_quote_qty: String,
-    /// Example: `"FILLED"`
-    pub status: String,
-    /// Example: `"GTC"`
-    pub time_in_force: String,
-    /// Example: `"LIMIT"`
-    pub r#type: String,
-    /// Example: `"SELL"`
-    pub side: String,
-    /// Example: `"NONE"`
-    pub self_trade_prevention_mode: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct OcoOrder {
     /// Example: `1929`
     pub order_list_id: i64,
@@ -208,54 +173,6 @@ pub struct MarginOcoOrder {
     pub is_isolated: bool,
     pub orders: Vec<OcoOrderItem>,
     pub order_reports: Vec<OcoOrderReport>,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct OrderDetails {
-    /// Example: `"LTCBTC"`
-    pub symbol: String,
-    /// Example: `1`
-    pub order_id: i64,
-    /// Example: `-1`
-    pub order_list_id: i64,
-    /// Example: `"myOrder1"`
-    pub client_order_id: String,
-    /// Example: `"0.1"`
-    pub price: String,
-    /// Example: `"1.0"`
-    pub orig_qty: String,
-    /// Example: `"0.0"`
-    pub executed_qty: String,
-    /// Example: `"0.0"`
-    pub cummulative_quote_qty: String,
-    /// Example: `"NEW"`
-    pub status: String,
-    /// Example: `"GTC"`
-    pub time_in_force: String,
-    /// Example: `"LIMIT"`
-    pub r#type: String,
-    /// Example: `"BUY"`
-    pub side: String,
-    /// Example: `"0.0"`
-    pub stop_price: String,
-    /// Example: `"0.0"`
-    pub iceberg_qty: String,
-    /// Example: `1499827319559`
-    pub time: i64,
-    /// Example: `1499827319559`
-    pub update_time: i64,
-    pub is_working: bool,
-    /// Example: `1499827319559`
-    pub working_time: i64,
-    /// Example: `"0.00000000"`
-    pub orig_quote_order_qty: String,
-    /// Example: `"NONE"`
-    pub self_trade_prevention_mode: String,
-    /// Example: `0`
-    pub prevented_match_id: Option<i64>,
-    /// Example: `1.200000`
-    pub prevented_quantity: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]

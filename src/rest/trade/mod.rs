@@ -1,9 +1,11 @@
 use super::{route, RestClient};
 
 mod new_order;
+mod query_order;
 mod test_new_order;
 
 pub use new_order::*;
+pub use query_order::*;
 pub use test_new_order::*;
 
 pub struct Handler<'r> {
@@ -17,4 +19,5 @@ impl<'r> Handler<'r> {
 
     route!(new_order, NewOrderEndpoint);
     route!(test_new_order, TestNewOrderEndpoint);
+    route!(query_order, QueryOrderEndpoint);
 }
