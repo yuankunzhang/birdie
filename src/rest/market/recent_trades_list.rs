@@ -1,7 +1,7 @@
 use reqwest::Method;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-use crate::{models::Trade, rest::endpoint};
+use crate::rest::endpoint;
 
 endpoint!(
     "/api/v3/trades",
@@ -48,4 +48,21 @@ impl RecentTradesListParams {
     }
 }
 
-pub type RecentTradesListResponse = Vec<Trade>;
+pub type RecentTradesListResponse = Vec<RecentTrade>;
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RecentTrade {
+    /// Example: `345196462`
+    pub id: i64,
+    /// Example: `"9638.99000000"`
+    pub price: String,
+    /// Example: `"0.02077200"`
+    pub qty: String,
+    /// Example: `"0.02077200"`
+    pub quote_qty: String,
+    /// Example: `1592887772684`
+    pub time: i64,
+    pub is_buyer_maker: bool,
+    pub is_best_match: bool,
+}

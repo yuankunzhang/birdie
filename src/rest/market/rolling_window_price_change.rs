@@ -1,11 +1,9 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    enums::TickerType,
-    models::{TickerFull, TickerMini},
-    rest::endpoint,
-};
+use crate::{enums::TickerType, rest::endpoint};
+
+use super::{TickerFull, TickerMini};
 
 endpoint!(
     "/api/v3/ticker",

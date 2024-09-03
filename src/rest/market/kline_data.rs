@@ -1,7 +1,7 @@
 use reqwest::Method;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-use crate::{enums::KlineInterval, models::Kline, rest::endpoint};
+use crate::{enums::KlineInterval, rest::endpoint};
 
 endpoint!(
     "/api/v3/klines",
@@ -77,3 +77,19 @@ impl KlineDataParams {
 }
 
 pub type KlineDataResponse = Vec<Kline>;
+
+#[derive(Debug, Deserialize)]
+pub struct Kline(
+    pub i64,    // Open time
+    pub String, // Open price
+    pub String, // High price
+    pub String, // Low price
+    pub String, // Close price
+    pub String, // Volume
+    pub i64,    // Close time
+    pub String, // Quote asset volume
+    pub i64,    // Number of trades
+    pub String, // Taker buy base asset volume
+    pub String, // Taker buy quote asset volume
+    pub String, // Unused field, ignore.
+);
