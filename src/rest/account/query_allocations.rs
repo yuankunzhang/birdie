@@ -1,8 +1,11 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::rest::{endpoint, SecurityType};
+use crate::{
+    models::Allocation,
+    rest::{endpoint, SecurityType},
+};
 
 endpoint!(
     "/api/v3/myAllocations",
@@ -94,22 +97,3 @@ impl QueryAllocationsParams {
 }
 
 pub type QueryAllocationsResponse = Vec<Allocation>;
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Allocation {
-    pub symbol: String,
-    pub allocation_id: i64,
-    pub allocation_type: String,
-    pub order_id: i64,
-    pub order_list_id: i64,
-    pub price: String,
-    pub qty: String,
-    pub quote_qty: String,
-    pub commission: String,
-    pub commission_asset: String,
-    pub time: i64,
-    pub is_buyer: bool,
-    pub is_maker: bool,
-    pub is_allocator: bool,
-}

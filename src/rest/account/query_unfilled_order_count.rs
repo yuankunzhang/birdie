@@ -1,9 +1,9 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::{
-    enums::RateLimit,
+    models::UnfilledOrderCount,
     rest::{endpoint, SecurityType},
 };
 
@@ -61,11 +61,3 @@ impl QueryUnfilledOrderCountParams {
 }
 
 pub type QueryUnfilledOrderCountResponse = Vec<UnfilledOrderCount>;
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct UnfilledOrderCount {
-    #[serde(flatten)]
-    pub rate_limit: RateLimit,
-    pub count: i64,
-}

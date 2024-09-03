@@ -1,7 +1,228 @@
 //! Data models.
 use serde::{Deserialize, Serialize};
 
-use crate::enums::{OrderSide, OrderType, PreventionMode, TimeInForce};
+use crate::enums::{OrderSide, OrderType, PreventionMode, RateLimit, TimeInForce};
+
+/// Account information.
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Account {
+    /// Example: `15`
+    pub maker_commission: i64,
+    /// Example: `15`
+    pub taker_commission: i64,
+    /// Example: `0`
+    pub buyer_commission: i64,
+    /// Example: `0`
+    pub seller_commission: i64,
+    pub commission_rates: CommissionRate,
+    pub can_trade: bool,
+    pub can_withdraw: bool,
+    pub can_deposit: bool,
+    /// Example: `False`
+    pub brokered: bool,
+    /// Example: `False`
+    pub require_self_trade_prevention: bool,
+    /// Example: `False`
+    pub prevent_sor: bool,
+    /// Example: `123456789`
+    pub update_time: i64,
+    /// Example: `"SPOT"`
+    pub account_type: String,
+    pub balances: Vec<Balance>,
+    pub permissions: Vec<String>,
+    /// Example: `354937868`
+    pub uid: i64,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CommissionRate {
+    /// Example: "0.00150000"
+    pub maker: String,
+    /// Example: "0.00150000"
+    pub taker: String,
+    /// Example: "0.00000000"
+    pub buyer: String,
+    /// Example: "0.00000000"
+    pub seller: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Balance {
+    /// Example: `"BTC"`
+    pub asset: String,
+    /// Example: "4723846.89208129"
+    pub free: String,
+    /// Example: "0.00000000"
+    pub locked: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MyTrade {
+    /// Example: `"BNBBTC"`
+    pub symbol: String,
+    /// Example: `28457`
+    pub id: i64,
+    /// Example: `100234`
+    pub order_id: i64,
+    /// Example: `-1`
+    pub order_list_id: i64,
+    /// Example: `"4.00000100"`
+    pub price: String,
+    /// Example: `"12.00000000"`
+    pub qty: String,
+    /// Example: `"48.000012"`
+    pub quote_qty: String,
+    /// Example: `"10.10000000"`
+    pub commission: String,
+    /// Example: `"BNB"`
+    pub commission_asset: String,
+    /// Example: `1499865549590`
+    pub time: i64,
+    /// Example: `False`
+    pub is_buyer: bool,
+    /// Example: `False`
+    pub is_maker: bool,
+    pub is_best_match: bool,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Allocation {
+    pub symbol: String,
+    pub allocation_id: i64,
+    pub allocation_type: String,
+    pub order_id: i64,
+    pub order_list_id: i64,
+    pub price: String,
+    pub qty: String,
+    pub quote_qty: String,
+    pub commission: String,
+    pub commission_asset: String,
+    pub time: i64,
+    pub is_buyer: bool,
+    pub is_maker: bool,
+    pub is_allocator: bool,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PreventedMatch {
+    pub symbol: String,
+    pub prevented_match_id: i64,
+    pub taker_order_id: i64,
+    pub maker_symbol: String,
+    pub maker_order_id: i64,
+    pub trade_group_id: i64,
+    pub self_trade_prevention_mode: String,
+    pub price: String,
+    pub maker_prevented_quantity: String,
+    pub transact_time: i64,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UnfilledOrderCount {
+    #[serde(flatten)]
+    pub rate_limit: RateLimit,
+    pub count: i64,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AggTrade {
+    /// Example: `26129`
+    #[serde(rename = "a")]
+    pub aggregated: i64,
+    /// Example: `"0.01633102"`
+    #[serde(rename = "p")]
+    pub price: String,
+    /// Example: `"4.70443515"`
+    #[serde(rename = "q")]
+    pub quantity: String,
+    /// Example: `27781`
+    #[serde(rename = "f")]
+    pub first_trade_id: i64,
+    /// Example: `27781`
+    #[serde(rename = "l")]
+    pub last_trade_id: i64,
+    /// Example: `1498793709153`
+    #[serde(rename = "T")]
+    pub time: i64,
+    #[serde(rename = "m")]
+    pub is_buyer_maker: bool,
+    #[serde(rename = "M")]
+    pub is_best_match: bool,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OldTrade {
+    /// Example: `345196462`
+    pub id: i64,
+    /// Example: `"9638.99000000"`
+    pub price: String,
+    /// Example: `"0.02077200"`
+    pub qty: String,
+    /// Example: `"0.02077200"`
+    pub quote_qty: String,
+    /// Example: `1592887772684`
+    pub time: i64,
+    pub is_buyer_maker: bool,
+    pub is_best_match: bool,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Trade {
+    /// Example: `345196462`
+    pub id: i64,
+    /// Example: `"9638.99000000"`
+    pub price: String,
+    /// Example: `"0.02077200"`
+    pub qty: String,
+    /// Example: `"0.02077200"`
+    pub quote_qty: String,
+    /// Example: `1592887772684`
+    pub time: i64,
+    pub is_buyer_maker: bool,
+    pub is_best_match: bool,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Kline(
+    pub i64,    // Open time
+    pub String, // Open price
+    pub String, // High price
+    pub String, // Low price
+    pub String, // Close price
+    pub String, // Volume
+    pub i64,    // Close time
+    pub String, // Quote asset volume
+    pub i64,    // Number of trades
+    pub String, // Taker buy base asset volume
+    pub String, // Taker buy quote asset volume
+    pub String, // Unused field, ignore.
+);
+
+#[derive(Debug, Deserialize)]
+pub struct UiKline(
+    pub i64,    // Open time
+    pub String, // Open price
+    pub String, // High price
+    pub String, // Low price
+    pub String, // Close price
+    pub String, // Volume
+    pub i64,    // Close time
+    pub String, // Quote asset volume
+    pub i64,    // Number of trades
+    pub String, // Taker buy base asset volume
+    pub String, // Taker buy quote asset volume
+    pub String, // Unused field, ignore.
+);
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -44,30 +265,6 @@ pub struct TickerMini {
     pub first_id: i64,
     pub last_id: i64,
     pub count: i64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct CommissionRate {
-    /// Example: "0.00150000"
-    pub maker: String,
-    /// Example: "0.00150000"
-    pub taker: String,
-    /// Example: "0.00000000"
-    pub buyer: String,
-    /// Example: "0.00000000"
-    pub seller: String,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Balance {
-    /// Example: `"BTC"`
-    pub asset: String,
-    /// Example: "4723846.89208129"
-    pub free: String,
-    /// Example: "0.00000000"
-    pub locked: String,
 }
 
 #[derive(Debug, Deserialize)]

@@ -1,9 +1,9 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::{
-    models::{Balance, CommissionRate},
+    models::Account,
     rest::{endpoint, SecurityType},
 };
 
@@ -69,33 +69,4 @@ impl AccountInformationParams {
     }
 }
 
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct AccountInformationResponse {
-    /// Example: `15`
-    pub maker_commission: i64,
-    /// Example: `15`
-    pub taker_commission: i64,
-    /// Example: `0`
-    pub buyer_commission: i64,
-    /// Example: `0`
-    pub seller_commission: i64,
-    pub commission_rates: CommissionRate,
-    pub can_trade: bool,
-    pub can_withdraw: bool,
-    pub can_deposit: bool,
-    /// Example: `False`
-    pub brokered: bool,
-    /// Example: `False`
-    pub require_self_trade_prevention: bool,
-    /// Example: `False`
-    pub prevent_sor: bool,
-    /// Example: `123456789`
-    pub update_time: i64,
-    /// Example: `"SPOT"`
-    pub account_type: String,
-    pub balances: Vec<Balance>,
-    pub permissions: Vec<String>,
-    /// Example: `354937868`
-    pub uid: i64,
-}
+pub type AccountInformationResponse = Account;

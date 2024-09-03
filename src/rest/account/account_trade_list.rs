@@ -1,8 +1,11 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::rest::{endpoint, SecurityType};
+use crate::{
+    models::MyTrade,
+    rest::{endpoint, SecurityType},
+};
 
 endpoint!(
     "/api/v3/myTrades",
@@ -96,33 +99,3 @@ impl AccountTradeListParams {
 }
 
 pub type AccountTradeListResponse = Vec<MyTrade>;
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct MyTrade {
-    /// Example: `"BNBBTC"`
-    pub symbol: String,
-    /// Example: `28457`
-    pub id: i64,
-    /// Example: `100234`
-    pub order_id: i64,
-    /// Example: `-1`
-    pub order_list_id: i64,
-    /// Example: `"4.00000100"`
-    pub price: String,
-    /// Example: `"12.00000000"`
-    pub qty: String,
-    /// Example: `"48.000012"`
-    pub quote_qty: String,
-    /// Example: `"10.10000000"`
-    pub commission: String,
-    /// Example: `"BNB"`
-    pub commission_asset: String,
-    /// Example: `1499865549590`
-    pub time: i64,
-    /// Example: `False`
-    pub is_buyer: bool,
-    /// Example: `False`
-    pub is_maker: bool,
-    pub is_best_match: bool,
-}

@@ -1,7 +1,7 @@
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::rest::endpoint;
+use crate::{models::AggTrade, rest::endpoint};
 
 endpoint!(
     "/api/v3/aggTrades",
@@ -77,30 +77,3 @@ impl AggregateTradesListParams {
 }
 
 pub type AggregateTradesListResponse = Vec<AggTrade>;
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct AggTrade {
-    /// Example: `26129`
-    #[serde(rename = "a")]
-    pub aggregated: i64,
-    /// Example: `"0.01633102"`
-    #[serde(rename = "p")]
-    pub price: String,
-    /// Example: `"4.70443515"`
-    #[serde(rename = "q")]
-    pub quantity: String,
-    /// Example: `27781`
-    #[serde(rename = "f")]
-    pub first_trade_id: i64,
-    /// Example: `27781`
-    #[serde(rename = "l")]
-    pub last_trade_id: i64,
-    /// Example: `1498793709153`
-    #[serde(rename = "T")]
-    pub time: i64,
-    #[serde(rename = "m")]
-    pub is_buyer_maker: bool,
-    #[serde(rename = "M")]
-    pub is_best_match: bool,
-}
