@@ -1,5 +1,6 @@
 use super::{route, RestClient};
 
+mod all_orders;
 mod cancel_all_open_orders;
 mod cancel_order;
 mod cancel_replace_order;
@@ -7,6 +8,7 @@ mod new_order;
 mod query_order;
 mod test_new_order;
 
+pub use all_orders::*;
 pub use cancel_all_open_orders::*;
 pub use cancel_order::*;
 pub use cancel_replace_order::*;
@@ -28,4 +30,6 @@ impl<'r> Handler<'r> {
     route!(query_order, QueryOrderEndpoint);
     route!(cancel_order, CancelOrderEndpoint);
     route!(cancel_all_open_orders, CancelAllOpenOrdersEndpoint);
+    route!(cancel_replace_order, CancelReplaceOrderEndpoint);
+    route!(all_orders, AllOrdersEndpoint);
 }
