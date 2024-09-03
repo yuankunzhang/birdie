@@ -5,6 +5,7 @@ mod kline_data;
 mod old_trade_lookup;
 mod order_book;
 mod recent_trades_list;
+mod rolling_window_price_change;
 mod symbol_order_book_ticker;
 mod symbol_price_ticker;
 mod ticker_24hr;
@@ -17,6 +18,7 @@ pub use kline_data::*;
 pub use old_trade_lookup::*;
 pub use order_book::*;
 pub use recent_trades_list::*;
+pub use rolling_window_price_change::*;
 pub use symbol_order_book_ticker::*;
 pub use symbol_price_ticker::*;
 pub use ticker_24hr::*;
@@ -45,4 +47,8 @@ impl<'r> Handler<'r> {
     route!(trading_day_ticker, TradingDayTickerEndpoint);
     route!(symbol_price_ticker, SymbolPriceTickerEndpoint);
     route!(symbol_order_book_ticker, SymbolOrderBookTickerEndpoint);
+    route!(
+        rolling_window_price_change,
+        RollingWindowPriceChangeEndpoint
+    );
 }
