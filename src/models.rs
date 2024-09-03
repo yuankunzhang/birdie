@@ -202,45 +202,6 @@ pub struct OrderResponseAck {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct OrderResponseResult {
-    /// Example: `"BTCUSDT"`
-    pub symbol: String,
-    /// Example: `28`
-    pub order_id: i64,
-    /// Example: `-1`
-    pub order_list_id: i64,
-    /// Example: `"6gCrw2kRUAF9CvJDGP16IP"`
-    pub client_order_id: String,
-    /// Example: `1507725176595`
-    pub transact_time: i64,
-    /// Example: `"0.00000000"`
-    pub price: String,
-    /// Example: `"10.00000000"`
-    pub orig_qty: String,
-    /// Example: `"10.00000000"`
-    pub executed_qty: String,
-    /// Example: `"10.00000000"`
-    pub cummulative_quote_qty: String,
-    /// Example: `"FILLED"`
-    pub status: String,
-    /// Example: `"GTC"`
-    pub time_in_force: String,
-    /// Example: `"MARKET"`
-    pub r#type: String,
-    /// Example: `"SELL"`
-    pub side: String,
-    /// Example: `1`
-    pub strategy_id: Option<i64>,
-    /// Example: `1000000`
-    pub strategy_type: Option<i64>,
-    /// Example: `1507725176595`
-    pub working_time: i64,
-    /// Example: `"NONE"`
-    pub self_trade_prevention_mode: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct OrderResponseFull {
     /// Example: `"BTCUSDT"`
     pub symbol: String,

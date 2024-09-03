@@ -39,6 +39,8 @@ pub enum BinanceErrorCode {
     ServerBusy = -1008,
     /// ERROR_MSG_RECEIVED
     ErrorMsgReceived = -1010,
+    /// Filter failure
+    FilterFailure = -1013,
     /// Unsupported order combination.
     UnknownOrderComposition = -1014,
     /// - Too many new orders.

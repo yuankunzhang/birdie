@@ -66,6 +66,7 @@ impl RestClient {
     handler!(account);
     handler!(general);
     handler!(market);
+    handler!(trade);
 
     pub(self) async fn request<P, R>(
         &self,
@@ -177,12 +178,12 @@ pub trait Endpoint {
         match self.security_type() {
             SecurityType::None => {
                 self.client()
-                    .request(Method::GET, self.path(), params)
+                    .request(self.method(), self.path(), params)
                     .await
             }
             _ => {
                 self.client()
-                    .signed_request(Method::GET, self.path(), params)
+                    .signed_request(self.method(), self.path(), params)
                     .await
             }
         }
