@@ -1,10 +1,9 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{
-    enums::CancelRestriction,
-    models::CancelOrderDetail,
+    enums::{CancelRestriction, OrderSide, OrderType, PreventionMode, TimeInForce},
     rest::{endpoint, SecurityType},
 };
 
@@ -91,3 +90,23 @@ impl CancelOrderParams {
 }
 
 pub type CancelOrderResponse = CancelOrderDetail;
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CancelOrderDetail {
+    pub symbol: String,
+    pub orig_client_order_id: String,
+    pub order_id: i64,
+    pub order_list_id: i64,
+    pub client_order_id: String,
+    pub transact_time: i64,
+    pub price: String,
+    pub orig_qty: String,
+    pub executed_qty: String,
+    pub cummulative_quote_qty: String,
+    pub status: String,
+    pub time_in_force: TimeInForce,
+    pub r#type: OrderType,
+    pub side: OrderSide,
+    pub self_trade_prevention_mode: PreventionMode,
+}

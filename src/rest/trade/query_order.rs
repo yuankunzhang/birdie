@@ -71,9 +71,11 @@ impl QueryOrderParams {
     }
 }
 
+pub type QueryOrderResponse = QueryOrderDetail;
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct QueryOrderResponse {
+pub struct QueryOrderDetail {
     /// Example: `"LTCBTC"`
     pub symbol: String,
     /// Example: `1`

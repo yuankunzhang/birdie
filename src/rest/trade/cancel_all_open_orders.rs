@@ -2,10 +2,9 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::Serialize;
 
-use crate::{
-    models::CancelOrderDetail,
-    rest::{endpoint, SecurityType},
-};
+use crate::rest::{endpoint, SecurityType};
+
+use super::CancelOrderDetail;
 
 endpoint!(
     "/api/v3/openOrders",
