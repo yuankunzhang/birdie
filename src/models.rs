@@ -5,6 +5,49 @@ use crate::enums::OrderType;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct TickerFull {
+    pub symbol: String,
+    pub price_change: String,
+    pub price_change_percent: String,
+    pub weighted_avg_price: String,
+    pub prev_close_price: String,
+    pub last_price: String,
+    pub last_qty: String,
+    pub bid_price: String,
+    pub bid_qty: String,
+    pub ask_price: String,
+    pub ask_qty: String,
+    pub open_price: String,
+    pub high_price: String,
+    pub low_price: String,
+    pub volume: String,
+    pub quote_volume: String,
+    pub open_time: i64,
+    pub close_time: i64,
+    pub first_id: i64,
+    pub last_id: i64,
+    pub count: i64,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TickerMini {
+    pub symbol: String,
+    pub open_price: String,
+    pub high_price: String,
+    pub low_price: String,
+    pub last_price: String,
+    pub volume: String,
+    pub quote_volume: String,
+    pub open_time: i64,
+    pub close_time: i64,
+    pub first_id: i64,
+    pub last_id: i64,
+    pub count: i64,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CommissionRate {
     /// Example: "0.00150000"
     pub maker: String,
@@ -25,6 +68,36 @@ pub struct Balance {
     pub free: String,
     /// Example: "0.00000000"
     pub locked: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Symbol {
+    pub symbol: String,
+    pub status: String,
+    pub base_asset: String,
+    pub base_asset_precision: i64,
+    pub quote_asset: String,
+    pub quote_asset_precision: i64,
+    pub base_commission_precision: i64,
+    pub quote_commission_precision: i64,
+    pub order_types: Vec<OrderType>,
+    pub iceberg_allowed: bool,
+    pub oco_allowed: bool,
+    pub oto_allowed: bool,
+    pub quote_order_qty_market_allowed: bool,
+    pub allow_trailing_stop: bool,
+    pub is_spot_trading_allowed: bool,
+    pub is_margin_trading_allowed: bool,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Discount {
+    pub enabled_for_account: bool,
+    pub enabled_for_symbol: bool,
+    pub discount_asset: Option<String>,
+    pub discount: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -187,74 +260,6 @@ pub struct OrderDetails {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct OrderResponseAck {
-    /// Example: `"BTCUSDT"`
-    pub symbol: String,
-    /// Example: `28`
-    pub order_id: i64,
-    /// Example: `-1`
-    pub order_list_id: i64,
-    /// Example: `"6gCrw2kRUAF9CvJDGP16IP"`
-    pub client_order_id: String,
-    /// Example: `1507725176595`
-    pub transact_time: i64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct OrderResponseFull {
-    /// Example: `"BTCUSDT"`
-    pub symbol: String,
-    /// Example: `28`
-    pub order_id: i64,
-    /// Example: `-1`
-    pub order_list_id: i64,
-    /// Example: `"6gCrw2kRUAF9CvJDGP16IP"`
-    pub client_order_id: String,
-    /// Example: `1507725176595`
-    pub transact_time: i64,
-    /// Example: `"0.00000000"`
-    pub price: String,
-    /// Example: `"10.00000000"`
-    pub orig_qty: String,
-    /// Example: `"10.00000000"`
-    pub executed_qty: String,
-    /// Example: `"10.00000000"`
-    pub cummulative_quote_qty: String,
-    /// Example: `"FILLED"`
-    pub status: String,
-    /// Example: `"GTC"`
-    pub time_in_force: String,
-    /// Example: `"MARKET"`
-    pub r#type: String,
-    /// Example: `"SELL"`
-    pub side: String,
-    /// Example: `1`
-    pub strategy_id: Option<i64>,
-    /// Example: `1000000`
-    pub strategy_type: Option<i64>,
-    /// Example: `1507725176595`
-    pub working_time: i64,
-    /// Example: `"NONE"`
-    pub self_trade_prevention_mode: String,
-    pub fills: Vec<OrderFill>,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct OrderFill {
-    /// Example: "4000.00000000"
-    pub price: String,
-    /// Example: "1.00000000"
-    pub qty: String,
-    /// Example: "4.00000000"
-    pub commission: String,
-    /// Example: "USDT"
-    pub commission_asset: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct MarginOrder {
     /// Example: `"LTCBTC"`
     pub symbol: String,
@@ -395,41 +400,6 @@ pub struct MarginOrderResponseResult {
     pub is_isolated: bool,
     /// Example: `"SELL"`
     pub side: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct MarginOrderResponseFull {
-    /// Example: `"BTCUSDT"`
-    pub symbol: String,
-    /// Example: `28`
-    pub order_id: i64,
-    /// Example: `"6gCrw2kRUAF9CvJDGP16IP"`
-    pub client_order_id: String,
-    /// Example: `1507725176595`
-    pub transact_time: i64,
-    /// Example: `"1.00000000"`
-    pub price: String,
-    /// Example: `"10.00000000"`
-    pub orig_qty: String,
-    /// Example: `"10.00000000"`
-    pub executed_qty: String,
-    /// Example: `"10.00000000"`
-    pub cummulative_quote_qty: String,
-    /// Example: `"FILLED"`
-    pub status: String,
-    /// Example: `"GTC"`
-    pub time_in_force: String,
-    /// Example: `"MARKET"`
-    pub r#type: String,
-    /// Example: `"SELL"`
-    pub side: String,
-    /// Example: `5`
-    pub margin_buy_borrow_amount: f64,
-    /// Example: `"BTC"`
-    pub margin_buy_borrow_asset: String,
-    pub is_isolated: bool,
-    pub fills: Vec<OrderFill>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -1017,34 +987,4 @@ pub struct DeliveryPositionRiskVos {
     pub symbol: String,
     /// Example: "-0.01612295"
     pub unrealized_profit: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Symbol {
-    pub symbol: String,
-    pub status: String,
-    pub base_asset: String,
-    pub base_asset_precision: i64,
-    pub quote_asset: String,
-    pub quote_asset_precision: i64,
-    pub base_commission_precision: i64,
-    pub quote_commission_precision: i64,
-    pub order_types: Vec<OrderType>,
-    pub iceberg_allowed: bool,
-    pub oco_allowed: bool,
-    pub oto_allowed: bool,
-    pub quote_order_qty_market_allowed: bool,
-    pub allow_trailing_stop: bool,
-    pub is_spot_trading_allowed: bool,
-    pub is_margin_trading_allowed: bool,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Discount {
-    pub enabled_for_account: bool,
-    pub enabled_for_symbol: bool,
-    pub discount_asset: Option<String>,
-    pub discount: String,
 }
