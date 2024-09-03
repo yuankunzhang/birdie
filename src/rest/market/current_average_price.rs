@@ -1,7 +1,7 @@
 use reqwest::Method;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-use crate::{models::AveragePrice, rest::endpoint};
+use crate::rest::endpoint;
 
 endpoint!(
     "/api/v3/avgPrice",
@@ -39,4 +39,10 @@ impl CurrentAveragePriceParams {
     }
 }
 
-pub type CurrentAveragePriceResponse = AveragePrice;
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CurrentAveragePriceResponse {
+    pub mins: i64,
+    pub price: String,
+    pub close_time: i64,
+}

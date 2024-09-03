@@ -1,40 +1,9 @@
 //! Data models.
 use serde::{Deserialize, Serialize};
 
-use crate::enums::{OrderType, RateLimit};
+use crate::enums::OrderType;
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Account {
-    /// Example: `15`
-    pub maker_commission: i64,
-    /// Example: `15`
-    pub taker_commission: i64,
-    /// Example: `0`
-    pub buyer_commission: i64,
-    /// Example: `0`
-    pub seller_commission: i64,
-    pub commission_rates: CommissionRate,
-    pub can_trade: bool,
-    pub can_withdraw: bool,
-    pub can_deposit: bool,
-    /// Example: `False`
-    pub brokered: bool,
-    /// Example: `False`
-    pub require_self_trade_prevention: bool,
-    /// Example: `False`
-    pub prevent_sor: bool,
-    /// Example: `123456789`
-    pub update_time: i64,
-    /// Example: `"SPOT"`
-    pub account_type: String,
-    pub balances: Vec<Balance>,
-    pub permissions: Vec<String>,
-    /// Example: `354937868`
-    pub uid: i64,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CommissionRate {
     /// Example: "0.00150000"
@@ -58,7 +27,7 @@ pub struct Balance {
     pub locked: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Order {
     /// Example: `"BNBBTC"`
@@ -93,7 +62,7 @@ pub struct Order {
     pub self_trade_prevention_mode: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OcoOrder {
     /// Example: `1929`
@@ -116,7 +85,7 @@ pub struct OcoOrder {
     pub order_reports: Vec<OcoOrderReport>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OcoOrderItem {
     pub symbol: String,
@@ -124,7 +93,7 @@ pub struct OcoOrderItem {
     pub client_order_id: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OcoOrderReport {
     pub symbol: String,
@@ -145,7 +114,7 @@ pub struct OcoOrderReport {
     pub transaction_time: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginOcoOrder {
     /// Example: `0`
@@ -168,7 +137,7 @@ pub struct MarginOcoOrder {
     pub order_reports: Vec<OcoOrderReport>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OrderDetails {
     /// Example: `"LTCBTC"`
@@ -216,7 +185,7 @@ pub struct OrderDetails {
     pub prevented_quantity: Option<String>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OrderResponseAck {
     /// Example: `"BTCUSDT"`
@@ -231,7 +200,7 @@ pub struct OrderResponseAck {
     pub transact_time: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OrderResponseResult {
     /// Example: `"BTCUSDT"`
@@ -270,7 +239,7 @@ pub struct OrderResponseResult {
     pub self_trade_prevention_mode: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OrderResponseFull {
     /// Example: `"BTCUSDT"`
@@ -310,7 +279,7 @@ pub struct OrderResponseFull {
     pub fills: Vec<OrderFill>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OrderFill {
     /// Example: "4000.00000000"
@@ -323,7 +292,7 @@ pub struct OrderFill {
     pub commission_asset: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginOrder {
     /// Example: `"LTCBTC"`
@@ -352,7 +321,7 @@ pub struct MarginOrder {
     pub side: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginOrderDetail {
     /// Example: `"ZwfQzuDIGpceVhKW5DvCmO"`
@@ -391,7 +360,7 @@ pub struct MarginOrderDetail {
     pub self_trade_prevention_mode: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CanceledMarginOrderDetail {
     /// Example: `"BNBUSDT"`
@@ -423,7 +392,7 @@ pub struct CanceledMarginOrderDetail {
     pub side: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginOrderResponseAck {
     /// Example: `"BTCUSDT"`
@@ -437,7 +406,7 @@ pub struct MarginOrderResponseAck {
     pub transact_time: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginOrderResponseResult {
     /// Example: `"BTCUSDT"`
@@ -467,7 +436,7 @@ pub struct MarginOrderResponseResult {
     pub side: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginOrderResponseFull {
     /// Example: `"BTCUSDT"`
@@ -502,7 +471,7 @@ pub struct MarginOrderResponseFull {
     pub fills: Vec<OrderFill>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginTrade {
     /// Example: `"0.00006000"`
@@ -528,7 +497,7 @@ pub struct MarginTrade {
     pub time: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginTransferDetails {
     pub rows: Vec<MarginTransferRow>,
@@ -536,7 +505,7 @@ pub struct MarginTransferDetails {
     pub total: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MarginTransferRow {
     /// Example: "0.10000000"
@@ -557,7 +526,7 @@ pub struct MarginTransferRow {
     pub trans_to: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct IsolatedMarginAccountInfo {
     pub assets: Vec<IsolatedMarginAccountAsset>,
@@ -569,7 +538,7 @@ pub struct IsolatedMarginAccountInfo {
     pub total_net_asset_of_btc: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct IsolatedMarginAccountAsset {
     pub base_asset: Asset,
@@ -593,7 +562,7 @@ pub struct IsolatedMarginAccountAsset {
     pub trade_enabled: bool,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Asset {
     /// Example: "BTC"
@@ -616,7 +585,7 @@ pub struct Asset {
     pub total_asset: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BookTicker {
     /// Example: `"BNBBTC"`
@@ -631,7 +600,7 @@ pub struct BookTicker {
     pub ask_qty: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PriceTicker {
     /// Example: `"BNBBTC"`
@@ -640,7 +609,7 @@ pub struct PriceTicker {
     pub price: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RepaymentInfo {
     /// Example: `"BUSD"`
@@ -659,7 +628,7 @@ pub struct RepaymentInfo {
     pub repay_status: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RepaymentInfo2 {
     /// Example: `"BUSD"`
@@ -670,7 +639,7 @@ pub struct RepaymentInfo2 {
     pub repay_status: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Ticker {
     /// Example: `"BNBBTC"`
@@ -713,7 +682,7 @@ pub struct Ticker {
     pub count: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DayTicker {
     /// Example: `"BTCUSDT"`
@@ -748,88 +717,14 @@ pub struct DayTicker {
     pub count: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct MyTrade {
-    /// Example: `"BNBBTC"`
-    pub symbol: String,
-    /// Example: `28457`
-    pub id: i64,
-    /// Example: `100234`
-    pub order_id: i64,
-    /// Example: `-1`
-    pub order_list_id: i64,
-    /// Example: `"4.00000100"`
-    pub price: String,
-    /// Example: `"12.00000000"`
-    pub qty: String,
-    /// Example: `"48.000012"`
-    pub quote_qty: String,
-    /// Example: `"10.10000000"`
-    pub commission: String,
-    /// Example: `"BNB"`
-    pub commission_asset: String,
-    /// Example: `1499865549590`
-    pub time: i64,
-    /// Example: `False`
-    pub is_buyer: bool,
-    /// Example: `False`
-    pub is_maker: bool,
-    pub is_best_match: bool,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Transaction {
     /// Example: `345196462`
     pub tran_id: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Trade {
-    /// Example: `345196462`
-    pub id: i64,
-    /// Example: `"9638.99000000"`
-    pub price: String,
-    /// Example: `"0.02077200"`
-    pub qty: String,
-    /// Example: `"0.02077200"`
-    pub quote_qty: String,
-    /// Example: `1592887772684`
-    pub time: i64,
-    pub is_buyer_maker: bool,
-    pub is_best_match: bool,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct AggTrade {
-    /// Example: `26129`
-    #[serde(rename = "a")]
-    pub aggregated: i64,
-    /// Example: `"0.01633102"`
-    #[serde(rename = "p")]
-    pub price: String,
-    /// Example: `"4.70443515"`
-    #[serde(rename = "q")]
-    pub quantity: String,
-    /// Example: `27781`
-    #[serde(rename = "f")]
-    pub first_trade_id: i64,
-    /// Example: `27781`
-    #[serde(rename = "l")]
-    pub last_trade_id: i64,
-    /// Example: `1498793709153`
-    #[serde(rename = "T")]
-    pub time: i64,
-    #[serde(rename = "m")]
-    pub is_buyer_maker: bool,
-    #[serde(rename = "M")]
-    pub is_best_match: bool,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BnbBurnStatus {
     pub spot_bnb_burn: bool,
@@ -837,7 +732,7 @@ pub struct BnbBurnStatus {
     pub interest_bnb_burn: bool,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotSpot {
     /// Example: `200`
@@ -847,7 +742,7 @@ pub struct SnapshotSpot {
     pub snapshot_vos: Vec<SnapshotVos>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotVos {
     pub balances: Vec<Balance>,
@@ -855,7 +750,7 @@ pub struct SnapshotVos {
     pub total_asset_of_btc: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotMargin {
     /// Example: `200`
@@ -865,7 +760,7 @@ pub struct SnapshotMargin {
     pub snapshot_vos: Vec<SnapshotMarginVos>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotMarginVos {
     pub data: SnapshotMarginVosData,
@@ -875,7 +770,7 @@ pub struct SnapshotMarginVos {
     pub update_time: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotMarginVosData {
     /// Example: "2748.02909813"
@@ -889,7 +784,7 @@ pub struct SnapshotMarginVosData {
     pub user_assets: Vec<Asset>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotFutures {
     /// Example: `200`
@@ -899,7 +794,7 @@ pub struct SnapshotFutures {
     pub snapshot_vos: Vec<SnapshotFuturesVos>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotFuturesVos {
     pub data: SnapshotFuturesVosData,
@@ -909,14 +804,14 @@ pub struct SnapshotFuturesVos {
     pub update_time: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotFuturesVosData {
     pub assets: Vec<SnapshotFuturesVosDataAsset>,
     pub position: Vec<SnapshotFuturesVosDataPosition>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotFuturesVosDataAsset {
     /// Example: "USDT"
@@ -927,7 +822,7 @@ pub struct SnapshotFuturesVosDataAsset {
     pub wallet_balance: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SnapshotFuturesVosDataPosition {
     /// Example: "7130.41000000"
@@ -943,13 +838,13 @@ pub struct SnapshotFuturesVosDataPosition {
     pub unrealized_profit: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SubAccountUsdtFuturesDetails {
     pub future_account_resp: FutureAccountResp,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FutureAccountResp {
     /// Example: "abc@test.com"
@@ -980,7 +875,7 @@ pub struct FutureAccountResp {
     pub update_time: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FutureAccountAsset {
     /// Example: "USDT"
@@ -1003,7 +898,7 @@ pub struct FutureAccountAsset {
     pub wallet_balance: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SubAccountCoinFuturesDetails {
     /// Example: `"abc@test.com"`
@@ -1018,13 +913,13 @@ pub struct SubAccountCoinFuturesDetails {
     pub update_time: i64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SubAccountUsdtFuturesSummary {
     pub future_account_summary_resp: FutureAccountSummaryResp,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FutureAccountSummaryResp {
     /// Example: "9.83137400"
@@ -1046,7 +941,7 @@ pub struct FutureAccountSummaryResp {
     pub sub_account_list: Vec<FutureAccountSubAccount>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FutureAccountSubAccount {
     /// Example: "123@test.com"
@@ -1069,13 +964,13 @@ pub struct FutureAccountSubAccount {
     pub asset: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SubAccountCoinFuturesSummary {
     pub delivery_account_summary_resp: DeliveryAccountSummaryResp,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DeliveryAccountSummaryResp {
     /// Example: 25.03221121
@@ -1089,7 +984,7 @@ pub struct DeliveryAccountSummaryResp {
     pub sub_account_list: Vec<DeliveryAccountSubAccount>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DeliveryAccountSubAccount {
     /// Example: 123@test.com
@@ -1104,13 +999,13 @@ pub struct DeliveryAccountSubAccount {
     pub asset: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SubAccountUsdtFuturesPositionRisk {
     pub future_position_risk_vos: Vec<FuturePositionRiskVos>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FuturePositionRiskVos {
     /// Example: "9975.12000"
@@ -1131,13 +1026,13 @@ pub struct FuturePositionRiskVos {
     pub unrealized_profit: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SubAccountCoinFuturesPositionRisk {
     pub delivery_position_risk_vos: Vec<DeliveryPositionRiskVos>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DeliveryPositionRiskVos {
     /// Example: "9975.12000"
@@ -1184,48 +1079,6 @@ pub struct Symbol {
     pub is_margin_trading_allowed: bool,
 }
 
-#[derive(Clone, Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct UnfilledOrderCount {
-    #[serde(flatten)]
-    pub rate_limit: RateLimit,
-    pub count: i64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct PreventedMatch {
-    pub symbol: String,
-    pub prevented_match_id: i64,
-    pub taker_order_id: i64,
-    pub maker_symbol: String,
-    pub maker_order_id: i64,
-    pub trade_group_id: i64,
-    pub self_trade_prevention_mode: String,
-    pub price: String,
-    pub maker_prevented_quantity: String,
-    pub transact_time: i64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Allocation {
-    pub symbol: String,
-    pub allocation_id: i64,
-    pub allocation_type: String,
-    pub order_id: i64,
-    pub order_list_id: i64,
-    pub price: String,
-    pub qty: String,
-    pub quote_qty: String,
-    pub commission: String,
-    pub commission_asset: String,
-    pub time: i64,
-    pub is_buyer: bool,
-    pub is_maker: bool,
-    pub is_allocator: bool,
-}
-
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Discount {
@@ -1233,133 +1086,4 @@ pub struct Discount {
     pub enabled_for_symbol: bool,
     pub discount_asset: Option<String>,
     pub discount: String,
-}
-
-#[derive(Debug)]
-pub enum KlineInterval {
-    OneSecond,
-    OneMinute,
-    ThreeMinutes,
-    FiveMinutes,
-    FifteenMinutes,
-    ThirtyMinutes,
-    OneHour,
-    TwoHours,
-    FourHours,
-    SixHours,
-    EightHours,
-    TwelveHours,
-    OneDay,
-    ThreeDays,
-    OneWeek,
-    OneMonth,
-}
-
-impl Serialize for KlineInterval {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::ser::Serializer,
-    {
-        let interval = match self {
-            KlineInterval::OneSecond => "1s",
-            KlineInterval::OneMinute => "1m",
-            KlineInterval::ThreeMinutes => "3m",
-            KlineInterval::FiveMinutes => "5m",
-            KlineInterval::FifteenMinutes => "15m",
-            KlineInterval::ThirtyMinutes => "30m",
-            KlineInterval::OneHour => "1h",
-            KlineInterval::TwoHours => "2h",
-            KlineInterval::FourHours => "4h",
-            KlineInterval::SixHours => "6h",
-            KlineInterval::EightHours => "8h",
-            KlineInterval::TwelveHours => "12h",
-            KlineInterval::OneDay => "1d",
-            KlineInterval::ThreeDays => "3d",
-            KlineInterval::OneWeek => "1w",
-            KlineInterval::OneMonth => "1M",
-        };
-        serializer.serialize_str(interval)
-    }
-}
-
-pub type Kline = (
-    i64,    // Open time
-    String, // Open price
-    String, // High price
-    String, // Low price
-    String, // Close price
-    String, // Volume
-    i64,    // Close time
-    String, // Quote asset volume
-    i64,    // Number of trades
-    String, // Taker buy base asset volume
-    String, // Taker buy quote asset volume
-    String, // Unused field, ignore.
-);
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct AveragePrice {
-    pub mins: i64,
-    pub price: String,
-    pub close_time: i64,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum TickerType {
-    Full,
-    Mini,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(untagged)]
-pub enum TickerData {
-    Full(Box<TickerFull>),
-    FullVec(Box<Vec<TickerFull>>),
-    Mini(Box<TickerMini>),
-    MiniVec(Box<Vec<TickerMini>>),
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct TickerFull {
-    pub symbol: String,
-    pub price_change: String,
-    pub price_change_percent: String,
-    pub weighted_avg_price: String,
-    pub prev_close_price: String,
-    pub last_price: String,
-    pub last_qty: String,
-    pub bid_price: String,
-    pub bid_qty: String,
-    pub ask_price: String,
-    pub ask_qty: String,
-    pub open_price: String,
-    pub high_price: String,
-    pub low_price: String,
-    pub volume: String,
-    pub quote_volume: String,
-    pub open_time: i64,
-    pub close_time: i64,
-    pub first_id: i64,
-    pub last_id: i64,
-    pub count: i64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct TickerMini {
-    pub symbol: String,
-    pub open_price: String,
-    pub high_price: String,
-    pub low_price: String,
-    pub last_price: String,
-    pub volume: String,
-    pub quote_volume: String,
-    pub open_time: i64,
-    pub close_time: i64,
-    pub first_id: i64,
-    pub last_id: i64,
-    pub count: i64,
 }

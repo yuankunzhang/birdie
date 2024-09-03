@@ -1,8 +1,10 @@
 use birdie::{
-    models::KlineInterval,
+    enums::KlineInterval,
     rest::{
         market::{
-            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams, OldTradeLookupParams, OrderBookParams, RecentTradesListParams, Ticker24hrParams, TradingDayTickerParams, UiKlinesParams
+            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams,
+            OldTradeLookupParams, OrderBookParams, RecentTradesListParams, Ticker24hrParams,
+            TradingDayTickerParams, UiKlinesParams,
         },
         Endpoint,
     },
@@ -90,12 +92,7 @@ async fn current_average_price() {
 async fn ticker_24hr() {
     let birdie = common::setup();
     let params = Ticker24hrParams::new().symbol("BTCUSDT");
-    let resp = birdie
-        .rest()
-        .market()
-        .ticker_24hr()
-        .request(params)
-        .await;
+    let resp = birdie.rest().market().ticker_24hr().request(params).await;
     assert!(resp.is_ok());
 }
 
