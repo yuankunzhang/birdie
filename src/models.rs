@@ -1,7 +1,7 @@
 //! Data models.
 use serde::Deserialize;
 
-use crate::{enums::OrderType, rest::account::Balance};
+use crate::{enums::OrderType, rest_api::account::Balance};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]

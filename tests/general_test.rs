@@ -1,8 +1,8 @@
 use birdie::{
     errors::{BinanceError, BinanceErrorCode},
-    rest::{
+    rest_api::{
         general::{CheckServerTimeParams, ExchangeInfoParams, TestConnectivityParams},
-        Endpoint, RestError,
+        Endpoint, RestApiError,
     },
 };
 
@@ -13,7 +13,7 @@ async fn test_connectivity() {
     let birdie = common::setup();
     let params = TestConnectivityParams::new();
     let resp = birdie
-        .rest()
+        .rest_api()
         .general()
         .test_connectivity()
         .request(params)
@@ -26,7 +26,7 @@ async fn check_server_time() {
     let birdie = common::setup();
     let params = CheckServerTimeParams::new();
     let resp = birdie
-        .rest()
+        .rest_api()
         .general()
         .check_server_time()
         .request(params)
@@ -41,7 +41,7 @@ async fn exchange_info() {
     // no params
     let params = ExchangeInfoParams::new();
     let resp = birdie
-        .rest()
+        .rest_api()
         .general()
         .exchange_info()
         .request(params)
@@ -51,7 +51,7 @@ async fn exchange_info() {
     // symbol param
     let params = ExchangeInfoParams::new().symbol("BTCUSDT");
     let resp = birdie
-        .rest()
+        .rest_api()
         .general()
         .exchange_info()
         .request(params)
@@ -61,13 +61,13 @@ async fn exchange_info() {
     // invalid symbol param
     let params = ExchangeInfoParams::new().symbol("NONEXIST");
     let resp = birdie
-        .rest()
+        .rest_api()
         .general()
         .exchange_info()
         .request(params)
         .await;
     assert!(resp.is_err());
-    let RestError::Binance(s, Some(BinanceError { code, msg })) = resp.err().unwrap() else {
+    let RestApiError::Binance(s, Some(BinanceError { code, msg })) = resp.err().unwrap() else {
         panic!()
     };
     assert_eq!(s, "400 Bad Request");
@@ -77,7 +77,7 @@ async fn exchange_info() {
     // symbols param
     let params = ExchangeInfoParams::new().symbols(&["BTCUSDT", "ETHUSDT"]);
     let resp = birdie
-        .rest()
+        .rest_api()
         .general()
         .exchange_info()
         .request(params)
@@ -89,13 +89,13 @@ async fn exchange_info() {
     // invalid symbols param
     let params = ExchangeInfoParams::new().symbols(&["BTCUSDT", "NONEXIST"]);
     let resp = birdie
-        .rest()
+        .rest_api()
         .general()
         .exchange_info()
         .request(params)
         .await;
     assert!(resp.is_err());
-    let RestError::Binance(s, Some(BinanceError { code, .. })) = resp.err().unwrap() else {
+    let RestApiError::Binance(s, Some(BinanceError { code, .. })) = resp.err().unwrap() else {
         panic!()
     };
     assert_eq!(s, "400 Bad Request");
@@ -106,13 +106,13 @@ async fn exchange_info() {
         .symbol("BTCUSDT")
         .symbols(&["ETHUSDT"]);
     let resp = birdie
-        .rest()
+        .rest_api()
         .general()
         .exchange_info()
         .request(params)
         .await;
     assert!(resp.is_err());
-    let RestError::Binance(s, Some(BinanceError { code, .. })) = resp.err().unwrap() else {
+    let RestApiError::Binance(s, Some(BinanceError { code, .. })) = resp.err().unwrap() else {
         panic!()
     };
     assert_eq!(s, "400 Bad Request");

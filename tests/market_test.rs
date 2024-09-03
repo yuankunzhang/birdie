@@ -1,6 +1,6 @@
 use birdie::{
     enums::KlineInterval,
-    rest::{
+    rest_api::{
         market::{
             AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams,
             OldTradeLookupParams, OrderBookParams, RecentTradesListParams,
@@ -17,7 +17,12 @@ mod common;
 async fn order_book() {
     let birdie = common::setup();
     let params = OrderBookParams::new("BTCUSDT").limit(10);
-    let resp = birdie.rest().market().order_book().request(params).await;
+    let resp = birdie
+        .rest_api()
+        .market()
+        .order_book()
+        .request(params)
+        .await;
     assert!(resp.is_ok());
 }
 
@@ -26,7 +31,7 @@ async fn recent_trades_list() {
     let birdie = common::setup();
     let params = RecentTradesListParams::new("BTCUSDT").limit(10);
     let resp = birdie
-        .rest()
+        .rest_api()
         .market()
         .recent_trades_list()
         .request(params)
@@ -39,7 +44,7 @@ async fn old_trade_lookup() {
     let birdie = common::setup();
     let params = OldTradeLookupParams::new("BTCUSDT").limit(10);
     let resp = birdie
-        .rest()
+        .rest_api()
         .market()
         .old_trade_lookup()
         .request(params)
@@ -52,7 +57,7 @@ async fn aggregate_trades_list() {
     let birdie = common::setup();
     let params = AggregateTradesListParams::new("BTCUSDT").limit(10);
     let resp = birdie
-        .rest()
+        .rest_api()
         .market()
         .aggregate_trades_list()
         .request(params)
@@ -64,7 +69,12 @@ async fn aggregate_trades_list() {
 async fn kline_data() {
     let birdie = common::setup();
     let params = KlineDataParams::new("BTCUSDT", KlineInterval::OneHour).limit(10);
-    let resp = birdie.rest().market().kline_data().request(params).await;
+    let resp = birdie
+        .rest_api()
+        .market()
+        .kline_data()
+        .request(params)
+        .await;
     assert!(resp.is_ok());
 }
 
@@ -72,7 +82,7 @@ async fn kline_data() {
 async fn ui_kline() {
     let birdie = common::setup();
     let params = UiKlinesParams::new("BTCUSDT", KlineInterval::OneHour).limit(10);
-    let resp = birdie.rest().market().ui_klines().request(params).await;
+    let resp = birdie.rest_api().market().ui_klines().request(params).await;
     assert!(resp.is_ok());
 }
 
@@ -81,7 +91,7 @@ async fn current_average_price() {
     let birdie = common::setup();
     let params = CurrentAveragePriceParams::new("BTCUSDT");
     let resp = birdie
-        .rest()
+        .rest_api()
         .market()
         .current_average_price()
         .request(params)
@@ -93,7 +103,12 @@ async fn current_average_price() {
 async fn ticker_24hr() {
     let birdie = common::setup();
     let params = Ticker24hrParams::new().symbol("BTCUSDT");
-    let resp = birdie.rest().market().ticker_24hr().request(params).await;
+    let resp = birdie
+        .rest_api()
+        .market()
+        .ticker_24hr()
+        .request(params)
+        .await;
     assert!(resp.is_ok());
 }
 
@@ -102,7 +117,7 @@ async fn trading_day_ticker() {
     let birdie = common::setup();
     let params = TradingDayTickerParams::new().symbol("BTCUSDT");
     let resp = birdie
-        .rest()
+        .rest_api()
         .market()
         .trading_day_ticker()
         .request(params)
@@ -115,7 +130,7 @@ async fn symbol_price_ticker() {
     let birdie = common::setup();
     let params = SymbolPriceTickerParams::new().symbol("BTCUSDT");
     let resp = birdie
-        .rest()
+        .rest_api()
         .market()
         .symbol_price_ticker()
         .request(params)
@@ -128,7 +143,7 @@ async fn symbol_order_book_ticker() {
     let birdie = common::setup();
     let params = SymbolOrderBookTickerParams::new().symbol("BTCUSDT");
     let resp = birdie
-        .rest()
+        .rest_api()
         .market()
         .symbol_order_book_ticker()
         .request(params)
@@ -143,7 +158,7 @@ async fn rolling_window_price_change() {
     // price too low
     let params = RollingWindowPriceChangeParams::new().symbol("BTCUSDT");
     let resp = birdie
-        .rest()
+        .rest_api()
         .market()
         .rolling_window_price_change()
         .request(params)
