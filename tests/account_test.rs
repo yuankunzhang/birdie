@@ -1,12 +1,10 @@
 use birdie::{
-    errors::{BinanceError, BinanceErrorCode},
-    rest_api::{
-        account::{
-            AccountInformationParams, AccountTradeListParams, QueryAllocationsParams,
-            QueryCommissionRatesParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams,
-        },
-        Endpoint, RestApiError,
+    account::{
+        AccountInformationParams, AccountTradeListParams, QueryAllocationsParams,
+        QueryCommissionRatesParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams,
     },
+    errors::{BinanceError, BinanceErrorCode},
+    rest_api::{Endpoint, RestApiError},
 };
 
 mod common;

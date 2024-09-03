@@ -1,14 +1,12 @@
 use birdie::{
     enums::KlineInterval,
-    rest_api::{
-        market::{
-            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams,
-            OldTradeLookupParams, OrderBookParams, RecentTradesListParams,
-            RollingWindowPriceChangeParams, SymbolOrderBookTickerParams, SymbolPriceTickerParams,
-            Ticker24hrParams, TradingDayTickerParams, UiKlinesParams,
-        },
-        Endpoint,
+    market::{
+        AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams,
+        OldTradeLookupParams, OrderBookParams, RecentTradesListParams,
+        RollingWindowPriceChangeParams, SymbolOrderBookTickerParams, SymbolPriceTickerParams,
+        Ticker24hrParams, TradingDayTickerParams, UiKlinesParams,
     },
+    rest_api::Endpoint,
 };
 
 mod common;

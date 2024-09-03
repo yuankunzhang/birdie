@@ -1,9 +1,7 @@
 use birdie::{
     errors::{BinanceError, BinanceErrorCode},
-    rest_api::{
-        general::{CheckServerTimeParams, ExchangeInfoParams, TestConnectivityParams},
-        Endpoint, RestApiError,
-    },
+    general::{CheckServerTimeParams, ExchangeInfoParams, TestConnectivityParams},
+    rest_api::{Endpoint, RestApiError},
 };
 
 mod common;

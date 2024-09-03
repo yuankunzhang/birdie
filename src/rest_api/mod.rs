@@ -1,5 +1,4 @@
 //! # Binance's REST API.
-pub mod account;
 pub mod auto_invest;
 pub mod blvt;
 pub mod c2c;
@@ -8,12 +7,10 @@ pub mod crypto_loans;
 pub mod fiat;
 pub mod futures;
 pub mod futures_algo;
-pub mod general;
 pub mod gift_card;
 pub mod isolated_margin_stream;
 pub mod margin;
 pub mod margin_stream;
-pub mod market;
 pub mod mining;
 pub mod nft;
 pub mod pay;
@@ -24,7 +21,6 @@ pub mod simple_earn;
 pub mod spot_algo;
 pub mod stream;
 pub mod sub_account;
-pub mod trade;
 pub mod vip_loans;
 pub mod wallet;
 
@@ -37,22 +33,35 @@ use url::Url;
 
 use crate::errors::BinanceError;
 
-macro_rules! handler {
-    ($name:ident) => {
-        pub fn $name(&self) -> $name::Handler {
-            $name::Handler::new(self)
-        }
-    };
+use crate::account;
+use crate::general;
+use crate::market;
+use crate::trade;
+
+#[derive(Debug, Error)]
+pub enum RestApiError {
+    #[error("reqwest error: {0}")]
+    Reqwest(#[from] reqwest::Error),
+    #[error("url parse error: {0}")]
+    Url(#[from] url::ParseError),
+    #[error("json parse error: {0}")]
+    Json(#[from] serde_json::Error),
+    #[error("query string parse error: {0}")]
+    QueryString(#[from] serde_qs::Error),
+    #[error("Hmac error: {0}")]
+    Hmac(#[from] hmac::digest::InvalidLength),
+    #[error("binance error: {0}")]
+    Binance(String, Option<BinanceError>),
 }
 
-pub struct RestClient {
+pub struct RestApiClient {
     pub(self) client: Client,
     pub(self) base_url: Url,
     api_key: String,
     secret_key: String,
 }
 
-impl RestClient {
+impl RestApiClient {
     pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, RestApiError> {
         let base_url = Url::parse(base_url)?;
         Ok(Self {
@@ -63,10 +72,21 @@ impl RestClient {
         })
     }
 
-    handler!(account);
-    handler!(general);
-    handler!(market);
-    handler!(trade);
+    pub fn account(&self) -> account::RestApiHandler {
+        account::RestApiHandler::new(self)
+    }
+
+    pub fn general(&self) -> general::RestApiHandler {
+        general::RestApiHandler::new(self)
+    }
+
+    pub fn market(&self) -> market::RestApiHandler {
+        market::RestApiHandler::new(self)
+    }
+
+    pub fn trade(&self) -> trade::RestApiHandler {
+        trade::RestApiHandler::new(self)
+    }
 
     pub(self) async fn request<P, R>(
         &self,
@@ -129,20 +149,19 @@ fn compute_signature(key: &str, data: &str) -> Result<String, RestApiError> {
     Ok(hex::encode(mac.finalize().into_bytes()))
 }
 
-#[derive(Debug, Error)]
-pub enum RestApiError {
-    #[error("reqwest error: {0}")]
-    Reqwest(#[from] reqwest::Error),
-    #[error("url parse error: {0}")]
-    Url(#[from] url::ParseError),
-    #[error("json parse error: {0}")]
-    Json(#[from] serde_json::Error),
-    #[error("query string parse error: {0}")]
-    QueryString(#[from] serde_qs::Error),
-    #[error("Hmac error: {0}")]
-    Hmac(#[from] hmac::digest::InvalidLength),
-    #[error("binance error: {0}")]
-    Binance(String, Option<BinanceError>),
+pub fn serialize_option_vec<S, T>(v: &Option<Vec<T>>, s: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+    T: ToString,
+{
+    match v.as_ref() {
+        Some(v) => {
+            let arr: Vec<_> = v.iter().map(|x| format!("\"{}\"", x.to_string())).collect();
+            let str = format!("[{}]", arr.join(","));
+            s.serialize_str(&str)
+        }
+        None => s.serialize_none(),
+    }
 }
 
 #[derive(Debug, Serialize)]
@@ -169,7 +188,7 @@ pub trait Endpoint {
     type Params: Params;
     type Response: Response;
 
-    fn client(&self) -> &RestClient;
+    fn client(&self) -> &RestApiClient;
     fn path(&self) -> &str;
     fn method(&self) -> Method;
     fn security_type(&self) -> SecurityType;
@@ -200,7 +219,7 @@ macro_rules! endpoint {
             type Params = $params;
             type Response = $response;
 
-            fn client(&self) -> &crate::rest_api::RestClient {
+            fn client(&self) -> &crate::rest_api::RestApiClient {
                 self.client
             }
 
@@ -226,7 +245,7 @@ macro_rules! endpoint {
             type Params = $params;
             type Response = $response;
 
-            fn client(&self) -> &crate::rest_api::RestClient {
+            fn client(&self) -> &crate::rest_api::RestApiClient {
                 self.client
             }
 
@@ -253,23 +272,8 @@ macro_rules! route {
     };
 }
 
-use endpoint;
-use route;
-
-pub fn serialize_option_vec<S, T>(v: &Option<Vec<T>>, s: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-    T: ToString,
-{
-    match v.as_ref() {
-        Some(v) => {
-            let arr: Vec<_> = v.iter().map(|x| format!("\"{}\"", x.to_string())).collect();
-            let str = format!("[{}]", arr.join(","));
-            s.serialize_str(&str)
-        }
-        None => s.serialize_none(),
-    }
-}
+pub(crate) use endpoint;
+pub(crate) use route;
 
 #[cfg(test)]
 mod tests {
