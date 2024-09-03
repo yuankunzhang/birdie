@@ -2,7 +2,7 @@ use birdie::{
     enums::KlineInterval,
     rest::{
         market::{
-            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams, OldTradeLookupParams, OrderBookParams, RecentTradesListParams, SymbolPriceTickerParams, Ticker24hrParams, TradingDayTickerParams, UiKlinesParams
+            AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams, OldTradeLookupParams, OrderBookParams, RecentTradesListParams, SymbolOrderBookTickerParams, SymbolPriceTickerParams, Ticker24hrParams, TradingDayTickerParams, UiKlinesParams
         },
         Endpoint,
     },
@@ -115,6 +115,19 @@ async fn symbol_price_ticker() {
         .rest()
         .market()
         .symbol_price_ticker()
+        .request(params)
+        .await;
+    assert!(resp.is_ok());
+}
+
+#[tokio::test]
+async fn symbol_order_book_ticker() {
+    let birdie = common::setup();
+    let params = SymbolOrderBookTickerParams::new().symbol("BTCUSDT");
+    let resp = birdie
+        .rest()
+        .market()
+        .symbol_order_book_ticker()
         .request(params)
         .await;
     assert!(resp.is_ok());
