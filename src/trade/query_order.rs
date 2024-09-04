@@ -3,7 +3,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    enums::{OrderSide, OrderType, PreventionMode, TimeInForce},
+    enums::{OrderSide, OrderType, SelfTradePreventionMode, TimeInForce},
     rest_api::{endpoint, SecurityType},
 };
 
@@ -30,6 +30,11 @@ impl<'r> QueryOrderEndpoint<'r> {
     }
 }
 
+/// Notes:
+///
+/// - Either `order_id` or `orig_client_order_id` must be sent.
+/// - For some historical orders `cummulative_quote_qty` will be < 0, meaning
+///   the data is not available at this time.
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QueryOrderParams {
@@ -76,43 +81,24 @@ pub type QueryOrderResponse = OrderDetail;
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OrderDetail {
-    /// Example: `"LTCBTC"`
     pub symbol: String,
-    /// Example: `1`
     pub order_id: i64,
-    /// Example: `-1`
     pub order_list_id: i64,
-    /// Example: `"myOrder1"`
     pub client_order_id: String,
-    /// Example: `"0.1"`
     pub price: String,
-    /// Example: `"1.0"`
     pub orig_qty: String,
-    /// Example: `"0.0"`
     pub executed_qty: String,
-    /// Example: `"0.0"`
     pub cummulative_quote_qty: String,
-    /// Example: `"NEW"`
     pub status: String,
-    /// Example: `"GTC"`
     pub time_in_force: TimeInForce,
-    /// Example: `"LIMIT"`
     pub r#type: OrderType,
-    /// Example: `"BUY"`
     pub side: OrderSide,
-    /// Example: `"0.0"`
     pub stop_price: String,
-    /// Example: `"0.0"`
     pub iceberg_qty: String,
-    /// Example: `1499827319559`
     pub time: i64,
-    /// Example: `1499827319559`
     pub update_time: i64,
     pub is_working: bool,
-    /// Example: `1499827319559`
     pub working_time: i64,
-    /// Example: `"0.00000000"`
     pub orig_quote_order_qty: String,
-    /// Example: `"NONE"`
-    pub self_trade_prevention_mode: PreventionMode,
+    pub self_trade_prevention_mode: SelfTradePreventionMode,
 }

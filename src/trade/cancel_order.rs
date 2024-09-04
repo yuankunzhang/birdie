@@ -3,7 +3,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    enums::{CancelRestriction, OrderSide, OrderType, PreventionMode, TimeInForce},
+    enums::{CancelRestriction, OrderSide, OrderType, SelfTradePreventionMode, TimeInForce},
     rest_api::{endpoint, SecurityType},
 };
 
@@ -30,6 +30,8 @@ impl<'r> CancelOrderEndpoint<'r> {
     }
 }
 
+/// Either `order_id` or `orig_client_order_id` must be sent. If both parameters
+/// are sent, `order_id` takes precedence.
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CancelOrderParams {
@@ -108,5 +110,5 @@ pub struct CancelOrderResult {
     pub time_in_force: TimeInForce,
     pub r#type: OrderType,
     pub side: OrderSide,
-    pub self_trade_prevention_mode: PreventionMode,
+    pub self_trade_prevention_mode: SelfTradePreventionMode,
 }

@@ -3,7 +3,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    enums::{OrderResponseType, OrderSide, OrderType, PreventionMode, TimeInForce},
+    enums::{NewOrderRespType, OrderSide, OrderType, SelfTradePreventionMode, TimeInForce},
     rest_api::{endpoint, SecurityType},
 };
 
@@ -30,6 +30,19 @@ impl<'r> NewOrderEndpoint<'r> {
     }
 }
 
+/// Manditory parameters: `symbol`, `side`, `type`.
+///
+/// Additional mandatory parameters based on order type:
+///
+/// - `LIMIT`: `time_in_force`, `quantity`, `price`
+/// - `MARKET`: `quantity` or `quote_order_qty`
+/// - `STOP_LOSS`: `quantity`, `stop_price` or `trailing_delta
+/// - `STOP_LOSS_LIMIT`: `time_in_force`, `quantity`, `price`, `stop_price` or
+///   `trailing_delta`
+/// - `TAKE_PROFIT`: `quantity`, `stop_price` or `trailing_delta`
+/// - `TAKE_PROFIT_LIMIT`: `time_in_force`, `quantity`, `price`, `stop_price`
+///   or `trailing_delta`
+/// - `LIMIT_MAKER`: `quantity`, `price`
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NewOrderParams {
@@ -57,9 +70,9 @@ pub struct NewOrderParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     iceberg_qty: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    new_order_resp_type: Option<OrderResponseType>,
+    new_order_resp_type: Option<NewOrderRespType>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    self_trade_prevention_mode: Option<PreventionMode>,
+    self_trade_prevention_mode: Option<SelfTradePreventionMode>,
     #[serde(skip_serializing_if = "Option::is_none")]
     recv_window: Option<i64>,
     timestamp: i64,
@@ -109,7 +122,7 @@ impl NewOrderParams {
     }
 
     /// A unique id among open orders. Automatically generated if not sent.
-    /// Orders with the same `newClientOrderID` can be accepted only when the
+    /// Orders with the same `new_client_order_id` can be accepted only when the
     /// previous one is filled, otherwise the order will be rejected.
     pub fn new_client_order_id(mut self, new_client_order_id: &str) -> Self {
         self.new_client_order_id = Some(new_client_order_id.to_owned());
@@ -127,40 +140,31 @@ impl NewOrderParams {
         self
     }
 
-    /// Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and
-    /// TAKE_PROFIT_LIMIT orders.
     pub fn stop_price(mut self, stop_price: f64) -> Self {
         self.stop_price = Some(stop_price);
         self
     }
 
-    /// Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and
-    /// TAKE_PROFIT_LIMIT orders.
     pub fn trailing_delta(mut self, trailing_delta: f64) -> Self {
         self.trailing_delta = Some(trailing_delta);
         self
     }
 
-    /// Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an
-    /// iceberg order.
     pub fn iceberg_qty(mut self, iceberg_qty: f64) -> Self {
         self.iceberg_qty = Some(iceberg_qty);
         self
     }
 
-    /// Set the response JSON. ACK, RESULT, or FULL; MARKET and LIMIT order types
-    /// default to FULL, all other orders default to ACK.
-    pub fn new_order_resp_type(mut self, new_order_resp_type: OrderResponseType) -> Self {
+    /// Set the response JSON. `MARKET` and `LIMIT` order types default to
+    /// `FULL`, all other orders default to `ACK`.
+    pub fn new_order_resp_type(mut self, new_order_resp_type: NewOrderRespType) -> Self {
         self.new_order_resp_type = Some(new_order_resp_type);
         self
     }
 
-    /// The allowed enums is dependent on what is configured on the symbol. The
-    /// possible supported values are EXPIRE_TAKER, EXPIRE_MAKER, EXPIRE_BOTH,
-    /// NONE.
     pub fn self_trade_prevention_mode(
         mut self,
-        self_trade_prevention_mode: PreventionMode,
+        self_trade_prevention_mode: SelfTradePreventionMode,
     ) -> Self {
         self.self_trade_prevention_mode = Some(self_trade_prevention_mode);
         self

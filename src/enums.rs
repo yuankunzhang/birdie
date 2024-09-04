@@ -105,7 +105,15 @@ pub enum OrderType {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum OrderResponseType {
+pub enum OcoOrderType {
+    StopLoss,
+    StopLossLimit,
+    LimitMaker,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum NewOrderRespType {
     Ack,
     Result,
     Full,
@@ -135,14 +143,14 @@ pub enum OrderSide {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum TimeInForce {
-    Gtc,
-    Ioc,
-    Fok,
+    Gtc, // Good till canceled
+    Ioc, // Immediate or cancel
+    Fok, // Fill or kill
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum PreventionMode {
+pub enum SelfTradePreventionMode {
     ExpireTaker,
     ExpireMaker,
     ExpireBoth,

@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        CancelReplaceMode, CancelRestriction, OrderRateLimitExceededMode, OrderResponseType,
-        OrderSide, OrderType, PreventionMode, TimeInForce,
+        CancelReplaceMode, CancelRestriction, NewOrderRespType, OrderRateLimitExceededMode,
+        OrderSide, OrderType, SelfTradePreventionMode, TimeInForce,
     },
     errors::BinanceError,
     rest_api::{endpoint, SecurityType},
@@ -76,9 +76,9 @@ pub struct CancelReplaceOrderParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     iceberg_qty: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    new_order_resp_type: Option<OrderResponseType>,
+    new_order_resp_type: Option<NewOrderRespType>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    self_trade_prevention_mode: Option<PreventionMode>,
+    self_trade_prevention_mode: Option<SelfTradePreventionMode>,
     #[serde(skip_serializing_if = "Option::is_none")]
     cancel_restrictions: Option<CancelRestriction>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -187,14 +187,14 @@ impl CancelReplaceOrderParams {
         self
     }
 
-    pub fn new_order_resp_type(mut self, new_order_resp_type: OrderResponseType) -> Self {
+    pub fn new_order_resp_type(mut self, new_order_resp_type: NewOrderRespType) -> Self {
         self.new_order_resp_type = Some(new_order_resp_type);
         self
     }
 
     pub fn self_trade_prevention_mode(
         mut self,
-        self_trade_prevention_mode: PreventionMode,
+        self_trade_prevention_mode: SelfTradePreventionMode,
     ) -> Self {
         self.self_trade_prevention_mode = Some(self_trade_prevention_mode);
         self
