@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::rest_api::{endpoint, SecurityType};
 
+use super::CommissionRates;
+
 endpoint!(
     "/api/v3/order/test",
     Method::POST,
@@ -52,5 +54,8 @@ impl TestNewOrderUsingSorParams {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct TestNewOrderUsingSorResponse;
+#[serde(untagged)]
+pub enum TestNewOrderUsingSorResponse {
+    Empty,
+    CommissionRates(CommissionRates),
+}

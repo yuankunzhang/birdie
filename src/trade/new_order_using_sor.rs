@@ -3,7 +3,9 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    enums::{NewOrderRespType, OrderSide, OrderType, SelfTradePreventionMode, TimeInForce},
+    enums::{
+        NewOrderRespType, OrderSide, OrderStatus, OrderType, SelfTradePreventionMode, TimeInForce,
+    },
     rest_api::{endpoint, SecurityType},
 };
 
@@ -113,6 +115,7 @@ impl NewOrderUsingSorParams {
         self
     }
 
+    /// Used with `LIMIT` to create an iceberg order.
     pub fn iceberg_qty(mut self, iceberg_qty: f64) -> Self {
         self.iceberg_qty = Some(iceberg_qty);
         self
@@ -140,4 +143,35 @@ impl NewOrderUsingSorParams {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NewOrderUsingSorResponse;
+pub struct NewOrderUsingSorResponse {
+    pub symbol: String,
+    pub order_id: i64,
+    pub order_list_id: i64,
+    pub client_order_id: String,
+    pub transact_time: i64,
+    pub price: String,
+    pub orig_qty: String,
+    pub executed_qty: String,
+    pub cummulative_quote_qty: String,
+    pub status: OrderStatus,
+    pub time_in_force: TimeInForce,
+    pub r#type: OrderType,
+    pub side: OrderSide,
+    pub working_time: i64,
+    pub fills: Vec<SorOrderFill>,
+    pub working_floor: String,
+    pub self_trade_prevention_mode: SelfTradePreventionMode,
+    pub used_sor: bool,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SorOrderFill {
+    pub match_type: String,
+    pub price: String,
+    pub qty: String,
+    pub commission: String,
+    pub commission_asset: String,
+    pub trade_id: i64,
+    pub alloc_id: i64,
+}

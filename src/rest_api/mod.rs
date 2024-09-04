@@ -36,11 +36,20 @@
 //! For example, here is the code to retreive the order book of BTC:
 //!
 //! ```no_run
-//! let birdie = Birdie::new(...);
+//! use birdie::{market::OrderBookParams, Birdie};
+//! use crate::birdie::rest_api::Endpoint;
 //!
-//! let params = OrderBookParams::new("BTCUSDT").limit(10);
-//! let resp = birdie.rest_api().market().order_book().request(params).await;
-//! assert!(resp.is_ok());
+//! #[tokio::main]
+//! async fn main() {
+//!   let base_url = "https://api.binance.com";
+//!   let api_key = "your_api_key";
+//!   let api_secret = "your_api_secret";
+//!   let birdie = Birdie::new(base_url, api_key, api_secret).unwrap();
+//!
+//!   let params = OrderBookParams::new("BTCUSDT").limit(10);
+//!   let resp = birdie.rest_api().market().order_book().request(params).await;
+//!   assert!(resp.is_ok());
+//! }
 //! ```
 
 pub mod auto_invest;
