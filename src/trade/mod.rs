@@ -2,6 +2,7 @@ mod all_orders;
 mod cancel_all_open_orders;
 mod cancel_order;
 mod cancel_replace_order;
+mod current_open_orders;
 mod new_order;
 mod query_order;
 mod test_new_order;
@@ -10,6 +11,7 @@ pub use all_orders::*;
 pub use cancel_all_open_orders::*;
 pub use cancel_order::*;
 pub use cancel_replace_order::*;
+pub use current_open_orders::*;
 pub use new_order::*;
 pub use query_order::*;
 pub use test_new_order::*;
@@ -32,4 +34,5 @@ impl<'r> RestApiHandler<'r> {
     route!(cancel_all_open_orders, CancelAllOpenOrdersEndpoint);
     route!(cancel_replace_order, CancelReplaceOrderEndpoint);
     route!(all_orders, AllOrdersEndpoint);
+    route!(current_open_orders, CurrentOpenOrdersEndpoint);
 }
