@@ -1,8 +1,8 @@
 //! Binance's FIX API - stub
 
-pub struct FixClient {}
+pub struct FixApiClient {}
 
-impl FixClient {
+impl FixApiClient {
     pub fn new() -> Self {
         Self {}
     }
