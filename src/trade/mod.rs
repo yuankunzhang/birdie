@@ -1,4 +1,18 @@
 //! Trade endpoints.
+//!
+//! - [`new_order`](NewOrderEndpoint)
+//! - [`test_new_order`](TestNewOrderEndpoint)
+//! - [`query_order`](QueryOrderEndpoint)
+//! - [`cancel_order`](CancelOrderEndpoint)
+//! - [`cancel_all_open_orders`](CancelAllOpenOrdersEndpoint)
+//! - [`cancel_replace_order`](CancelReplaceOrderEndpoint)
+//! - [`current_open_orders`](CurrentOpenOrdersEndpoint)
+//! - [`all_orders`](AllOrdersEndpoint)
+//! - [`current_open_orders`](CurrentOpenOrdersEndpoint)
+//! - [`new_order_list_oco`](NewOrderListOcoEndpoint)
+//! - [`new_order_list_oto`](NewOrderListOtoEndpoint)
+//! - [`new_order_list_otoco`](NewOrderListOtocoEndpoint)
+//! - [`cancel_order_list`](CancelOrderListEndpoint)
 mod all_orders;
 mod cancel_all_open_orders;
 mod cancel_order;

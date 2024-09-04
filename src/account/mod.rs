@@ -1,4 +1,11 @@
 //! Account endpoints
+//!
+//! - [`account_information`](AccountInformationEndpoint)
+//! - [`account_trade_list`](AccountTradeListEndpoint)
+//! - [`query_unfilled_order_count`](QueryUnfilledOrderCountEndpoint)
+//! - [`query_prevented_matches`](QueryPreventedMatchesEndpoint)
+//! - [`query_allocations`](QueryAllocationsEndpoint)
+//! - [`query_commission_rates`](QueryCommissionRatesEndpoint)
 mod account_information;
 mod account_trade_list;
 mod query_allocations;

@@ -1,4 +1,9 @@
 //! # Binance's REST API.
+//!
+//! - [`account`] Account endpoints.
+//! - [`general`] General endpoints.
+//! - [`market`] Market endpoints.
+//! - [`trade`] Trade endpoints.
 pub mod auto_invest;
 pub mod blvt;
 pub mod c2c;

@@ -1,4 +1,8 @@
 //! General endpoints
+//!
+//! - [`test_connectivity`](TestConnectivityEndpoint)
+//! - [`check_server_time`](CheckServerTimeEndpoint)
+//! - [`exchange_info`](ExchangeInfoEndpoint)
 mod check_server_time;
 mod exchange_info;
 mod test_connectivity;

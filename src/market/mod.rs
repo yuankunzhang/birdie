@@ -1,4 +1,17 @@
 //! Market Data endpoints
+//!
+//! - [`order_book`](OrderBookEndpoint)
+//! - [`recent_trades_list`](RecentTradesListEndpoint)
+//! - [`old_trade_lookup`](OldTradeLookupEndpoint)
+//! - [`aggregate_trades_list`](AggregateTradesListEndpoint)
+//! - [`kline_data`](KlineDataEndpoint)
+//! - [`ui_klines`](UiKlinesEndpoint)
+//! - [`current_average_price`](CurrentAveragePriceEndpoint)
+//! - [`ticker_24hr`](Ticker24hrEndpoint)
+//! - [`trading_day_ticker`](TradingDayTickerEndpoint)
+//! - [`symbol_price_ticker`](SymbolPriceTickerEndpoint)
+//! - [`symbol_order_book_ticker`](SymbolOrderBookTickerEndpoint)
+//! - [`rolling_window_price_change`](RollingWindowPriceChangeEndpoint)
 mod aggregate_trades_list;
 mod current_average_price;
 mod kline_data;

@@ -10,6 +10,11 @@
 //! - Since the API specification doesn't specify number sizes or signedness,
 //!   all integer fields are treated as `i64`, all floating point fields are
 //!   treated as `f64`.
+//!
+//! ## Components
+//!
+//! - [`fix_api`] - FIX API client (stub).
+//! - [`rest_api`] - REST API client.
 
 pub mod enums;
 pub mod errors;
