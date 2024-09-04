@@ -3,6 +3,14 @@
 //! Birdie is a third party Binance API client, allowing you to easily interact
 //! with the Binance API using Rust.
 //!
+//! ## Read First
+//!
+//! - This is a third part client, please refer to the official Binance API
+//!   documentation for the most up-to-date information.
+//! - Since the API specification doesn't specify number sizes or signedness,
+//!   all integer fields are treated as `i64`, all floating point fields are
+//!   treated as `f64`.
+//!
 //! ## Components
 //!
 //! Birdie is divided into several components, each representing a different
@@ -28,14 +36,6 @@
 //! by calling the corresponding methods. For example, to access the REST API
 //! client: `let rest = birdie.rest_api()`. Read the documentation for each
 //! component to learn how to use them.
-//!
-//! ## Important Notes
-//!
-//! - The API specification is subject to change, please refer to the official
-//!   Binance API documentation for the most up-to-date information.
-//! - Since the API specification doesn't specify number sizes or signedness,
-//!   all integer fields are treated as `i64`, all floating point fields are
-//!   treated as `f64`.
 
 pub mod enums;
 pub mod errors;

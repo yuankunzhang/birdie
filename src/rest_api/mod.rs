@@ -5,7 +5,7 @@
 //! - [`market`] Market endpoints.
 //! - [`trade`] Trade endpoints.
 //!
-//! ## Usage
+//! ## How to Use
 //!
 //! The calling of a request is done with the following hierarchical pattern:
 //!
@@ -51,6 +51,8 @@
 //!   assert!(resp.is_ok());
 //! }
 //! ```
+//!
+//! Now, try it yourself!
 
 pub mod auto_invest;
 pub mod blvt;
