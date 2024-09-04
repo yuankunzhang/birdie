@@ -105,14 +105,6 @@ pub enum OrderType {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum OcoOrderType {
-    StopLoss,
-    StopLossLimit,
-    LimitMaker,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum NewOrderRespType {
     Ack,
     Result,

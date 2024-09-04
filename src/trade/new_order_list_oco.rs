@@ -3,7 +3,7 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    enums::{NewOrderRespType, OcoOrderType, OrderSide, SelfTradePreventionMode},
+    enums::{NewOrderRespType, OrderSide, OrderType, SelfTradePreventionMode, TimeInForce},
     rest_api::{endpoint, SecurityType},
 };
 
@@ -39,7 +39,7 @@ pub struct NewOrderListOcoParams {
     list_client_order_id: Option<String>,
     side: OrderSide,
     quantity: Option<f64>,
-    above_type: OcoOrderType,
+    above_type: OrderType,
     #[serde(skip_serializing_if = "Option::is_none")]
     above_client_order_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -51,12 +51,12 @@ pub struct NewOrderListOcoParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     above_trailing_delta: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    above_time_in_force: Option<f64>,
+    above_time_in_force: Option<TimeInForce>,
     #[serde(skip_serializing_if = "Option::is_none")]
     above_strategy_id: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     above_strategy_type: Option<i64>,
-    below_type: OcoOrderType,
+    below_type: OrderType,
     #[serde(skip_serializing_if = "Option::is_none")]
     below_client_order_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -68,7 +68,7 @@ pub struct NewOrderListOcoParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     below_trailing_delta: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    below_time_in_force: Option<f64>,
+    below_time_in_force: Option<TimeInForce>,
     #[serde(skip_serializing_if = "Option::is_none")]
     below_strategy_id: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -86,8 +86,8 @@ impl NewOrderListOcoParams {
     pub fn new(
         symbol: &str,
         side: OrderSide,
-        above_type: OcoOrderType,
-        below_type: OcoOrderType,
+        above_type: OrderType,
+        below_type: OrderType,
     ) -> Self {
         Self {
             symbol: symbol.to_owned(),
@@ -154,7 +154,7 @@ impl NewOrderListOcoParams {
         self
     }
 
-    pub fn above_time_in_force(mut self, above_time_in_force: f64) -> Self {
+    pub fn above_time_in_force(mut self, above_time_in_force: TimeInForce) -> Self {
         self.above_time_in_force = Some(above_time_in_force);
         self
     }
@@ -194,7 +194,7 @@ impl NewOrderListOcoParams {
         self
     }
 
-    pub fn below_time_in_force(mut self, below_time_in_force: f64) -> Self {
+    pub fn below_time_in_force(mut self, below_time_in_force: TimeInForce) -> Self {
         self.below_time_in_force = Some(below_time_in_force);
         self
     }

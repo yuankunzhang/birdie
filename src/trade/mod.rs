@@ -6,6 +6,7 @@ mod cancel_replace_order;
 mod current_open_orders;
 mod new_order;
 mod new_order_list_oco;
+mod new_order_list_oto;
 mod query_order;
 mod test_new_order;
 
@@ -16,6 +17,7 @@ pub use cancel_replace_order::*;
 pub use current_open_orders::*;
 pub use new_order::*;
 pub use new_order_list_oco::*;
+pub use new_order_list_oto::*;
 pub use query_order::*;
 pub use test_new_order::*;
 
