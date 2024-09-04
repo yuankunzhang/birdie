@@ -1,15 +1,35 @@
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::{enums::KlineInterval, rest_api::endpoint};
+use crate::{
+    enums::KlineInterval,
+    rest_api::{Endpoint, Params, RestApiClient, SecurityType},
+};
 
-endpoint!(
-    "/api/v3/uiKlines",
-    Method::GET,
-    UiKlinesEndpoint,
-    UiKlinesParams,
-    UiKlinesResponse
-);
+use super::Kline;
+
+impl Params for UiKlinesParams {}
+
+impl Endpoint for UiKlinesEndpoint<'_> {
+    type Params = UiKlinesParams;
+    type Response = UiKlinesResponse;
+
+    fn client(&self) -> &RestApiClient {
+        self.client
+    }
+
+    fn path(&self) -> &str {
+        "/api/v3/uiKlines"
+    }
+
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn security_type(&self) -> SecurityType {
+        SecurityType::None
+    }
+}
 
 /// Kline/candlestick bars for a symbol. Klines are uniquely identified by their
 /// open time.
@@ -76,20 +96,4 @@ impl UiKlinesParams {
     }
 }
 
-pub type UiKlinesResponse = Vec<UiKline>;
-
-#[derive(Debug, Deserialize)]
-pub struct UiKline(
-    pub i64,    // Open time
-    pub String, // Open price
-    pub String, // High price
-    pub String, // Low price
-    pub String, // Close price
-    pub String, // Volume
-    pub i64,    // Close time
-    pub String, // Quote asset volume
-    pub i64,    // Number of trades
-    pub String, // Taker buy base asset volume
-    pub String, // Taker buy quote asset volume
-    pub String, // Unused field, ignore.
-);
+pub type UiKlinesResponse = Vec<Kline>;
