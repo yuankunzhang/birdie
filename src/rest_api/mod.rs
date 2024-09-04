@@ -4,6 +4,45 @@
 //! - [`general`] General endpoints.
 //! - [`market`] Market endpoints.
 //! - [`trade`] Trade endpoints.
+//!
+//! ## Usage
+//!
+//! The calling of a request is done with the following hierarchical pattern:
+//!
+//! ```txt
+//! birdie.rest_api().general().test_connectivity().request(params).await
+//! ------ ---------- --------- ------------------- ---------------
+//! |      |          |         |                   |
+//! |      |          |         |                   \
+//! |      |          |         \                     The request with params
+//! |      |          \           The endpoint
+//! |      \            The endpoint category
+//! \        The REST API client
+//!   The Birdie instance
+//! ```
+//!
+//! There are three important types for each endpoint: [`Endpoint`],
+//! [`Params`], and [`Response`].
+//!
+//! - [`Endpoint`] represents an API endpoint.
+//! - [`Params`] represents the request parameters that the endpoint accepts.
+//! - [`Response`] represents the response that the endpoint returns.
+//!
+//! To make a request, you need to first create an instance of the [`Params`]
+//! type, and then call the [`Endpoint::request`] method on the [`Endpoint`]
+//! instance as shown in the pattern above. The [`Endpoint::request`] method
+//! returns a [`Response`] instance or a [`RestApiError`] if an error occurs.
+//!
+//! For example, here is the code to retreive the order book of BTC:
+//!
+//! ```no_run
+//! let birdie = Birdie::new(...);
+//!
+//! let params = OrderBookParams::new("BTCUSDT").limit(10);
+//! let resp = birdie.rest_api().market().order_book().request(params).await;
+//! assert!(resp.is_ok());
+//! ```
+
 pub mod auto_invest;
 pub mod blvt;
 pub mod c2c;

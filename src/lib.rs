@@ -3,6 +3,32 @@
 //! Birdie is a third party Binance API client, allowing you to easily interact
 //! with the Binance API using Rust.
 //!
+//! ## Components
+//!
+//! Birdie is divided into several components, each representing a different
+//! part of the Binance API:
+//!
+//! - [`fix_api`] - FIX API client (stub).
+//! - [`rest_api`] - REST API client.
+//!
+//! To start using Birdie, you need to create a instance of the `Birdie`
+//! struct. This struct contains all the components you need to interact with
+//! the Binance API.
+//!
+//! ```rust
+//! use birdie::Birdie;
+//!
+//! let base_url = "https://api.binance.com";
+//! let api_key = "your_api_key";
+//! let api_secret = "your_api_secret";
+//! let birdie = Birdie::new(base_url, api_key, api_secret).unwrap();
+//! ```
+//!
+//! Once you have a `Birdie` instance, you can access the different components
+//! by calling the corresponding methods. For example, to access the REST API
+//! client: `let rest = birdie.rest_api()`. Read the documentation for each
+//! component to learn how to use them.
+//!
 //! ## Important Notes
 //!
 //! - The API specification is subject to change, please refer to the official
@@ -10,11 +36,6 @@
 //! - Since the API specification doesn't specify number sizes or signedness,
 //!   all integer fields are treated as `i64`, all floating point fields are
 //!   treated as `f64`.
-//!
-//! ## Components
-//!
-//! - [`fix_api`] - FIX API client (stub).
-//! - [`rest_api`] - REST API client.
 
 pub mod enums;
 pub mod errors;
