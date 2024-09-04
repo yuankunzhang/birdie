@@ -4,7 +4,7 @@ use serde::Serialize;
 
 use crate::rest_api::{endpoint, SecurityType};
 
-use super::CancelOrderDetail;
+use super::CancelOrderResult;
 
 endpoint!(
     "/api/v3/openOrders",
@@ -54,4 +54,4 @@ impl CancelAllOpenOrdersParams {
     }
 }
 
-pub type CancelAllOpenOrdersResponse = Vec<CancelOrderDetail>;
+pub type CancelAllOpenOrdersResponse = Vec<CancelOrderResult>;

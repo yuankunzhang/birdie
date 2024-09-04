@@ -7,8 +7,11 @@ use crate::{
         CancelReplaceMode, CancelRestriction, OrderRateLimitExceededMode, OrderResponseType,
         OrderSide, OrderType, PreventionMode, TimeInForce,
     },
+    errors::BinanceError,
     rest_api::{endpoint, SecurityType},
 };
+
+use super::{CancelOrderResult, NewOrderResult};
 
 endpoint!(
     "/api/v3/cancelReplace",
@@ -219,4 +222,47 @@ impl CancelReplaceOrderParams {
 
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
-pub enum CancelReplaceOrderResponse {}
+pub enum CancelReplaceOrderResponse {
+    Success(Success),
+    NotSuccess(NotSuccess),
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Success {
+    pub cancel_result: String,
+    pub new_order_result: String,
+    pub cancel_response: CancelResult,
+    pub new_order_response: NewResult,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NotSuccess {
+    #[serde(flatten)]
+    pub error: BinanceError,
+    pub data: NotSuccessData,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NotSuccessData {
+    pub cancel_result: String,
+    pub new_order_result: String,
+    pub cancel_response: CancelResult,
+    pub new_order_response: NewResult,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(untagged)]
+pub enum CancelResult {
+    Success(CancelOrderResult),
+    Failure(BinanceError),
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(untagged)]
+pub enum NewResult {
+    Success(NewOrderResult),
+    Failure(BinanceError),
+}
