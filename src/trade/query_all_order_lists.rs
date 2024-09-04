@@ -1,8 +1,10 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::rest_api::{endpoint, SecurityType};
+
+use super::OrderListResult;
 
 endpoint!(
     "/api/v3/allOrderList",
@@ -86,6 +88,4 @@ impl QueryAllOrderListsParams {
     }
 }
 
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct QueryAllOrderListsResponse;
+pub type QueryAllOrderListsResponse = Vec<OrderListResult>;

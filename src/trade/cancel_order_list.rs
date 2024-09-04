@@ -1,17 +1,33 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::rest_api::{endpoint, SecurityType};
+use crate::rest_api::{Endpoint, Params, RestApiClient, SecurityType};
 
-endpoint!(
-    "/api/v3/orderList",
-    Method::DELETE,
-    SecurityType::Trade,
-    CancelOrderListEndpoint,
-    CancelOrderListParams,
-    CancelOrderListResponse
-);
+use super::OrderListResult;
+
+impl Endpoint for CancelOrderListEndpoint<'_> {
+    type Response = CancelOrderListResponse;
+    type Params = CancelOrderListParams;
+
+    fn client(&self) -> &RestApiClient {
+        self.client
+    }
+
+    fn path(&self) -> &str {
+        "/api/v3/orderList"
+    }
+
+    fn method(&self) -> Method {
+        Method::DELETE
+    }
+
+    fn security_type(&self) -> SecurityType {
+        SecurityType::Trade
+    }
+}
+
+impl Params for CancelOrderListParams {}
 
 /// Cancel an entire order list.
 ///
@@ -83,6 +99,4 @@ impl CancelOrderListParams {
     }
 }
 
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct CancelOrderListResponse;
+pub type CancelOrderListResponse = OrderListResult;

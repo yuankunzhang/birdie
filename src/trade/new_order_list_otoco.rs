@@ -1,20 +1,36 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::{
     enums::{NewOrderRespType, OrderSide, OrderType, SelfTradePreventionMode, TimeInForce},
-    rest_api::{endpoint, SecurityType},
+    rest_api::{Endpoint, Params, RestApiClient, SecurityType},
 };
 
-endpoint!(
-    "/api/v3/orderList/otoco",
-    Method::POST,
-    SecurityType::Trade,
-    NewOrderListOtocoEndpoint,
-    NewOrderListOtocoParams,
-    NewOrderListOtocoResponse
-);
+use super::OrderListResult;
+
+impl Endpoint for NewOrderListOtocoEndpoint<'_> {
+    type Response = NewOrderListOtocoResponse;
+    type Params = NewOrderListOtocoParams;
+
+    fn client(&self) -> &RestApiClient {
+        self.client
+    }
+
+    fn path(&self) -> &str {
+        "/api/v3/orderList/otoco"
+    }
+
+    fn method(&self) -> Method {
+        Method::POST
+    }
+
+    fn security_type(&self) -> SecurityType {
+        SecurityType::Trade
+    }
+}
+
+impl Params for NewOrderListOtocoParams {}
 
 /// Place an OTOCO.
 ///
@@ -294,5 +310,4 @@ impl NewOrderListOtocoParams {
     }
 }
 
-#[derive(Debug, Deserialize)]
-pub struct NewOrderListOtocoResponse;
+pub type NewOrderListOtocoResponse = OrderListResult;

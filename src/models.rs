@@ -1,7 +1,11 @@
 //! Data models.
 use serde::Deserialize;
 
-use crate::{account::Balance, enums::OrderType};
+use crate::{
+    account::Balance,
+    enums::OrderType,
+    trade::{OrderListItem, OrderListReport},
+};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -26,58 +30,6 @@ pub struct Symbol {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct OcoOrder {
-    /// Example: `1929`
-    pub order_list_id: i64,
-    /// Example: `"OCO"`
-    pub contingency_type: String,
-    /// Example: `"ALL_DONE"`
-    pub list_status_type: String,
-    /// Example: `"ALL_DONE"`
-    pub list_order_status: String,
-    /// Example: `"C3wyj4WVEktd7u9aVBRXcN"`
-    pub list_client_order_id: String,
-    /// Example: `1574040868128`
-    pub transaction_time: i64,
-    /// Example: `"BNBBTC"`
-    pub symbol: String,
-    /// Example: `[{'symbol': 'BNBBTC', 'orderId': 2, 'clientOrderId': 'pO9ufTiFGg3nw2fOdgeOXa'}, {'symbol': 'BNBBTC', 'orderId': 3, 'clientOrderId': 'TXOvglzXuaubXAaENpaRCB'}]`
-    pub orders: Vec<OcoOrderItem>,
-    /// Example: `[{'symbol': 'BNBBTC', 'origClientOrderId': 'pO9ufTiFGg3nw2fOdgeOXa', 'orderId': 2, 'orderListId': 0, 'clientOrderId': 'unfWT8ig8i0uj6lPuYLez6', 'price': '1.00000000', 'origQty': '10.00000000', 'executedQty': '0.00000000', 'cummulativeQuoteQty': '0.00000000', 'status': 'CANCELED', 'timeInForce': 'GTC', 'type': 'STOP_LOSS_LIMIT', 'side': 'SELL', 'stopPrice': '1.00000000', 'transactTime': 1688005070874}, {'symbol': 'BNBBTC', 'origClientOrderId': 'TXOvglzXuaubXAaENpaRCB', 'orderId': 3, 'orderListId': 0, 'clientOrderId': 'unfWT8ig8i0uj6lPuYLez6', 'price': '3.00000000', 'origQty': '10.00000000', 'executedQty': '0.00000000', 'cummulativeQuoteQty': '0.00000000', 'status': 'CANCELED', 'timeInForce': 'GTC', 'type': 'LIMIT_MAKER', 'side': 'SELL', 'selfTradePreventionMode': 'NONE', 'transactTime': 1688005070874}]`
-    pub order_reports: Vec<OcoOrderReport>,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct OcoOrderItem {
-    pub symbol: String,
-    pub order_id: i64,
-    pub client_order_id: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct OcoOrderReport {
-    pub symbol: String,
-    pub orig_client_order_id: String,
-    pub order_id: i64,
-    pub order_list_id: i64,
-    pub client_order_id: String,
-    pub price: String,
-    pub orig_qty: String,
-    pub executed_qty: String,
-    pub cummulative_quote_qty: String,
-    pub status: String,
-    pub time_in_force: String,
-    pub r#type: String,
-    pub side: String,
-    pub stop_price: String,
-    pub self_trade_prevention_mode: String,
-    pub transaction_time: i64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct MarginOcoOrder {
     /// Example: `0`
     pub order_list_id: i64,
@@ -95,8 +47,8 @@ pub struct MarginOcoOrder {
     pub symbol: String,
     /// Example: `False`
     pub is_isolated: bool,
-    pub orders: Vec<OcoOrderItem>,
-    pub order_reports: Vec<OcoOrderReport>,
+    pub orders: Vec<OrderListItem>,
+    pub order_reports: Vec<OrderListReport>,
 }
 
 #[derive(Debug, Deserialize)]

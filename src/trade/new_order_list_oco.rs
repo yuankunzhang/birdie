@@ -124,11 +124,14 @@ impl NewOrderListOcoParams {
         self
     }
 
+    ///	Quantity for both legs of the order list.
     pub fn quantity(mut self, quantity: f64) -> Self {
         self.quantity = Some(quantity);
         self
     }
 
+    /// Arbitrary unique ID among open orders for the above leg order.
+    /// Automatically generated if not sent.
     pub fn above_client_order_id(mut self, above_client_order_id: &str) -> Self {
         self.above_client_order_id = Some(above_client_order_id.to_owned());
         self
@@ -159,11 +162,15 @@ impl NewOrderListOcoParams {
         self
     }
 
+    /// Arbitrary numeric value identifying the above leg order within an order
+    /// strategy.
     pub fn above_strategy_id(mut self, above_strategy_id: i64) -> Self {
         self.above_strategy_id = Some(above_strategy_id);
         self
     }
 
+    /// Arbitrary numeric value identifying the above leg order strategy. Values
+    /// smaller than 1000000 are reserved and cannot be used.
     pub fn above_strategy_type(mut self, above_strategy_type: i64) -> Self {
         self.above_strategy_type = Some(above_strategy_type);
         self
@@ -199,11 +206,15 @@ impl NewOrderListOcoParams {
         self
     }
 
+    /// Arbitrary numeric value identifying the below leg order within an order
+    /// strategy.
     pub fn below_strategy_id(mut self, below_strategy_id: i64) -> Self {
         self.below_strategy_id = Some(below_strategy_id);
         self
     }
 
+    ///	Arbitrary numeric value identifying the below leg order strategy. Values
+    /// smaller than 1000000 are reserved and cannot be used.
     pub fn below_strategy_type(mut self, below_strategy_type: i64) -> Self {
         self.below_strategy_type = Some(below_strategy_type);
         self
@@ -234,5 +245,49 @@ impl NewOrderListOcoParams {
     }
 }
 
+pub type NewOrderListOcoResponse = OrderListResult;
+
 #[derive(Debug, Deserialize)]
-pub struct NewOrderListOcoResponse;
+#[serde(rename_all = "camelCase")]
+pub struct OrderListResult {
+    pub order_list_id: i64,
+    pub contingency_type: String,
+    pub list_status_type: String,
+    pub list_order_status: String,
+    pub list_client_order_id: String,
+    pub transaction_time: i64,
+    pub symbol: String,
+    #[serde(default)]
+    pub orders: Vec<OrderListItem>,
+    #[serde(default)]
+    pub order_reports: Vec<OrderListReport>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OrderListItem {
+    pub symbol: String,
+    pub order_id: i64,
+    pub client_order_id: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OrderListReport {
+    pub symbol: String,
+    pub orig_client_order_id: String,
+    pub order_id: i64,
+    pub order_list_id: i64,
+    pub client_order_id: String,
+    pub price: String,
+    pub orig_qty: String,
+    pub executed_qty: String,
+    pub cummulative_quote_qty: String,
+    pub status: String,
+    pub time_in_force: String,
+    pub r#type: String,
+    pub side: String,
+    pub stop_price: String,
+    pub self_trade_prevention_mode: String,
+    pub transaction_time: i64,
+}

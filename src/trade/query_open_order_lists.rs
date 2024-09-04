@@ -1,17 +1,33 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::rest_api::{endpoint, SecurityType};
+use crate::rest_api::{Endpoint, Params, RestApiClient, SecurityType};
 
-endpoint!(
-    "/api/v3/openOrderList",
-    Method::GET,
-    SecurityType::UserData,
-    QueryOpenOrderListsEndpoint,
-    QueryOpenOrderListsParams,
-    QueryOpenOrderListsResponse
-);
+use super::OrderListResult;
+
+impl Endpoint for QueryOpenOrderListsEndpoint<'_> {
+    type Response = QueryOpenOrderListsResponse;
+    type Params = QueryOpenOrderListsParams;
+
+    fn client(&self) -> &RestApiClient {
+        self.client
+    }
+
+    fn path(&self) -> &str {
+        "/api/v3/openOrderList"
+    }
+
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn security_type(&self) -> SecurityType {
+        SecurityType::UserData
+    }
+}
+
+impl Params for QueryOpenOrderListsParams {}
 
 /// Query open order lists.
 ///
@@ -50,6 +66,4 @@ impl QueryOpenOrderListsParams {
     }
 }
 
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct QueryOpenOrderListsResponse;
+pub type QueryOpenOrderListsResponse = Vec<OrderListResult>;

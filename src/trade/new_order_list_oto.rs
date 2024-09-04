@@ -1,20 +1,36 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::{
     enums::{NewOrderRespType, OrderSide, OrderType, SelfTradePreventionMode, TimeInForce},
-    rest_api::{endpoint, SecurityType},
+    rest_api::{Endpoint, Params, RestApiClient, SecurityType},
 };
 
-endpoint!(
-    "/api/v3/orderList/oto",
-    Method::POST,
-    SecurityType::Trade,
-    NewOrderListOtoEndpoint,
-    NewOrderListOtoParams,
-    NewOrderListOtoResponse
-);
+use super::OrderListResult;
+
+impl Endpoint for NewOrderListOtoEndpoint<'_> {
+    type Response = NewOrderListOtoResponse;
+    type Params = NewOrderListOtoParams;
+
+    fn client(&self) -> &RestApiClient {
+        self.client
+    }
+
+    fn path(&self) -> &str {
+        "/api/v3/orderList/oto"
+    }
+
+    fn method(&self) -> Method {
+        Method::POST
+    }
+
+    fn security_type(&self) -> SecurityType {
+        SecurityType::Trade
+    }
+}
+
+impl Params for NewOrderListOtoParams {}
 
 /// Place an OTO.
 ///
@@ -221,5 +237,4 @@ impl NewOrderListOtoParams {
     }
 }
 
-#[derive(Debug, Deserialize)]
-pub struct NewOrderListOtoResponse;
+pub type NewOrderListOtoResponse = OrderListResult;

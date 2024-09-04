@@ -1,17 +1,33 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::rest_api::{endpoint, SecurityType};
+use crate::rest_api::{Endpoint, Params, RestApiClient, SecurityType};
 
-endpoint!(
-    "/api/v3/orderList",
-    Method::GET,
-    SecurityType::UserData,
-    QueryOrderListsEndpoint,
-    QueryOrderListsParams,
-    QueryOrderListsResponse
-);
+use super::OrderListResult;
+
+impl Endpoint for QueryOrderListsEndpoint<'_> {
+    type Response = QueryOrderListsResponse;
+    type Params = QueryOrderListsParams;
+
+    fn client(&self) -> &RestApiClient {
+        self.client
+    }
+
+    fn path(&self) -> &str {
+        "/api/v3/orderList"
+    }
+
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn security_type(&self) -> SecurityType {
+        SecurityType::UserData
+    }
+}
+
+impl Params for QueryOrderListsParams {}
 
 /// Retrieves a specific order list based on provided optional parameters.
 ///
@@ -79,6 +95,4 @@ impl QueryOrderListsParams {
     }
 }
 
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct QueryOrderListsResponse;
+pub type QueryOrderListsResponse = OrderListResult;
