@@ -7,6 +7,7 @@ mod current_open_orders;
 mod new_order;
 mod new_order_list_oco;
 mod new_order_list_oto;
+mod new_order_list_otoco;
 mod query_order;
 mod test_new_order;
 
@@ -18,6 +19,7 @@ pub use current_open_orders::*;
 pub use new_order::*;
 pub use new_order_list_oco::*;
 pub use new_order_list_oto::*;
+pub use new_order_list_otoco::*;
 pub use query_order::*;
 pub use test_new_order::*;
 
