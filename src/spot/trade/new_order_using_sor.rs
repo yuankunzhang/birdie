@@ -4,9 +4,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        NewOrderRespType, OrderSide, OrderStatus, OrderType, SelfTradePreventionMode, TimeInForce,
+        NewOrderRespType, OrderSide, OrderStatus, OrderType, SecurityType, SelfTradePreventionMode,
+        TimeInForce,
     },
-    rest_api::{endpoint, SecurityType},
+    rest_api::endpoint,
 };
 
 endpoint!(

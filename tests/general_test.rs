@@ -1,7 +1,7 @@
 use birdie::{
     errors::{BinanceError, BinanceErrorCode},
-    spot::general::{CheckServerTimeParams, ExchangeInfoParams, TestConnectivityParams},
     rest_api::{Endpoint, RestApiError},
+    spot::general::{CheckServerTimeParams, ExchangeInfoParams, TestConnectivityParams},
 };
 
 mod common;

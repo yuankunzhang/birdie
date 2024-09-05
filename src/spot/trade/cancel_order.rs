@@ -3,8 +3,10 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    enums::{CancelRestriction, OrderSide, OrderType, SelfTradePreventionMode, TimeInForce},
-    rest_api::{endpoint, SecurityType},
+    enums::{
+        CancelRestriction, OrderSide, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
+    },
+    rest_api::endpoint,
 };
 
 endpoint!(

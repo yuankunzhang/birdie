@@ -50,7 +50,6 @@ pub mod spot;
 use fix_api::FixApiClient;
 use rest_api::{RestApiClient, RestApiError};
 use thiserror::Error;
-use web_socket_api::WebSocketApiClient;
 
 #[derive(Debug, Error)]
 pub enum BirdieError {
@@ -61,19 +60,15 @@ pub enum BirdieError {
 pub struct Birdie {
     fix_api: FixApiClient,
     rest_api: RestApiClient,
-    web_socket: WebSocketApiClient,
 }
 
 impl Birdie {
     pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, BirdieError> {
         let fix_api = FixApiClient::new();
         let rest_api = RestApiClient::new(base_url, api_key, secret_key)?;
-        let web_socket = WebSocketApiClient::new();
-        Ok(Self {
-            fix_api,
-            rest_api,
-            web_socket,
-        })
+        // let web_socket_api =
+        //     WebSocketApiClient::new("wss://stream.binance.com:9443/ws", api_key, secret_key);
+        Ok(Self { fix_api, rest_api })
     }
 
     pub fn fix_api(&self) -> &FixApiClient {
@@ -82,9 +77,5 @@ impl Birdie {
 
     pub fn rest_api(&self) -> &RestApiClient {
         &self.rest_api
-    }
-
-    pub fn web_socket(&self) -> &WebSocketApiClient {
-        &self.web_socket
     }
 }

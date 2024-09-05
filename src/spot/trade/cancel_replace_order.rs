@@ -5,10 +5,10 @@ use serde::{Deserialize, Serialize};
 use crate::{
     enums::{
         CancelReplaceMode, CancelRestriction, NewOrderRespType, OrderRateLimitExceededMode,
-        OrderSide, OrderType, SelfTradePreventionMode, TimeInForce,
+        OrderSide, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
     },
     errors::BinanceError,
-    rest_api::{endpoint, SecurityType},
+    rest_api::endpoint,
 };
 
 use super::{CancelOrderResult, NewOrderResult};

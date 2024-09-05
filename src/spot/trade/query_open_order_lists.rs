@@ -2,7 +2,10 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::Serialize;
 
-use crate::rest_api::{Endpoint, Params, RestApiClient, SecurityType};
+use crate::{
+    enums::SecurityType,
+    rest_api::{Endpoint, Params, RestApiClient},
+};
 
 use super::OrderListResult;
 

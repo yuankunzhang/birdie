@@ -86,6 +86,7 @@ use sha2::Sha256;
 use thiserror::Error;
 use url::Url;
 
+use crate::enums::SecurityType;
 use crate::errors::BinanceError;
 
 use crate::spot::account;
@@ -219,15 +220,6 @@ where
     }
 }
 
-#[derive(Debug, Serialize)]
-#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum SecurityType {
-    None,
-    Trade,
-    UserData,
-    UserStream,
-}
-
 /// Query parameters for a REST API endpoint.
 pub trait Params: Sized + Send + Serialize {
     fn as_query(&self) -> Result<String, RestApiError> {
@@ -286,8 +278,8 @@ macro_rules! endpoint {
                 $method
             }
 
-            fn security_type(&self) -> $crate::rest_api::SecurityType {
-                $crate::rest_api::SecurityType::None
+            fn security_type(&self) -> $crate::enums::SecurityType {
+                $crate::enums::SecurityType::None
             }
         }
     };
@@ -312,7 +304,7 @@ macro_rules! endpoint {
                 $method
             }
 
-            fn security_type(&self) -> $crate::rest_api::SecurityType {
+            fn security_type(&self) -> $crate::enums::SecurityType {
                 $security
             }
         }

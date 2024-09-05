@@ -1,10 +1,10 @@
 use birdie::{
+    errors::{BinanceError, BinanceErrorCode},
+    rest_api::{Endpoint, RestApiError},
     spot::account::{
         AccountInformationParams, AccountTradeListParams, QueryAllocationsParams,
         QueryCommissionRatesParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams,
     },
-    errors::{BinanceError, BinanceErrorCode},
-    rest_api::{Endpoint, RestApiError},
 };
 
 mod common;

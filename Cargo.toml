@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 async-trait = "0.1"
 bytes = { version = "1.7", default-features = false }
+futures-util = "0.3"
 hex = "0.4"
 hmac = "0.12"
 jiff = { version = "0.1", default-features = false, features = ["std"] }
@@ -17,4 +18,5 @@ serde_repr = "0.1"
 sha2 = "0.10"
 thiserror = { version = "1.0", default-features = false }
 tokio = { version = "1.40", default-features = false, features = ["macros", "rt-multi-thread"] }
+tokio-tungstenite = { version = "0.23", features = ["rustls-tls-webpki-roots"] }
 url = { version = "2.5", default-features = false }

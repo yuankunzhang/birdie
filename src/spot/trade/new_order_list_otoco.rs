@@ -3,8 +3,10 @@ use reqwest::Method;
 use serde::Serialize;
 
 use crate::{
-    enums::{NewOrderRespType, OrderSide, OrderType, SelfTradePreventionMode, TimeInForce},
-    rest_api::{Endpoint, Params, RestApiClient, SecurityType},
+    enums::{
+        NewOrderRespType, OrderSide, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
+    },
+    rest_api::{Endpoint, Params, RestApiClient},
 };
 
 use super::OrderListResult;

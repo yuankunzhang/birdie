@@ -1,7 +1,8 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest_api::{endpoint, SecurityType};
+use crate::enums::SecurityType;
+use crate::rest_api::endpoint;
 use crate::spot::account::Discount;
 
 use super::NewOrderParams;

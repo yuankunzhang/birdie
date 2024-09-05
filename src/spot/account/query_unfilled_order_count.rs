@@ -3,8 +3,8 @@ use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    enums::RateLimit,
-    rest_api::{endpoint, SecurityType},
+    enums::{RateLimit, SecurityType},
+    rest_api::endpoint,
 };
 
 endpoint!(

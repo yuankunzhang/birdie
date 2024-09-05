@@ -2,8 +2,8 @@ use reqwest::Method;
 use serde::Serialize;
 
 use crate::{
-    enums::KlineInterval,
-    rest_api::{Endpoint, Params, RestApiClient, SecurityType},
+    enums::{KlineInterval, SecurityType},
+    rest_api::{Endpoint, Params, RestApiClient},
 };
 
 use super::Kline;

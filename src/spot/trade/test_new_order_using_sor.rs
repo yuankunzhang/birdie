@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest_api::{endpoint, SecurityType};
+use crate::{enums::SecurityType, rest_api::endpoint};
 
 use super::CommissionRates;
 
