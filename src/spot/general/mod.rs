@@ -11,7 +11,7 @@ pub use check_server_time::*;
 pub use exchange_info::*;
 pub use test_connectivity::*;
 
-use super::rest_api::{route, RestApiClient};
+use crate::rest_api::{route, RestApiClient};
 
 pub struct RestApiHandler<'r> {
     client: &'r RestApiClient,

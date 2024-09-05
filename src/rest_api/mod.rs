@@ -36,7 +36,7 @@
 //! For example, here is the code to retreive the order book of BTC:
 //!
 //! ```no_run
-//! use birdie::{market::OrderBookParams, Birdie};
+//! use birdie::{spot::market::OrderBookParams, Birdie};
 //! use crate::birdie::rest_api::Endpoint;
 //!
 //! #[tokio::main]
@@ -88,10 +88,10 @@ use url::Url;
 
 use crate::errors::BinanceError;
 
-use crate::account;
-use crate::general;
-use crate::market;
-use crate::trade;
+use crate::spot::account;
+use crate::spot::general;
+use crate::spot::market;
+use crate::spot::trade;
 
 #[derive(Debug, Error)]
 pub enum RestApiError {

@@ -45,10 +45,7 @@ pub mod models;
 pub mod rest_api;
 pub mod web_socket;
 
-pub mod account;
-pub mod general;
-pub mod market;
-pub mod trade;
+pub mod spot;
 
 use fix_api::FixApiClient;
 use rest_api::{RestApiClient, RestApiError};

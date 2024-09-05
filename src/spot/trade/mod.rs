@@ -54,7 +54,7 @@ pub use query_order_lists::*;
 pub use test_new_order::*;
 pub use test_new_order_using_sor::*;
 
-use super::rest_api::{route, RestApiClient};
+use crate::rest_api::{route, RestApiClient};
 
 pub struct RestApiHandler<'r> {
     client: &'r RestApiClient,

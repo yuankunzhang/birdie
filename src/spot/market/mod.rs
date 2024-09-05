@@ -38,7 +38,7 @@ pub use ticker_24hr::*;
 pub use trading_day_ticker::*;
 pub use ui_klines::*;
 
-use super::rest_api::{route, RestApiClient};
+use crate::rest_api::{route, RestApiClient};
 
 pub struct RestApiHandler<'r> {
     client: &'r RestApiClient,

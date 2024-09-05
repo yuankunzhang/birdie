@@ -2,9 +2,11 @@
 use serde::Deserialize;
 
 use crate::{
-    account::Balance,
     enums::OrderType,
-    trade::{OrderListItem, OrderListReport},
+    spot::{
+        account::Balance,
+        trade::{OrderListItem, OrderListReport},
+    },
 };
 
 #[derive(Debug, Deserialize)]

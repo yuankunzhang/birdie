@@ -20,7 +20,7 @@ pub use query_commission_rates::*;
 pub use query_prevented_matches::*;
 pub use query_unfilled_order_count::*;
 
-use super::rest_api::{route, RestApiClient};
+use crate::rest_api::{route, RestApiClient};
 
 pub struct RestApiHandler<'r> {
     client: &'r RestApiClient,
