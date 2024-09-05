@@ -1,6 +1,6 @@
 use birdie::{
     enums::KlineInterval,
-    market::{
+    spot::market::{
         AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams,
         OldTradeLookupParams, OrderBookParams, RecentTradesListParams,
         RollingWindowPriceChangeParams, SymbolOrderBookTickerParams, SymbolPriceTickerParams,

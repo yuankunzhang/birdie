@@ -1,6 +1,6 @@
 use birdie::{
     errors::{BinanceError, BinanceErrorCode},
-    general::{CheckServerTimeParams, ExchangeInfoParams, TestConnectivityParams},
+    spot::general::{CheckServerTimeParams, ExchangeInfoParams, TestConnectivityParams},
     rest_api::{Endpoint, RestApiError},
 };
 

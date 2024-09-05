@@ -1,5 +1,5 @@
 use birdie::{
-    account::{
+    spot::account::{
         AccountInformationParams, AccountTradeListParams, QueryAllocationsParams,
         QueryCommissionRatesParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams,
     },
