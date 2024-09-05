@@ -1,8 +1,8 @@
 //! Binance's WebSocket API - stub
 
-pub struct WebSocketClient {}
+pub struct WebSocketApiClient {}
 
-impl WebSocketClient {
+impl WebSocketApiClient {
     pub fn new() -> Self {
         Self {}
     }

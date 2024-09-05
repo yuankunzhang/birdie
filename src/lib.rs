@@ -43,14 +43,14 @@ pub mod filters;
 pub mod fix_api;
 pub mod models;
 pub mod rest_api;
-pub mod web_socket;
+pub mod web_socket_api;
 
 pub mod spot;
 
 use fix_api::FixApiClient;
 use rest_api::{RestApiClient, RestApiError};
 use thiserror::Error;
-use web_socket::WebSocketClient;
+use web_socket_api::WebSocketApiClient;
 
 #[derive(Debug, Error)]
 pub enum BirdieError {
@@ -61,14 +61,14 @@ pub enum BirdieError {
 pub struct Birdie {
     fix_api: FixApiClient,
     rest_api: RestApiClient,
-    web_socket: WebSocketClient,
+    web_socket: WebSocketApiClient,
 }
 
 impl Birdie {
     pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, BirdieError> {
         let fix_api = FixApiClient::new();
         let rest_api = RestApiClient::new(base_url, api_key, secret_key)?;
-        let web_socket = WebSocketClient::new();
+        let web_socket = WebSocketApiClient::new();
         Ok(Self {
             fix_api,
             rest_api,
@@ -84,7 +84,7 @@ impl Birdie {
         &self.rest_api
     }
 
-    pub fn web_socket(&self) -> &WebSocketClient {
+    pub fn web_socket(&self) -> &WebSocketApiClient {
         &self.web_socket
     }
 }
