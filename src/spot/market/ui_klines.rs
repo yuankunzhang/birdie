@@ -3,7 +3,8 @@ use serde::Serialize;
 
 use crate::{
     enums::{KlineInterval, SecurityType},
-    rest_api::{Endpoint, Params, RestApiClient},
+    rest_api::{Endpoint, RestApiClient},
+    Params,
 };
 
 use super::Kline;

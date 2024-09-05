@@ -49,6 +49,7 @@ pub mod spot;
 
 use fix_api::FixApiClient;
 use rest_api::{RestApiClient, RestApiError};
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -79,3 +80,11 @@ impl Birdie {
         &self.rest_api
     }
 }
+
+pub trait Params: Sized + Send + Serialize {
+    fn as_query(&self) -> Result<String, RestApiError> {
+        Ok(serde_qs::to_string(self)?)
+    }
+}
+
+pub trait Response: Sized + for<'de> Deserialize<'de> {}

@@ -6,7 +6,8 @@ use crate::{
     enums::{
         NewOrderRespType, OrderSide, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
     },
-    rest_api::{Endpoint, Params, RestApiClient},
+    rest_api::{Endpoint, RestApiClient},
+    Params,
 };
 
 use super::OrderListResult;

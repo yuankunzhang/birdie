@@ -81,7 +81,7 @@ pub mod wallet;
 
 use hmac::{Hmac, Mac};
 use reqwest::{Client, Method, RequestBuilder};
-use serde::{Deserialize, Serialize, Serializer};
+use serde::{Serializer};
 use sha2::Sha256;
 use thiserror::Error;
 use url::Url;
@@ -93,6 +93,8 @@ use crate::spot::account;
 use crate::spot::general;
 use crate::spot::market;
 use crate::spot::trade;
+use crate::Params;
+use crate::Response;
 
 #[derive(Debug, Error)]
 pub enum RestApiError {
@@ -220,16 +222,6 @@ where
     }
 }
 
-/// Query parameters for a REST API endpoint.
-pub trait Params: Sized + Send + Serialize {
-    fn as_query(&self) -> Result<String, RestApiError> {
-        Ok(serde_qs::to_string(self)?)
-    }
-}
-
-/// Response data for a REST API endpoint.
-pub trait Response: Sized + for<'de> Deserialize<'de> {}
-
 #[async_trait::async_trait]
 pub trait Endpoint {
     type Params: Params;
@@ -258,8 +250,8 @@ pub trait Endpoint {
 
 macro_rules! endpoint {
     ($path:literal, $method:expr, $name:ident, $params:ty, $response:ty) => {
-        impl crate::rest_api::Params for $params {}
-        impl crate::rest_api::Response for $response {}
+        impl crate::Params for $params {}
+        impl crate::Response for $response {}
 
         #[async_trait::async_trait]
         impl crate::rest_api::Endpoint for $name<'_> {
@@ -284,8 +276,8 @@ macro_rules! endpoint {
         }
     };
     ($path:literal, $method:expr, $security:expr, $name:ident, $params:ty, $response:ty) => {
-        impl crate::rest_api::Params for $params {}
-        impl crate::rest_api::Response for $response {}
+        impl crate::Params for $params {}
+        impl crate::Response for $response {}
 
         #[async_trait::async_trait]
         impl crate::rest_api::Endpoint for $name<'_> {

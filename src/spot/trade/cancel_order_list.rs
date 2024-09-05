@@ -4,7 +4,8 @@ use serde::Serialize;
 
 use crate::{
     enums::SecurityType,
-    rest_api::{Endpoint, Params, RestApiClient},
+    rest_api::{Endpoint, RestApiClient},
+    Params,
 };
 
 use super::OrderListResult;
