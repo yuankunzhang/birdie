@@ -79,13 +79,12 @@ pub mod sub_account;
 pub mod vip_loans;
 pub mod wallet;
 
-use hmac::{Hmac, Mac};
 use reqwest::{Client, Method, RequestBuilder};
-use serde::{Serializer};
-use sha2::Sha256;
+use serde::Serializer;
 use thiserror::Error;
 use url::Url;
 
+use crate::compute_signature;
 use crate::enums::SecurityType;
 use crate::errors::BinanceError;
 
@@ -201,12 +200,6 @@ impl RestApiClient {
     }
 }
 
-fn compute_signature(key: &str, data: &str) -> Result<String, RestApiError> {
-    let mut mac = Hmac::<Sha256>::new_from_slice(key.as_bytes())?;
-    mac.update(data.as_bytes());
-    Ok(hex::encode(mac.finalize().into_bytes()))
-}
-
 pub fn serialize_option_vec<S, T>(v: &Option<Vec<T>>, s: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
@@ -317,17 +310,6 @@ pub(crate) use route;
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn signature() {
-        let key = "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j";
-        let data = "symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559";
-        let sig = compute_signature(key, data).unwrap();
-        assert_eq!(
-            sig,
-            "c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71"
-        );
-    }
 
     #[test]
     fn option_vec() {
