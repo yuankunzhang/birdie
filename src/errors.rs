@@ -55,6 +55,8 @@ pub enum BinanceErrorCode {
     InvalidTimestamp = -1021,
     /// Signature for this request is not valid.
     InvalidSignature = -1022,
+    /// Not found, authenticated, or authorized.
+    NotFound = -1099,
     /// - Illegal characters found in a parameter.
     /// - Illegal characters found in parameter '%s'; legal range is '%s'.
     IllegalChars = -1100,
@@ -109,6 +111,8 @@ pub enum BinanceErrorCode {
     /// - Invalid data sent for a parameter.
     /// - Data sent for parameter '%s' is not valid.
     InvalidParameter = -1130,
+    /// `recvWindow` must be less than 60000.
+    BadRecvWindow = -1131,
     /// `strategyType` was less than 1000000.
     BadStrategyType = -1134,
     /// - Invalid JSON Request

@@ -59,9 +59,9 @@ use serde::Serializer;
 use thiserror::Error;
 use url::Url;
 
-use crate::compute_signature;
 use crate::enums::SecurityType;
 use crate::errors::BinanceError;
+use crate::hmac_signature;
 
 use crate::spot::account;
 use crate::spot::general;
@@ -149,7 +149,7 @@ impl RestApiClient {
     {
         let mut url = self.base_url.join(endpoint)?;
         let query = params.as_query()?;
-        let signature = compute_signature(&self.secret_key, &query)?;
+        let signature = hmac_signature(&self.secret_key, &query)?;
         let query = format!("{query}&signature={signature}");
         url.set_query(Some(&query));
 

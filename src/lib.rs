@@ -47,6 +47,8 @@ pub mod web_socket_api;
 
 pub mod spot;
 
+use base64::{engine::general_purpose::STANDARD as b64, Engine};
+use ed25519_dalek::{ed25519::signature::SignerMut, pkcs8::DecodePrivateKey, SigningKey};
 use fix_api::FixApiClient;
 use hmac::{Hmac, Mac};
 use rest_api::{RestApiClient, RestApiError};
@@ -104,10 +106,20 @@ pub trait Params: Sized + Send + Serialize {
 
 pub trait Response: Sized + for<'de> Deserialize<'de> {}
 
-pub(crate) fn compute_signature(key: &str, data: &str) -> Result<String, RestApiError> {
+pub(crate) fn hmac_signature(key: &str, data: &str) -> Result<String, hmac::digest::InvalidLength> {
     let mut mac = Hmac::<Sha256>::new_from_slice(key.as_bytes())?;
     mac.update(data.as_bytes());
     Ok(hex::encode(mac.finalize().into_bytes()))
+}
+
+pub(crate) fn ed25519_signature(
+    key: &str,
+    data: &str,
+) -> Result<String, ed25519_dalek::pkcs8::Error> {
+    let mut key = SigningKey::from_pkcs8_pem(key)?;
+    let signature = key.sign(data.as_bytes());
+    let encoded = b64.encode(signature.to_bytes());
+    Ok(encoded)
 }
 
 #[cfg(test)]
@@ -115,13 +127,25 @@ mod tests {
     use super::*;
 
     #[test]
-    fn signature() {
+    fn hmac() {
         let key = "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j";
         let data = "symbol=LTCBTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559";
-        let sig = compute_signature(key, data).unwrap();
+        let sig = hmac_signature(key, data).unwrap();
         assert_eq!(
             sig,
             "c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71"
         );
+    }
+
+    #[tokio::test]
+    async fn ed25519() {
+        let pem = r#"\
+-----BEGIN PRIVATE KEY-----
+MC4CAQAwBQYDK2VwBCIEIHWPzTvl8pIHsAbZtJv+/0kaXO611fs90IewpT1PEwFT
+-----END PRIVATE KEY-----
+"#;
+        let data = "hello world";
+        let signature = ed25519_signature(pem, data).unwrap();
+        assert_eq!(signature, "e2jzxQfzCeKvlScapTXk1Jt7e1i6rIXLZ4UVWcJ7kykMSARX/rUV7a3za+LlFizFUORuUs/38zlVbxFnrcCLBw==");
     }
 }

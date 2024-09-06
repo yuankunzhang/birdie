@@ -1,4 +1,5 @@
 //! Binance's WebSocket API - stub
+mod auth;
 
 use std::collections::HashMap;
 
@@ -11,6 +12,7 @@ use tracing::{error, info};
 use uuid::Uuid;
 
 use crate::{enums::SecurityType, errors::BinanceError, spot::general, Params, Response};
+use auth::*;
 
 const REQUEST_PARALALISM: usize = 1000;
 
@@ -28,6 +30,8 @@ pub enum WebSocketApiError {
     WebSocket(#[from] tokio_tungstenite::tungstenite::Error),
     #[error("json parse error: {0}")]
     Json(#[from] serde_json::Error),
+    #[error("pkcs8 error: {0}")]
+    Pkcs8(#[from] ed25519_dalek::pkcs8::Error),
     #[error("binance error: {0}")]
     Binance(String, Option<BinanceError>),
     #[error("client error: {0}")]
@@ -37,17 +41,17 @@ pub enum WebSocketApiError {
 pub struct WebSocketApiClient {
     request_sender: Option<mpsc::Sender<RequestEnvelope>>,
     endpoint: String,
-    _api_key: String,
-    _secret_key: String,
+    api_key: String,
+    ed25519_key: String,
 }
 
 impl WebSocketApiClient {
-    pub fn new(endpoint: &str, api_key: &str, secret_key: &str) -> Self {
+    pub fn new(endpoint: &str, api_key: &str, ed25519_key: &str) -> Self {
         Self {
             request_sender: None,
             endpoint: endpoint.to_owned(),
-            _api_key: api_key.to_owned(),
-            _secret_key: secret_key.to_owned(),
+            api_key: api_key.to_owned(),
+            ed25519_key: ed25519_key.to_owned(),
         }
     }
 
@@ -140,6 +144,20 @@ impl WebSocketApiClient {
             }
         });
 
+        self.logon().await?;
+        Ok(())
+    }
+
+    pub async fn logon(&self) -> Result<(), WebSocketApiError> {
+        let mut params = LogonParams::new(&self.api_key);
+        params.sign(&self.ed25519_key)?;
+        let _: LogonResponse = self.request("session.logon", params).await?;
+        Ok(())
+    }
+
+    pub async fn logout(&self) -> Result<(), WebSocketApiError> {
+        let params = LogoutParams {};
+        let _: LogoutResponse = self.request("session.logout", params).await?;
         Ok(())
     }
 
@@ -178,18 +196,6 @@ impl WebSocketApiClient {
             ))
         }
     }
-
-    pub async fn signed_request<P, R>(
-        &self,
-        method: &str,
-        params: P,
-    ) -> Result<R, WebSocketApiError>
-    where
-        P: Params,
-        R: Response,
-    {
-        todo!()
-    }
 }
 
 /// RequestEnvelope is a tuple of the request string, the request id, and a
@@ -226,10 +232,7 @@ pub trait WebSocket {
     fn security_type(&self) -> SecurityType;
 
     async fn request(&self, params: Self::Params) -> Result<Self::Response, WebSocketApiError> {
-        match self.security_type() {
-            SecurityType::None => self.client().request(self.method(), params).await,
-            _ => self.client().signed_request(self.method(), params).await,
-        }
+        self.client().request(self.method(), params).await
     }
 }
 
