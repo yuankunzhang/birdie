@@ -36,15 +36,15 @@ impl<'r> NewOrderEndpoint<'r> {
 ///
 /// Additional mandatory parameters based on order type:
 ///
-/// - `LIMIT`: `time_in_force`, `quantity`, `price`
-/// - `MARKET`: `quantity` or `quote_order_qty`
-/// - `STOP_LOSS`: `quantity`, `stop_price` or `trailing_delta
-/// - `STOP_LOSS_LIMIT`: `time_in_force`, `quantity`, `price`, `stop_price` or
+/// - [`OrderType::Limit`]: `time_in_force`, `quantity`, `price`
+/// - [`OrderType::Market`]: `quantity` or `quote_order_qty`
+/// - [`OrderType::StopLoss`]: `quantity`, `stop_price` or `trailing_delta
+/// - [`OrderType::StopLossLimit`]: `time_in_force`, `quantity`, `price`, `stop_price` or
 ///   `trailing_delta`
-/// - `TAKE_PROFIT`: `quantity`, `stop_price` or `trailing_delta`
-/// - `TAKE_PROFIT_LIMIT`: `time_in_force`, `quantity`, `price`, `stop_price`
+/// - [`OrderType::TakeProfit`]: `quantity`, `stop_price` or `trailing_delta`
+/// - [`OrderType::TakeProfitLimit`]: `time_in_force`, `quantity`, `price`, `stop_price`
 ///   or `trailing_delta`
-/// - `LIMIT_MAKER`: `quantity`, `price`
+/// - [`OrderType::LimitMaker`]: `quantity`, `price`
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NewOrderParams {
@@ -157,8 +157,6 @@ impl NewOrderParams {
         self
     }
 
-    /// Set the response JSON. `MARKET` and `LIMIT` order types default to
-    /// `FULL`, all other orders default to `ACK`.
     pub fn new_order_resp_type(mut self, new_order_resp_type: NewOrderRespType) -> Self {
         self.new_order_resp_type = Some(new_order_resp_type);
         self

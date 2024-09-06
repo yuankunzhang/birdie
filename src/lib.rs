@@ -5,6 +5,7 @@
 //!
 //! ## Read First
 //!
+//! - Always test your code.
 //! - This is a third part client, please refer to the official Binance API
 //!   documentation for the most up-to-date information.
 //! - Since the API specification doesn't specify number sizes or signedness,
@@ -18,6 +19,7 @@
 //!
 //! - [`fix_api`] - FIX API client (stub).
 //! - [`rest_api`] - REST API client.
+//! - [`web_socket_api`] - Web Socket API client.
 //!
 //! To start using Birdie, you need to create a instance of the `Birdie`
 //! struct. This struct contains all the components you need to interact with
