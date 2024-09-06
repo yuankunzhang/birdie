@@ -8,8 +8,7 @@ mod common;
 
 #[tokio::test]
 async fn ws_test_connectivity() {
-    let mut birdie = common::setup();
-    let client = birdie.web_socket_api_mut();
+    let mut client = common::setup_web_socket_api_client();
 
     let (tx, mut rx) = tokio::sync::mpsc::channel(10);
     client.connect(tx).await.unwrap();
@@ -22,8 +21,7 @@ async fn ws_test_connectivity() {
 
 #[tokio::test]
 async fn ws_check_server_time() {
-    let mut birdie = common::setup();
-    let client = birdie.web_socket_api_mut();
+    let mut client = common::setup_web_socket_api_client();
 
     let (tx, mut rx) = tokio::sync::mpsc::channel(10);
     client.connect(tx).await.unwrap();
@@ -36,8 +34,7 @@ async fn ws_check_server_time() {
 
 #[tokio::test]
 async fn ws_exchange_info() {
-    let mut birdie = common::setup();
-    let client = birdie.web_socket_api_mut();
+    let mut client = common::setup_web_socket_api_client();
 
     let (tx, mut rx) = tokio::sync::mpsc::channel(10);
     client.connect(tx).await.unwrap();

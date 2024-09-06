@@ -55,7 +55,6 @@ use rest_api::{RestApiClient, RestApiError};
 use serde::{Deserialize, Serialize};
 use sha2::Sha256;
 use thiserror::Error;
-use web_socket_api::WebSocketApiClient;
 
 #[derive(Debug, Error)]
 pub enum BirdieError {
@@ -66,23 +65,13 @@ pub enum BirdieError {
 pub struct Birdie {
     fix_api: FixApiClient,
     rest_api: RestApiClient,
-    web_socket_api: WebSocketApiClient,
 }
 
 impl Birdie {
     pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, BirdieError> {
         let fix_api = FixApiClient::new();
         let rest_api = RestApiClient::new(base_url, api_key, secret_key)?;
-        let web_socket_api = WebSocketApiClient::new(
-            "wss://ws-api.binance.com:443/ws-api/v3",
-            api_key,
-            secret_key,
-        );
-        Ok(Self {
-            fix_api,
-            rest_api,
-            web_socket_api,
-        })
+        Ok(Self { fix_api, rest_api })
     }
 
     pub fn fix_api(&self) -> &FixApiClient {
@@ -91,10 +80,6 @@ impl Birdie {
 
     pub fn rest_api(&self) -> &RestApiClient {
         &self.rest_api
-    }
-
-    pub fn web_socket_api_mut(&mut self) -> &mut WebSocketApiClient {
-        &mut self.web_socket_api
     }
 }
 
