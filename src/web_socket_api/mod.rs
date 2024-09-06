@@ -1,6 +1,6 @@
 //! Binance's WebSocket API - stub
 
-use std::{cell::RefCell, collections::HashMap};
+use std::collections::HashMap;
 
 use futures_util::{SinkExt, StreamExt};
 use serde::{Deserialize, Serialize};
@@ -10,7 +10,7 @@ use tokio_tungstenite::{connect_async, tungstenite};
 use tracing::{error, info};
 use uuid::Uuid;
 
-use crate::{errors::BinanceError, Params, Response};
+use crate::{enums::SecurityType, errors::BinanceError, spot::general, Params, Response};
 
 const REQUEST_PARALALISM: usize = 1000;
 
@@ -35,7 +35,7 @@ pub enum WebSocketApiError {
 }
 
 pub struct WebSocketApiClient {
-    request_sender: RefCell<Option<mpsc::Sender<RequestEnvelope>>>,
+    request_sender: Option<mpsc::Sender<RequestEnvelope>>,
     endpoint: String,
     _api_key: String,
     _secret_key: String,
@@ -44,27 +44,30 @@ pub struct WebSocketApiClient {
 impl WebSocketApiClient {
     pub fn new(endpoint: &str, api_key: &str, secret_key: &str) -> Self {
         Self {
-            request_sender: RefCell::new(None),
+            request_sender: None,
             endpoint: endpoint.to_owned(),
             _api_key: api_key.to_owned(),
             _secret_key: secret_key.to_owned(),
         }
     }
 
+    pub fn general(&self) -> general::WebSocketApiHandler {
+        general::WebSocketApiHandler::new(self)
+    }
+
     pub fn is_connected(&self) -> bool {
         self.request_sender
-            .borrow()
             .as_ref()
             .map(|s| !s.is_closed())
             .unwrap_or(false)
     }
 
     pub async fn connect(
-        &self,
+        &mut self,
         status: mpsc::Sender<ConnectionStatus>,
     ) -> Result<(), WebSocketApiError> {
         let (request_sender, mut request_receiver) = mpsc::channel(REQUEST_PARALALISM);
-        self.request_sender.replace(Some(request_sender));
+        self.request_sender = Some(request_sender);
 
         let (stream, _) = connect_async(&self.endpoint).await?;
         let (mut write, mut read) = stream.split();
@@ -155,7 +158,6 @@ impl WebSocketApiClient {
         let (tx, rx) = oneshot::channel();
         let envelope = (serde_json::to_string(&req)?, id, tx);
         self.request_sender
-            .borrow()
             .as_ref()
             .ok_or_else(|| WebSocketApiError::Client("not connected".to_owned()))?
             .send(envelope)
@@ -175,6 +177,18 @@ impl WebSocketApiClient {
                 res.error,
             ))
         }
+    }
+
+    pub async fn signed_request<P, R>(
+        &self,
+        method: &str,
+        params: P,
+    ) -> Result<R, WebSocketApiError>
+    where
+        P: Params,
+        R: Response,
+    {
+        todo!()
     }
 }
 
@@ -201,3 +215,72 @@ struct ResponseFrame<R> {
     #[serde(skip_serializing_if = "Option::is_none")]
     result: Option<R>,
 }
+
+#[async_trait::async_trait]
+pub trait WebSocket {
+    type Params: Params;
+    type Response: Response;
+
+    fn client(&self) -> &WebSocketApiClient;
+    fn method(&self) -> &str;
+    fn security_type(&self) -> SecurityType;
+
+    async fn request(&self, params: Self::Params) -> Result<Self::Response, WebSocketApiError> {
+        match self.security_type() {
+            SecurityType::None => self.client().request(self.method(), params).await,
+            _ => self.client().signed_request(self.method(), params).await,
+        }
+    }
+}
+
+macro_rules! web_socket {
+    ($method:literal, $name:ident, $params:ty, $response:ty) => {
+        #[async_trait::async_trait]
+        impl crate::web_socket_api::WebSocket for $name<'_> {
+            type Params = $params;
+            type Response = $response;
+
+            fn client(&self) -> &crate::web_socket_api::WebSocketApiClient {
+                self.client
+            }
+
+            fn method(&self) -> &str {
+                $method
+            }
+
+            fn security_type(&self) -> $crate::enums::SecurityType {
+                $crate::enums::SecurityType::None
+            }
+        }
+    };
+    ($method:literal, $security:expr, $name:ident, $params:ty, $response:ty) => {
+        #[async_trait::async_trait]
+        impl crate::web_socket_api::WebSocket for $name<'_> {
+            type Params = $params;
+            type Response = $response;
+
+            fn client(&self) -> &crate::web_socket_api::WebSocketApiClient {
+                self.client
+            }
+
+            fn method(&self) -> &str {
+                $method
+            }
+
+            fn security_type(&self) -> $crate::enums::SecurityType {
+                $security
+            }
+        }
+    };
+}
+
+macro_rules! target {
+    ($target:ident, $endpoint:ty) => {
+        pub fn $target(&self) -> $endpoint {
+            <$endpoint>::new(self.client)
+        }
+    };
+}
+
+pub(crate) use target;
+pub(crate) use web_socket;

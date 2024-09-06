@@ -16,7 +16,6 @@ pub struct BinanceError {
 #[serde(untagged)]
 #[repr(i32)]
 pub enum BinanceErrorCode {
-    InvalidRequest = 2,
     /// An unknown error occurred while processing the request.
     Unknown = -1000,
     /// Internal error; unable to process your request. Please try again.

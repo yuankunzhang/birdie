@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest_api::endpoint;
+use crate::{rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/time",
@@ -46,4 +46,21 @@ impl CheckServerTimeParams {
 pub struct CheckServerTimeResponse {
     /// Example: 1499827319559
     pub server_time: i64,
+}
+
+web_socket!(
+    "time",
+    CheckServerTimeWebSocket,
+    CheckServerTimeParams,
+    CheckServerTimeResponse
+);
+
+pub struct CheckServerTimeWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> CheckServerTimeWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

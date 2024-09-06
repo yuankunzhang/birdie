@@ -71,8 +71,11 @@ impl Birdie {
     pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, BirdieError> {
         let fix_api = FixApiClient::new();
         let rest_api = RestApiClient::new(base_url, api_key, secret_key)?;
-        let web_socket_api =
-            WebSocketApiClient::new("wss://stream.binance.com:9443/ws", api_key, secret_key);
+        let web_socket_api = WebSocketApiClient::new(
+            "wss://ws-api.binance.com:443/ws-api/v3",
+            api_key,
+            secret_key,
+        );
         Ok(Self {
             fix_api,
             rest_api,
@@ -88,8 +91,8 @@ impl Birdie {
         &self.rest_api
     }
 
-    pub fn web_socket_api(&self) -> &WebSocketApiClient {
-        &self.web_socket_api
+    pub fn web_socket_api_mut(&mut self) -> &mut WebSocketApiClient {
+        &mut self.web_socket_api
     }
 }
 

@@ -1,7 +1,10 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::RateLimit, filters::ExchangeFilter, models::Symbol, rest_api::endpoint};
+use crate::{
+    enums::RateLimit, filters::ExchangeFilter, models::Symbol, rest_api::endpoint,
+    web_socket_api::web_socket,
+};
 
 endpoint!(
     "/api/v3/exchangeInfo",
@@ -35,10 +38,13 @@ impl<'r> ExchangeInfoEndpoint<'r> {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ExchangeInfoParams {
+    #[serde(skip_serializing_if = "Option::is_none")]
     symbol: Option<String>,
     #[serde(serialize_with = "crate::rest_api::serialize_option_vec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     symbols: Option<Vec<String>>,
     #[serde(serialize_with = "crate::rest_api::serialize_option_vec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     permissions: Option<Vec<String>>,
 }
 
@@ -81,4 +87,21 @@ pub struct ExchangeInfoResponse {
     pub rate_limits: Vec<RateLimit>,
     pub exchange_filters: Vec<ExchangeFilter>,
     pub symbols: Vec<Symbol>,
+}
+
+web_socket!(
+    "exchangeInfo",
+    ExchangeInfoWebSocket,
+    ExchangeInfoParams,
+    ExchangeInfoResponse
+);
+
+pub struct ExchangeInfoWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> ExchangeInfoWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

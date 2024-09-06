@@ -11,7 +11,10 @@ pub use check_server_time::*;
 pub use exchange_info::*;
 pub use test_connectivity::*;
 
-use crate::rest_api::{route, RestApiClient};
+use crate::{
+    rest_api::{route, RestApiClient},
+    web_socket_api::{target, WebSocketApiClient},
+};
 
 pub struct RestApiHandler<'r> {
     client: &'r RestApiClient,
@@ -25,4 +28,18 @@ impl<'r> RestApiHandler<'r> {
     route!(test_connectivity, TestConnectivityEndpoint);
     route!(check_server_time, CheckServerTimeEndpoint);
     route!(exchange_info, ExchangeInfoEndpoint);
+}
+
+pub struct WebSocketApiHandler<'w> {
+    client: &'w WebSocketApiClient,
+}
+
+impl<'w> WebSocketApiHandler<'w> {
+    pub fn new(client: &'w WebSocketApiClient) -> Self {
+        WebSocketApiHandler { client }
+    }
+
+    target!(test_connectivity, TestConnectivityWebSocket);
+    target!(check_server_time, CheckServerTimeWebSocket);
+    target!(exchange_info, ExchangeInfoWebSocket);
 }
