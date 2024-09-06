@@ -13,7 +13,7 @@ pub use test_connectivity::*;
 
 use crate::{
     rest_api::{route, RestApiClient},
-    web_socket_api::{target, WebSocketApiClient},
+    web_socket_api::{web_socket_endpoint, WebSocketApiClient},
 };
 
 pub struct RestApiHandler<'r> {
@@ -39,7 +39,7 @@ impl<'w> WebSocketApiHandler<'w> {
         WebSocketApiHandler { client }
     }
 
-    target!(test_connectivity, TestConnectivityWebSocket);
-    target!(check_server_time, CheckServerTimeWebSocket);
-    target!(exchange_info, ExchangeInfoWebSocket);
+    web_socket_endpoint!(test_connectivity, TestConnectivityWebSocket);
+    web_socket_endpoint!(check_server_time, CheckServerTimeWebSocket);
+    web_socket_endpoint!(exchange_info, ExchangeInfoWebSocket);
 }

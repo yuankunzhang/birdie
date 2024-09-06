@@ -274,7 +274,7 @@ macro_rules! web_socket {
     };
 }
 
-macro_rules! target {
+macro_rules! web_socket_endpoint {
     ($target:ident, $endpoint:ty) => {
         pub fn $target(&self) -> $endpoint {
             <$endpoint>::new(self.client)
@@ -282,5 +282,5 @@ macro_rules! target {
     };
 }
 
-pub(crate) use target;
 pub(crate) use web_socket;
+pub(crate) use web_socket_endpoint;
