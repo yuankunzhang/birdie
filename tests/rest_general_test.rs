@@ -7,7 +7,7 @@ use birdie::{
 mod common;
 
 #[tokio::test]
-async fn test_connectivity() {
+async fn rest_test_connectivity() {
     let birdie = common::setup();
     let params = TestConnectivityParams::new();
     let resp = birdie
@@ -20,7 +20,7 @@ async fn test_connectivity() {
 }
 
 #[tokio::test]
-async fn check_server_time() {
+async fn rest_check_server_time() {
     let birdie = common::setup();
     let params = CheckServerTimeParams::new();
     let resp = birdie
@@ -33,7 +33,7 @@ async fn check_server_time() {
 }
 
 #[tokio::test]
-async fn exchange_info() {
+async fn rest_exchange_info() {
     let birdie = common::setup();
 
     // no params

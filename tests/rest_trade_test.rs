@@ -11,7 +11,7 @@ use birdie::{
 mod common;
 
 #[tokio::test]
-async fn test_new_order() {
+async fn rest_test_new_order() {
     let birdie = common::setup();
 
     // invalid price
@@ -56,7 +56,7 @@ async fn test_new_order() {
 }
 
 #[tokio::test]
-async fn query_order() {
+async fn rest_query_order() {
     let birdie = common::setup();
 
     let params = QueryOrderParams::new("BTCUSDT");
@@ -92,7 +92,7 @@ async fn query_order() {
 }
 
 #[tokio::test]
-async fn cancel_order() {
+async fn rest_cancel_order() {
     let birdie = common::setup();
 
     let params = CancelOrderParams::new("BTCUSDT").order_id(1);
@@ -111,7 +111,7 @@ async fn cancel_order() {
 }
 
 #[tokio::test]
-async fn cancel_all_open_orders() {
+async fn rest_cancel_all_open_orders() {
     let birdie = common::setup();
 
     let params = CancelAllOpenOrdersParams::new("BTCUSDT");
@@ -130,7 +130,7 @@ async fn cancel_all_open_orders() {
 }
 
 #[tokio::test]
-async fn all_orders() {
+async fn rest_all_orders() {
     let birdie = common::setup();
 
     let params = AllOrdersParams::new("BTCUSDT");

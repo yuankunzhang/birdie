@@ -10,7 +10,7 @@ use birdie::{
 mod common;
 
 #[tokio::test]
-async fn account_information() {
+async fn rest_account_information() {
     let birdie = common::setup();
     let params = AccountInformationParams::new().omit_zero_balances(true);
     let resp = birdie
@@ -23,7 +23,7 @@ async fn account_information() {
 }
 
 #[tokio::test]
-async fn account_trade_list() {
+async fn rest_account_trade_list() {
     let birdie = common::setup();
     let params = AccountTradeListParams::new("BTCUSDT");
     let resp = birdie
@@ -36,7 +36,7 @@ async fn account_trade_list() {
 }
 
 #[tokio::test]
-async fn query_unfilled_order_count() {
+async fn rest_query_unfilled_order_count() {
     let birdie = common::setup();
     let params = QueryUnfilledOrderCountParams::new();
     let resp = birdie
@@ -49,7 +49,7 @@ async fn query_unfilled_order_count() {
 }
 
 #[tokio::test]
-async fn query_prevented_matches() {
+async fn rest_query_prevented_matches() {
     let birdie = common::setup();
     let params = QueryPreventedMatchesParams::new("BTCUSDT").order_id(1);
     let resp = birdie
@@ -77,7 +77,7 @@ async fn query_prevented_matches() {
 }
 
 #[tokio::test]
-async fn query_allocations() {
+async fn rest_query_allocations() {
     let birdie = common::setup();
     let params = QueryAllocationsParams::new("BTCUSDT");
     let resp = birdie
@@ -90,7 +90,7 @@ async fn query_allocations() {
 }
 
 #[tokio::test]
-async fn query_commission_rates() {
+async fn rest_query_commission_rates() {
     let birdie = common::setup();
     let params = QueryCommissionRatesParams::new("BTCUSDT");
     let resp = birdie

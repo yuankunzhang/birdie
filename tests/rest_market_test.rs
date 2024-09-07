@@ -12,7 +12,7 @@ use birdie::{
 mod common;
 
 #[tokio::test]
-async fn order_book() {
+async fn rest_order_book() {
     let birdie = common::setup();
     let params = OrderBookParams::new("BTCUSDT").limit(10);
     let resp = birdie
@@ -25,7 +25,7 @@ async fn order_book() {
 }
 
 #[tokio::test]
-async fn recent_trades_list() {
+async fn rest_recent_trades_list() {
     let birdie = common::setup();
     let params = RecentTradesListParams::new("BTCUSDT").limit(10);
     let resp = birdie
@@ -38,7 +38,7 @@ async fn recent_trades_list() {
 }
 
 #[tokio::test]
-async fn old_trade_lookup() {
+async fn rest_old_trade_lookup() {
     let birdie = common::setup();
     let params = OldTradeLookupParams::new("BTCUSDT").limit(10);
     let resp = birdie
@@ -51,7 +51,7 @@ async fn old_trade_lookup() {
 }
 
 #[tokio::test]
-async fn aggregate_trades_list() {
+async fn rest_aggregate_trades_list() {
     let birdie = common::setup();
     let params = AggregateTradesListParams::new("BTCUSDT").limit(10);
     let resp = birdie
@@ -64,7 +64,7 @@ async fn aggregate_trades_list() {
 }
 
 #[tokio::test]
-async fn kline_data() {
+async fn rest_kline_data() {
     let birdie = common::setup();
     let params = KlineDataParams::new("BTCUSDT", KlineInterval::OneHour).limit(10);
     let resp = birdie
@@ -77,7 +77,7 @@ async fn kline_data() {
 }
 
 #[tokio::test]
-async fn ui_kline() {
+async fn rest_ui_kline() {
     let birdie = common::setup();
     let params = UiKlinesParams::new("BTCUSDT", KlineInterval::OneHour).limit(10);
     let resp = birdie.rest_api().market().ui_klines().request(params).await;
@@ -85,7 +85,7 @@ async fn ui_kline() {
 }
 
 #[tokio::test]
-async fn current_average_price() {
+async fn rest_current_average_price() {
     let birdie = common::setup();
     let params = CurrentAveragePriceParams::new("BTCUSDT");
     let resp = birdie
@@ -98,7 +98,7 @@ async fn current_average_price() {
 }
 
 #[tokio::test]
-async fn ticker_24hr() {
+async fn rest_ticker_24hr() {
     let birdie = common::setup();
     let params = Ticker24hrParams::new().symbol("BTCUSDT");
     let resp = birdie
@@ -111,7 +111,7 @@ async fn ticker_24hr() {
 }
 
 #[tokio::test]
-async fn trading_day_ticker() {
+async fn rest_trading_day_ticker() {
     let birdie = common::setup();
     let params = TradingDayTickerParams::new().symbol("BTCUSDT");
     let resp = birdie
@@ -124,7 +124,7 @@ async fn trading_day_ticker() {
 }
 
 #[tokio::test]
-async fn symbol_price_ticker() {
+async fn rest_symbol_price_ticker() {
     let birdie = common::setup();
     let params = SymbolPriceTickerParams::new().symbol("BTCUSDT");
     let resp = birdie
@@ -137,7 +137,7 @@ async fn symbol_price_ticker() {
 }
 
 #[tokio::test]
-async fn symbol_order_book_ticker() {
+async fn rest_symbol_order_book_ticker() {
     let birdie = common::setup();
     let params = SymbolOrderBookTickerParams::new().symbol("BTCUSDT");
     let resp = birdie
@@ -150,7 +150,7 @@ async fn symbol_order_book_ticker() {
 }
 
 #[tokio::test]
-async fn rolling_window_price_change() {
+async fn rest_rolling_window_price_change() {
     let birdie = common::setup();
 
     let params = RollingWindowPriceChangeParams::new().symbol("BTCUSDT");
