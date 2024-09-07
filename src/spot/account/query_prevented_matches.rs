@@ -2,7 +2,7 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::SecurityType, rest_api::endpoint};
+use crate::{enums::SecurityType, rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/myPreventedMatches",
@@ -103,4 +103,21 @@ pub struct PreventedMatch {
     pub price: String,
     pub maker_prevented_quantity: String,
     pub transact_time: i64,
+}
+
+web_socket!(
+    "myPreventedMatches",
+    QueryPreventedMatchesWebSocket,
+    QueryPreventedMatchesParams,
+    QueryPreventedMatchesResponse
+);
+
+pub struct QueryPreventedMatchesWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> QueryPreventedMatchesWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

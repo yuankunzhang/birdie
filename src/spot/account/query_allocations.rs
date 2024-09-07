@@ -2,7 +2,7 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::SecurityType, rest_api::endpoint};
+use crate::{enums::SecurityType, rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/myAllocations",
@@ -112,4 +112,21 @@ pub struct Allocation {
     pub is_buyer: bool,
     pub is_maker: bool,
     pub is_allocator: bool,
+}
+
+web_socket!(
+    "myAllocations",
+    QueryAllocationsWebSocket,
+    QueryAllocationsParams,
+    QueryAllocationsResponse
+);
+
+pub struct QueryAllocationsWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> QueryAllocationsWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

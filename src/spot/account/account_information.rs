@@ -2,7 +2,7 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::SecurityType, rest_api::endpoint};
+use crate::{enums::SecurityType, rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/account",
@@ -131,4 +131,21 @@ pub struct Discount {
     pub enabled_for_symbol: bool,
     pub discount_asset: Option<String>,
     pub discount: String,
+}
+
+web_socket!(
+    "account.status",
+    AccountInformationWebSocket,
+    AccountInformationParams,
+    AccountInformationResponse
+);
+
+pub struct AccountInformationWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> AccountInformationWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

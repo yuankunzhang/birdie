@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     enums::{RateLimit, SecurityType},
     rest_api::endpoint,
+    web_socket_api::web_socket,
 };
 
 endpoint!(
@@ -68,4 +69,21 @@ pub struct UnfilledOrderCount {
     #[serde(flatten)]
     pub rate_limit: RateLimit,
     pub count: i64,
+}
+
+web_socket!(
+    "account.rateLimits.orders",
+    QueryUnfilledOrderCountWebSocket,
+    QueryUnfilledOrderCountParams,
+    QueryUnfilledOrderCountResponse
+);
+
+pub struct QueryUnfilledOrderCountWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> QueryUnfilledOrderCountWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

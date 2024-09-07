@@ -2,7 +2,7 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::SecurityType, rest_api::endpoint};
+use crate::{enums::SecurityType, rest_api::endpoint, web_socket_api::web_socket};
 
 use super::{CommissionRate, Discount};
 
@@ -52,4 +52,21 @@ pub struct QueryCommissionRatesResponse {
     pub standard_commission: CommissionRate,
     pub tax_commission: CommissionRate,
     pub discount: Discount,
+}
+
+web_socket!(
+    "account.commission",
+    QueryCommissionRatesWebSocket,
+    QueryCommissionRatesParams,
+    QueryCommissionRatesResponse
+);
+
+pub struct QueryCommissionRatesWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> QueryCommissionRatesWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }
