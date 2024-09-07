@@ -57,6 +57,7 @@
 use reqwest::{Client, Method, RequestBuilder};
 use serde::Serializer;
 use thiserror::Error;
+use tracing::info;
 use url::Url;
 
 use crate::enums::SecurityType;
@@ -132,6 +133,7 @@ impl RestApiClient {
     {
         let mut url = self.base_url.join(endpoint)?;
         url.set_query(Some(&params.as_query()?));
+        info!("send request to {url}");
 
         let req = self.client.request(method, url);
         Self::send_request(req).await
@@ -152,6 +154,7 @@ impl RestApiClient {
         let signature = hmac_signature(&self.secret_key, &query)?;
         let query = format!("{query}&signature={signature}");
         url.set_query(Some(&query));
+        info!("send signed request to {url}");
 
         let req = self
             .client

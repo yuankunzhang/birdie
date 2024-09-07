@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        NewOrderRespType, OrderSide, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
+        NewOrderRespType, OrderSide, OrderStatus, OrderType, SecurityType, SelfTradePreventionMode,
+        TimeInForce,
     },
     rest_api::endpoint,
 };
@@ -209,12 +210,12 @@ pub struct NewOrderResult {
     pub orig_qty: String,
     pub executed_qty: String,
     pub cummulative_quote_qty: String,
-    pub status: String,
-    pub time_in_force: String,
-    pub r#type: String,
-    pub side: String,
+    pub status: OrderStatus,
+    pub time_in_force: TimeInForce,
+    pub r#type: OrderType,
+    pub side: OrderSide,
     pub working_type: i64,
-    pub self_trade_prevention_mode: String,
+    pub self_trade_prevention_mode: SelfTradePreventionMode,
     #[serde(flatten)]
     pub conditional: ConditionalFields,
 }
@@ -231,12 +232,12 @@ pub struct NewOrderFull {
     pub orig_qty: String,
     pub executed_qty: String,
     pub cummulative_quote_qty: String,
-    pub status: String,
-    pub time_in_force: String,
-    pub r#type: String,
+    pub status: OrderStatus,
+    pub time_in_force: TimeInForce,
+    pub r#type: OrderType,
     pub side: String,
     pub working_type: i64,
-    pub self_trade_prevention_mode: String,
+    pub self_trade_prevention_mode: SelfTradePreventionMode,
     pub fills: Vec<OrderFill>,
     #[serde(flatten)]
     pub conditional: ConditionalFields,

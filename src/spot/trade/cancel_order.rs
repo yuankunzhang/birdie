@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        CancelRestriction, OrderSide, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
+        CancelRestriction, OrderSide, OrderStatus, OrderType, SecurityType,
+        SelfTradePreventionMode, TimeInForce,
     },
     rest_api::endpoint,
 };
@@ -108,7 +109,7 @@ pub struct CancelOrderResult {
     pub orig_qty: String,
     pub executed_qty: String,
     pub cummulative_quote_qty: String,
-    pub status: String,
+    pub status: OrderStatus,
     pub time_in_force: TimeInForce,
     pub r#type: OrderType,
     pub side: OrderSide,

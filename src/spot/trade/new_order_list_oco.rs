@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        NewOrderRespType, OrderSide, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
+        ContingencyType, NewOrderRespType, OrderListOrderStatus, OrderListStatus, OrderSide,
+        OrderStatus, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
     },
     rest_api::endpoint,
 };
@@ -20,6 +21,17 @@ endpoint!(
 
 /// Send in an one-cancels-the-other (OCO) pair, where activation of one order
 /// immediately cancels the other.
+///
+/// - An OCO has 2 legs called the above leg and below leg.
+/// - One of the legs must be a [`OrderType::LimitMaker`] order and the other
+///   leg must be [`OrderType::StopLoss`] or [`OrderType::StopLossLimit`] order.
+/// - Price restrictions:
+///     - If the OCO is on the [`OrderSide::Sell`] side:
+///       [`OrderType::LimitMaker`] price > Last Traded Price > `stop_price`
+///     - If the OCO is on the [`OrderSide::Buy`] side:
+///       [`OrderType::LimitMaker`] price < Last Traded Price < `stop_price`
+/// - OCOs add 2 orders to the unfilled order count, `ExchangeMaxNumOrders`
+///   filter and `MaxNumOrders` filter.
 ///
 /// - Weight: 1
 /// - Data Source: Matching Engine
@@ -253,9 +265,9 @@ pub type NewOrderListOcoResponse = OrderListResult;
 #[serde(rename_all = "camelCase")]
 pub struct OrderListResult {
     pub order_list_id: i64,
-    pub contingency_type: String,
-    pub list_status_type: String,
-    pub list_order_status: String,
+    pub contingency_type: ContingencyType,
+    pub list_status_type: OrderListStatus,
+    pub list_order_status: OrderListOrderStatus,
     pub list_client_order_id: String,
     pub transaction_time: i64,
     pub symbol: String,
@@ -285,11 +297,11 @@ pub struct OrderListReport {
     pub orig_qty: String,
     pub executed_qty: String,
     pub cummulative_quote_qty: String,
-    pub status: String,
-    pub time_in_force: String,
-    pub r#type: String,
-    pub side: String,
+    pub status: OrderStatus,
+    pub time_in_force: TimeInForce,
+    pub r#type: OrderType,
+    pub side: OrderSide,
     pub stop_price: String,
-    pub self_trade_prevention_mode: String,
+    pub self_trade_prevention_mode: SelfTradePreventionMode,
     pub transaction_time: i64,
 }

@@ -1,19 +1,37 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-use crate::{enums::SecurityType, rest_api::endpoint};
+use crate::{
+    enums::SecurityType,
+    rest_api::{Endpoint, RestApiClient},
+    Params,
+};
 
 use super::OrderDetail;
 
-endpoint!(
-    "/api/v3/openOrders",
-    Method::GET,
-    SecurityType::UserData,
-    CurrentOpenOrdersEndpoint,
-    CurrentOpenOrdersParams,
-    CurrentOpenOrdersResponse
-);
+impl Endpoint for CurrentOpenOrdersEndpoint<'_> {
+    type Response = CurrentOpenOrdersResponse;
+    type Params = CurrentOpenOrdersParams;
+
+    fn client(&self) -> &RestApiClient {
+        self.client
+    }
+
+    fn path(&self) -> &str {
+        "/api/v3/orderList"
+    }
+
+    fn method(&self) -> Method {
+        Method::GET
+    }
+
+    fn security_type(&self) -> SecurityType {
+        SecurityType::UserData
+    }
+}
+
+impl Params for CurrentOpenOrdersParams {}
 
 /// Get all open orders on a symbol. Careful when accessing this with no symbol.
 ///
@@ -56,9 +74,4 @@ impl CurrentOpenOrdersParams {
     }
 }
 
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct CurrentOpenOrdersResponse {
-    #[serde(flatten)]
-    pub vec: Vec<OrderDetail>,
-}
+pub type CurrentOpenOrdersResponse = Vec<OrderDetail>;

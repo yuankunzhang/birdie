@@ -39,8 +39,9 @@ impl Params for NewOrderListOtocoParams {}
 ///
 /// - An OTOCO (One-Triggers-One-Cancels-the-Other) is an order list comprised
 ///   of 3 orders.
-/// - The first order is called the working order and must be `LIMIT` or
-///   `LIMIT_MAKER`. Initially, only the working order goes on the order book.
+/// - The first order is called the working order and must be
+///   [`OrderType::Limit`] or [`OrderType::LimitMaker`]. Initially, only the
+///   working order goes on the order book.
 ///   - The behavior of the working order is the same as the OTO.
 /// - OTOCO has 2 pending orders (pending above and pending below), forming an
 ///   OCO pair. The pending orders are only placed on the order book when the

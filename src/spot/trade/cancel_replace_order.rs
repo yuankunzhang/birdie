@@ -27,8 +27,7 @@ endpoint!(
 /// Filters and Order Count are evaluated before the processing of the
 /// cancellation and order placement occurs.
 ///
-/// A new order that was not attempted (i.e. when newOrderResult:
-/// NOT_ATTEMPTED ), will still increase the order count by 1.
+/// A new order that was not attempted will still increase the order count by 1.
 ///
 /// - Weight: 1
 /// - Data Source: Matching Engine
@@ -228,10 +227,25 @@ pub enum CancelReplaceOrderResponse {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum CancelResultStatus {
+    Success,
+    Failure,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum NewOrderResultStatus {
+    Success,
+    Failure,
+    NotAttempted,
+}
+
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Success {
-    pub cancel_result: String,
-    pub new_order_result: String,
+    pub cancel_result: CancelResultStatus,
+    pub new_order_result: NewOrderResultStatus,
     pub cancel_response: CancelResult,
     pub new_order_response: NewResult,
 }
@@ -247,8 +261,8 @@ pub struct NotSuccess {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NotSuccessData {
-    pub cancel_result: String,
-    pub new_order_result: String,
+    pub cancel_result: CancelResultStatus,
+    pub new_order_result: NewOrderResultStatus,
     pub cancel_response: CancelResult,
     pub new_order_response: NewResult,
 }

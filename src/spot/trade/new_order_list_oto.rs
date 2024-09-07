@@ -38,12 +38,13 @@ impl Params for NewOrderListOtoParams {}
 /// Place an OTO.
 ///
 /// - An OTO (One-Triggers-the-Other) is an order list comprised of 2 orders.
-/// - The first order is called the working order and must be `LIMIT` or
-///   `LIMIT_MAKER`. Initially, only the working order goes on the order book.
-/// - The /// second order is called the pending order. It can be any order
-///   type except for `MARKET` orders using parameter `quote_order_qty`. The
-///   pending order is only placed on the order book when the working order
-///   gets fully filled.
+/// - The first order is called the working order and must be
+///   [`OrderType::Limit`] or [`OrderType::LimitMaker`]. Initially, only the
+///   working order goes on the order book.
+/// - The second order is called the pending order. It can be any order type
+///   except for [`OrderType::Market`] orders using parameter
+///   `quote_order_qty`. The pending order is only placed on the order book when
+///   the working order gets fully filled.
 /// - If either the working order or the pending order is cancelled
 ///   individually, the other order in the order list will also be canceled or
 ///   expired.
