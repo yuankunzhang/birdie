@@ -18,7 +18,7 @@ use crate::{
 };
 use auth::*;
 
-const CHANNEL_BUFFER: usize = 1024;
+const CHANNEL_BUFFER: usize = 2048;
 
 #[derive(Debug, Error)]
 pub enum WebSocketApiError {
