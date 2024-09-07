@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use crate::enums::SecurityType;
 use crate::rest_api::endpoint;
 use crate::spot::account::Discount;
+use crate::web_socket_api::web_socket;
 
 use super::NewOrderParams;
 
@@ -77,4 +78,21 @@ pub struct CommissionRates {
 pub struct CommissionForOrder {
     pub maker: i64,
     pub taker: i64,
+}
+
+web_socket!(
+    "order.test",
+    TestNewOrderWebSocket,
+    TestNewOrderParams,
+    TestNewOrderResponse
+);
+
+pub struct TestNewOrderWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> TestNewOrderWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

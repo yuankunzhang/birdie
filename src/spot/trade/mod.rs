@@ -54,7 +54,10 @@ pub use query_order_lists::*;
 pub use test_new_order::*;
 pub use test_new_order_using_sor::*;
 
-use crate::rest_api::{route, RestApiClient};
+use crate::{
+    rest_api::{route, RestApiClient},
+    web_socket_api::{ws_route, WebSocketApiClient},
+};
 
 pub struct RestApiHandler<'r> {
     client: &'r RestApiClient,
@@ -82,4 +85,19 @@ impl<'r> RestApiHandler<'r> {
     route!(query_open_order_lists, QueryOpenOrderListsEndpoint);
     route!(new_order_using_sor, NewOrderUsingSorEndpoint);
     route!(test_new_order_using_sor, TestNewOrderUsingSorEndpoint);
+}
+
+pub struct WebSocketApiHandler<'w> {
+    client: &'w WebSocketApiClient,
+}
+
+impl<'w> WebSocketApiHandler<'w> {
+    pub fn new(client: &'w WebSocketApiClient) -> Self {
+        WebSocketApiHandler { client }
+    }
+
+    ws_route!(new_order, NewOrderWebSocket);
+    ws_route!(test_new_order, TestNewOrderWebSocket);
+    // ws_route!(check_server_time, CheckServerTimeWebSocket);
+    // ws_route!(exchange_info, ExchangeInfoWebSocket);
 }

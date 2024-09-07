@@ -8,6 +8,7 @@ use crate::{
         TimeInForce,
     },
     rest_api::endpoint,
+    web_socket_api::web_socket,
 };
 
 endpoint!(
@@ -287,4 +288,21 @@ pub struct ConditionalFields {
     /// the order book the order was submitted to. Appears when placing orders
     /// using SOR
     pub working_floor: Option<String>,
+}
+
+web_socket!(
+    "order.place",
+    NewOrderWebSocket,
+    NewOrderParams,
+    NewOrderResponse
+);
+
+pub struct NewOrderWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> NewOrderWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

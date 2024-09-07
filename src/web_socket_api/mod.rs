@@ -11,7 +11,12 @@ use tokio_tungstenite::{connect_async, tungstenite};
 use tracing::{error, info};
 use uuid::Uuid;
 
-use crate::{enums::SecurityType, errors::BinanceError, spot::general, Params, Response};
+use crate::{
+    enums::SecurityType,
+    errors::BinanceError,
+    spot::{general, trade},
+    Params, Response,
+};
 use auth::*;
 
 const REQUEST_PARALALISM: usize = 1000;
@@ -57,6 +62,10 @@ impl WebSocketApiClient {
 
     pub fn general(&self) -> general::WebSocketApiHandler {
         general::WebSocketApiHandler::new(self)
+    }
+
+    pub fn trade(&self) -> trade::WebSocketApiHandler {
+        trade::WebSocketApiHandler::new(self)
     }
 
     pub fn is_connected(&self) -> bool {
