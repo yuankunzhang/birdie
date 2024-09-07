@@ -8,6 +8,7 @@ use crate::{
         TimeInForce,
     },
     rest_api::endpoint,
+    web_socket_api::web_socket,
 };
 
 endpoint!(
@@ -175,4 +176,21 @@ pub struct SorOrderFill {
     pub commission_asset: String,
     pub trade_id: i64,
     pub alloc_id: i64,
+}
+
+web_socket!(
+    "sor.order.place",
+    NewOrderUsingSorWebSocket,
+    NewOrderUsingSorParams,
+    NewOrderUsingSorResponse
+);
+
+pub struct NewOrderUsingSorWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> NewOrderUsingSorWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

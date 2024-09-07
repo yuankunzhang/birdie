@@ -7,6 +7,7 @@ use crate::{
         NewOrderRespType, OrderSide, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
     },
     rest_api::{Endpoint, RestApiClient},
+    web_socket_api::web_socket,
     Params,
 };
 
@@ -242,3 +243,20 @@ impl NewOrderListOtoParams {
 }
 
 pub type NewOrderListOtoResponse = OrderListResult;
+
+web_socket!(
+    "orderList.place.oto",
+    NewOrderListOtoWebSocket,
+    NewOrderListOtoParams,
+    NewOrderListOtoResponse
+);
+
+pub struct NewOrderListOtoWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> NewOrderListOtoWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
+}

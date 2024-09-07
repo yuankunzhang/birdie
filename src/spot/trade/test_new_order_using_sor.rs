@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::SecurityType, rest_api::endpoint};
+use crate::{enums::SecurityType, rest_api::endpoint, web_socket_api::web_socket};
 
 use super::CommissionRates;
 
@@ -58,4 +58,21 @@ impl TestNewOrderUsingSorParams {
 pub enum TestNewOrderUsingSorResponse {
     Empty,
     CommissionRates(CommissionRates),
+}
+
+web_socket!(
+    "sor.order.test",
+    TestNewOrderUsingSorWebSocket,
+    TestNewOrderUsingSorParams,
+    TestNewOrderUsingSorResponse
+);
+
+pub struct TestNewOrderUsingSorWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> TestNewOrderUsingSorWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

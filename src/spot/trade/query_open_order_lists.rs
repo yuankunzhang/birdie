@@ -5,6 +5,7 @@ use serde::Serialize;
 use crate::{
     enums::SecurityType,
     rest_api::{Endpoint, RestApiClient},
+    web_socket_api::web_socket,
     Params,
 };
 
@@ -71,3 +72,20 @@ impl QueryOpenOrderListsParams {
 }
 
 pub type QueryOpenOrderListsResponse = Vec<OrderListResult>;
+
+web_socket!(
+    "openOrderLists.status",
+    QueryOpenOrderListsWebSocket,
+    QueryOpenOrderListsParams,
+    QueryOpenOrderListsResponse
+);
+
+pub struct QueryOpenOrderListsWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> QueryOpenOrderListsWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
+}

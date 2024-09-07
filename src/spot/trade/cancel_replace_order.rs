@@ -9,6 +9,7 @@ use crate::{
     },
     errors::BinanceError,
     rest_api::endpoint,
+    web_socket_api::web_socket,
 };
 
 use super::{CancelOrderResult, NewOrderResult};
@@ -279,4 +280,21 @@ pub enum CancelResult {
 pub enum NewResult {
     Success(NewOrderResult),
     Failure(BinanceError),
+}
+
+web_socket!(
+    "order.cancelReplace",
+    CancelReplaceOrderWebSocket,
+    CancelReplaceOrderParams,
+    CancelReplaceOrderResponse
+);
+
+pub struct CancelReplaceOrderWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> CancelReplaceOrderWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

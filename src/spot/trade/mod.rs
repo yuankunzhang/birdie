@@ -98,6 +98,19 @@ impl<'w> WebSocketApiHandler<'w> {
 
     ws_route!(new_order, NewOrderWebSocket);
     ws_route!(test_new_order, TestNewOrderWebSocket);
-    // ws_route!(check_server_time, CheckServerTimeWebSocket);
-    // ws_route!(exchange_info, ExchangeInfoWebSocket);
+    ws_route!(query_order, QueryOrderWebSocket);
+    ws_route!(cancel_order, CancelOrderWebSocket);
+    ws_route!(cancel_all_open_orders, CancelAllOpenOrdersWebSocket);
+    ws_route!(cancel_replace_order, CancelReplaceOrderWebSocket);
+    ws_route!(current_open_orders, CurrentOpenOrdersWebSocket);
+    // ws_route!(all_orders, AllOrdersWebSocket);
+    ws_route!(new_order_list_oco, NewOrderListOcoWebSocket);
+    ws_route!(new_order_list_oto, NewOrderListOtoWebSocket);
+    ws_route!(new_order_list_otoco, NewOrderListOtocoWebSocket);
+    ws_route!(cancel_order_list, CancelOrderListWebSocket);
+    ws_route!(query_order_lists, QueryOrderListsWebSocket);
+    // ws_route!(query_all_order_lists, QueryAllOrderListsWebSocket);
+    ws_route!(query_open_order_lists, QueryOpenOrderListsWebSocket);
+    ws_route!(new_order_using_sor, NewOrderUsingSorWebSocket);
+    ws_route!(test_new_order_using_sor, TestNewOrderUsingSorWebSocket);
 }

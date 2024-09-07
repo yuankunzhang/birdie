@@ -7,6 +7,7 @@ use crate::{
         OrderSide, OrderStatus, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
     },
     rest_api::endpoint,
+    web_socket_api::web_socket,
 };
 
 endpoint!(
@@ -103,4 +104,21 @@ pub struct OrderDetail {
     pub working_time: i64,
     pub orig_quote_order_qty: String,
     pub self_trade_prevention_mode: SelfTradePreventionMode,
+}
+
+web_socket!(
+    "order.status",
+    QueryOrderWebSocket,
+    QueryOrderParams,
+    QueryOrderResponse
+);
+
+pub struct QueryOrderWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> QueryOrderWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

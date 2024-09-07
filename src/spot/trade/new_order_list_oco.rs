@@ -8,6 +8,7 @@ use crate::{
         OrderStatus, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
     },
     rest_api::endpoint,
+    web_socket_api::web_socket,
 };
 
 endpoint!(
@@ -304,4 +305,21 @@ pub struct OrderListReport {
     pub stop_price: String,
     pub self_trade_prevention_mode: SelfTradePreventionMode,
     pub transaction_time: i64,
+}
+
+web_socket!(
+    "orderList.place.oco",
+    NewOrderListOcoWebSocket,
+    NewOrderListOcoParams,
+    NewOrderListOcoResponse
+);
+
+pub struct NewOrderListOcoWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> NewOrderListOcoWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

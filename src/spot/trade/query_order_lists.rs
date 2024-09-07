@@ -5,6 +5,7 @@ use serde::Serialize;
 use crate::{
     enums::SecurityType,
     rest_api::{Endpoint, RestApiClient},
+    web_socket_api::web_socket,
     Params,
 };
 
@@ -100,3 +101,20 @@ impl QueryOrderListsParams {
 }
 
 pub type QueryOrderListsResponse = OrderListResult;
+
+web_socket!(
+    "orderList.status",
+    QueryOrderListsWebSocket,
+    QueryOrderListsParams,
+    QueryOrderListsResponse
+);
+
+pub struct QueryOrderListsWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> QueryOrderListsWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
+}

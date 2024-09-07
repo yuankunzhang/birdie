@@ -5,6 +5,7 @@ use serde::Serialize;
 use crate::{
     enums::SecurityType,
     rest_api::{Endpoint, RestApiClient},
+    web_socket_api::web_socket,
     Params,
 };
 
@@ -104,3 +105,20 @@ impl CancelOrderListParams {
 }
 
 pub type CancelOrderListResponse = OrderListResult;
+
+web_socket!(
+    "orderList.cancel",
+    CancelOrderListWebSocket,
+    CancelOrderListParams,
+    CancelOrderListResponse
+);
+
+pub struct CancelOrderListWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> CancelOrderListWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
+}

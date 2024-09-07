@@ -2,7 +2,7 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::Serialize;
 
-use crate::{enums::SecurityType, rest_api::endpoint};
+use crate::{enums::SecurityType, rest_api::endpoint, web_socket_api::web_socket};
 
 use super::CancelOrderResult;
 
@@ -55,3 +55,20 @@ impl CancelAllOpenOrdersParams {
 }
 
 pub type CancelAllOpenOrdersResponse = Vec<CancelOrderResult>;
+
+web_socket!(
+    "openOrders.cancelAll",
+    CancelAllOpenOrdersWebSocket,
+    CancelAllOpenOrdersParams,
+    CancelAllOpenOrdersResponse
+);
+
+pub struct CancelAllOpenOrdersWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> CancelAllOpenOrdersWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
+}

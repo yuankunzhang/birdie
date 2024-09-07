@@ -8,6 +8,7 @@ use crate::{
         SelfTradePreventionMode, TimeInForce,
     },
     rest_api::endpoint,
+    web_socket_api::web_socket,
 };
 
 endpoint!(
@@ -114,4 +115,21 @@ pub struct CancelOrderResult {
     pub r#type: OrderType,
     pub side: OrderSide,
     pub self_trade_prevention_mode: SelfTradePreventionMode,
+}
+
+web_socket!(
+    "order.cancel",
+    CancelOrderWebSocket,
+    CancelOrderParams,
+    CancelOrderResponse
+);
+
+pub struct CancelOrderWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> CancelOrderWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }
