@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::TickerType, rest_api::endpoint};
+use crate::{enums::TickerType, rest_api::endpoint, web_socket_api::web_socket};
 
 use super::{TickerFull, TickerMini};
 
@@ -106,4 +106,21 @@ pub enum RollingWindowPriceChangeResponse {
     FullVec(Box<Vec<TickerFull>>),
     Mini(Box<TickerMini>),
     MiniVec(Box<Vec<TickerMini>>),
+}
+
+web_socket!(
+    "ticker",
+    RollingWindowPriceChangeWebSocket,
+    RollingWindowPriceChangeParams,
+    RollingWindowPriceChangeResponse
+);
+
+pub struct RollingWindowPriceChangeWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> RollingWindowPriceChangeWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

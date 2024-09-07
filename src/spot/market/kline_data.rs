@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::KlineInterval, rest_api::endpoint};
+use crate::{enums::KlineInterval, rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/klines",
@@ -93,3 +93,20 @@ pub struct Kline(
     pub String, // Taker buy quote asset volume
     pub String, // Unused field, ignore.
 );
+
+web_socket!(
+    "klines",
+    KlineDataWebSocket,
+    KlineDataParams,
+    KlineDataResponse
+);
+
+pub struct KlineDataWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> KlineDataWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
+}

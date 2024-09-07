@@ -14,7 +14,7 @@ use uuid::Uuid;
 use crate::{
     enums::SecurityType,
     errors::BinanceError,
-    spot::{account, general, trade},
+    spot::{account, general, market, trade},
     Params, Response,
 };
 use auth::*;
@@ -66,6 +66,10 @@ impl WebSocketApiClient {
 
     pub fn general(&self) -> general::WebSocketApiHandler {
         general::WebSocketApiHandler::new(self)
+    }
+
+    pub fn market(&self) -> market::WebSocketApiHandler {
+        market::WebSocketApiHandler::new(self)
     }
 
     pub fn trade(&self) -> trade::WebSocketApiHandler {

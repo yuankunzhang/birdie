@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest_api::endpoint;
+use crate::{rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/avgPrice",
@@ -45,4 +45,21 @@ pub struct CurrentAveragePriceResponse {
     pub mins: i64,
     pub price: String,
     pub close_time: i64,
+}
+
+web_socket!(
+    "avgPrice",
+    CurrentAveragePriceWebSocket,
+    CurrentAveragePriceParams,
+    CurrentAveragePriceResponse
+);
+
+pub struct CurrentAveragePriceWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> CurrentAveragePriceWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

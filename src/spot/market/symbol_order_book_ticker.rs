@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest_api::endpoint;
+use crate::{rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/ticker/bookTicker",
@@ -74,4 +74,21 @@ pub struct SymbolOrderBookTicker {
     pub bid_qty: String,
     pub ask_price: String,
     pub ask_qty: String,
+}
+
+web_socket!(
+    "ticker.book",
+    SymbolOrderBookTickerWebSocket,
+    SymbolOrderBookTickerParams,
+    SymbolOrderBookTickerResponse
+);
+
+pub struct SymbolOrderBookTickerWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> SymbolOrderBookTickerWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

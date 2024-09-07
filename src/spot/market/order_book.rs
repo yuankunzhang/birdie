@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest_api::endpoint;
+use crate::{rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/depth",
@@ -59,4 +59,21 @@ pub struct OrderBookResponse {
     pub last_update_id: i64,
     pub bids: Vec<(String, String)>,
     pub asks: Vec<(String, String)>,
+}
+
+web_socket!(
+    "depth",
+    OrderBookWebSocket,
+    OrderBookParams,
+    OrderBookResponse
+);
+
+pub struct OrderBookWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> OrderBookWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

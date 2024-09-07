@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest_api::endpoint;
+use crate::{rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/historicalTrades",
@@ -69,4 +69,21 @@ pub struct OldTrade {
     pub time: i64,
     pub is_buyer_maker: bool,
     pub is_best_match: bool,
+}
+
+web_socket!(
+    "trades.historical",
+    OldTradeLookupWebSocket,
+    OldTradeLookupParams,
+    OldTradeLookupResponse
+);
+
+pub struct OldTradeLookupWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> OldTradeLookupWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

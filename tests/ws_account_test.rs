@@ -23,7 +23,7 @@ async fn ws_account_information() {
 }
 
 #[tokio::test]
-async fn account_trade_list() {
+async fn ws_account_trade_list() {
     let mut client = common::setup_web_socket_api_client();
 
     let (tx, mut rx) = tokio::sync::mpsc::channel(10);
@@ -36,7 +36,7 @@ async fn account_trade_list() {
 }
 
 #[tokio::test]
-async fn query_unfilled_order_count() {
+async fn ws_query_unfilled_order_count() {
     let mut client = common::setup_web_socket_api_client();
 
     let (tx, mut rx) = tokio::sync::mpsc::channel(10);
@@ -53,7 +53,7 @@ async fn query_unfilled_order_count() {
 }
 
 #[tokio::test]
-async fn query_prevented_matches() {
+async fn ws_query_prevented_matches() {
     let mut client = common::setup_web_socket_api_client();
 
     let (tx, mut rx) = tokio::sync::mpsc::channel(10);
@@ -84,7 +84,7 @@ async fn query_prevented_matches() {
 }
 
 #[tokio::test]
-async fn query_allocations() {
+async fn ws_query_allocations() {
     let mut client = common::setup_web_socket_api_client();
 
     let (tx, mut rx) = tokio::sync::mpsc::channel(10);
@@ -97,7 +97,7 @@ async fn query_allocations() {
 }
 
 #[tokio::test]
-async fn query_commission_rates() {
+async fn ws_query_commission_rates() {
     let mut client = common::setup_web_socket_api_client();
 
     let (tx, mut rx) = tokio::sync::mpsc::channel(10);

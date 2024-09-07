@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::TickerType, rest_api::endpoint};
+use crate::{enums::TickerType, rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/ticker/tradingDay",
@@ -128,4 +128,21 @@ pub struct TickerMini {
     pub first_id: i64,
     pub last_id: i64,
     pub count: i64,
+}
+
+web_socket!(
+    "ticker.tradingDay",
+    TradingDayTickerWebSocket,
+    TradingDayTickerParams,
+    TradingDayTickerResponse
+);
+
+pub struct TradingDayTickerWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> TradingDayTickerWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

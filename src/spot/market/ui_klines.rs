@@ -4,6 +4,7 @@ use serde::Serialize;
 use crate::{
     enums::{KlineInterval, SecurityType},
     rest_api::{Endpoint, RestApiClient},
+    web_socket_api::web_socket,
     Params,
 };
 
@@ -98,3 +99,20 @@ impl UiKlinesParams {
 }
 
 pub type UiKlinesResponse = Vec<Kline>;
+
+web_socket!(
+    "uiKlines",
+    UiKlinesWebSocket,
+    UiKlinesParams,
+    UiKlinesResponse
+);
+
+pub struct UiKlinesWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> UiKlinesWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
+}

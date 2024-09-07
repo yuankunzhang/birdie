@@ -153,7 +153,6 @@ async fn symbol_order_book_ticker() {
 async fn rolling_window_price_change() {
     let birdie = common::setup();
 
-    // price too low
     let params = RollingWindowPriceChangeParams::new().symbol("BTCUSDT");
     let resp = birdie
         .rest_api()

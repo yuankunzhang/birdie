@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest_api::endpoint;
+use crate::{rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/aggTrades",
@@ -103,4 +103,21 @@ pub struct AggTrade {
     pub is_buyer_maker: bool,
     #[serde(rename = "M")]
     pub is_best_match: bool,
+}
+
+web_socket!(
+    "trades.aggregate",
+    AggregateTradesListWebSocket,
+    AggregateTradesListParams,
+    AggregateTradesListResponse
+);
+
+pub struct AggregateTradesListWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> AggregateTradesListWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

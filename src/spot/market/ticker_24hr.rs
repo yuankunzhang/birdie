@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::TickerType, rest_api::endpoint};
+use crate::{enums::TickerType, rest_api::endpoint, web_socket_api::web_socket};
 
 use super::{TickerFull, TickerMini};
 
@@ -78,4 +78,21 @@ pub enum Ticker24hrResponse {
     FullVec(Box<Vec<TickerFull>>),
     Mini(Box<TickerMini>),
     MiniVec(Box<Vec<TickerMini>>),
+}
+
+web_socket!(
+    "ticker.24hr",
+    Ticker24hrWebSocket,
+    Ticker24hrParams,
+    Ticker24hrResponse
+);
+
+pub struct Ticker24hrWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> Ticker24hrWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }

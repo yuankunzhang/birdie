@@ -38,7 +38,10 @@ pub use ticker_24hr::*;
 pub use trading_day_ticker::*;
 pub use ui_klines::*;
 
-use crate::rest_api::{route, RestApiClient};
+use crate::{
+    rest_api::{route, RestApiClient},
+    web_socket_api::{ws_route, WebSocketApiClient},
+};
 
 pub struct RestApiHandler<'r> {
     client: &'r RestApiClient,
@@ -63,5 +66,31 @@ impl<'r> RestApiHandler<'r> {
     route!(
         rolling_window_price_change,
         RollingWindowPriceChangeEndpoint
+    );
+}
+
+pub struct WebSocketApiHandler<'w> {
+    client: &'w WebSocketApiClient,
+}
+
+impl<'w> WebSocketApiHandler<'w> {
+    pub fn new(client: &'w WebSocketApiClient) -> Self {
+        WebSocketApiHandler { client }
+    }
+
+    ws_route!(order_book, OrderBookWebSocket);
+    ws_route!(recent_trades_list, RecentTradesListWebSocket);
+    ws_route!(old_trade_lookup, OldTradeLookupWebSocket);
+    ws_route!(aggregate_trades_list, AggregateTradesListWebSocket);
+    ws_route!(kline_data, KlineDataWebSocket);
+    ws_route!(ui_klines, UiKlinesWebSocket);
+    ws_route!(current_average_price, CurrentAveragePriceWebSocket);
+    ws_route!(ticker_24hr, Ticker24hrWebSocket);
+    ws_route!(trading_day_ticker, TradingDayTickerWebSocket);
+    ws_route!(symbol_price_ticker, SymbolPriceTickerWebSocket);
+    ws_route!(symbol_order_book_ticker, SymbolOrderBookTickerWebSocket);
+    ws_route!(
+        rolling_window_price_change,
+        RollingWindowPriceChangeWebSocket
     );
 }

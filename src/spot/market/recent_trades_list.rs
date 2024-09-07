@@ -1,7 +1,7 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::rest_api::endpoint;
+use crate::{rest_api::endpoint, web_socket_api::web_socket};
 
 endpoint!(
     "/api/v3/trades",
@@ -60,4 +60,21 @@ pub struct RecentTrade {
     pub time: i64,
     pub is_buyer_maker: bool,
     pub is_best_match: bool,
+}
+
+web_socket!(
+    "trades.recent",
+    RecentTradesListWebSocket,
+    RecentTradesListParams,
+    RecentTradesListResponse
+);
+
+pub struct RecentTradesListWebSocket<'w> {
+    client: &'w crate::web_socket_api::WebSocketApiClient,
+}
+
+impl<'w> RecentTradesListWebSocket<'w> {
+    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
+        Self { client }
+    }
 }
