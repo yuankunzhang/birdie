@@ -1,4 +1,4 @@
-//! Binance's WebSocket API - stub
+//! Binance's WebSocket API
 mod auth;
 
 use std::collections::HashMap;

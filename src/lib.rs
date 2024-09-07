@@ -47,6 +47,7 @@ pub mod models;
 pub mod rest_api;
 pub mod web_socket;
 pub mod web_socket_api;
+pub mod web_socket_stream;
 
 pub mod spot;
 
