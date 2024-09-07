@@ -4,7 +4,8 @@ use birdie::{
         AccountInformationParams, AccountTradeListParams, QueryAllocationsParams,
         QueryCommissionRatesParams, QueryPreventedMatchesParams, QueryUnfilledOrderCountParams,
     },
-    web_socket_api::{ConnectionStatus, WebSocket, WebSocketApiError},
+    web_socket::ConnectionStatus,
+    web_socket_api::{WebSocket, WebSocketApiError},
 };
 
 mod common;

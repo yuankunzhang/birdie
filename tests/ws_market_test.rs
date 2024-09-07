@@ -6,7 +6,8 @@ use birdie::{
         RollingWindowPriceChangeParams, SymbolOrderBookTickerParams, SymbolPriceTickerParams,
         Ticker24hrParams, TradingDayTickerParams, UiKlinesParams,
     },
-    web_socket_api::{ConnectionStatus, WebSocket},
+    web_socket::ConnectionStatus,
+    web_socket_api::WebSocket,
 };
 
 mod common;

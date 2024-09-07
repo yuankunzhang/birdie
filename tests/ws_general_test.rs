@@ -1,7 +1,8 @@
 use birdie::{
     errors::{BinanceError, BinanceErrorCode},
     spot::general::{CheckServerTimeParams, ExchangeInfoParams, TestConnectivityParams},
-    web_socket_api::{ConnectionStatus, WebSocket, WebSocketApiError},
+    web_socket::ConnectionStatus,
+    web_socket_api::{WebSocket, WebSocketApiError},
 };
 
 mod common;

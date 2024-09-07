@@ -5,7 +5,8 @@ use birdie::{
         CancelAllOpenOrdersParams, CancelOrderParams, NewOrderParams, QueryOrderParams,
         TestNewOrderParams,
     },
-    web_socket_api::{ConnectionStatus, WebSocket, WebSocketApiError},
+    web_socket::ConnectionStatus,
+    web_socket_api::{WebSocket, WebSocketApiError},
 };
 
 mod common;

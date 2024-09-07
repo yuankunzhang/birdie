@@ -3,31 +3,22 @@ mod auth;
 
 use std::collections::HashMap;
 
-use futures_util::{SinkExt, StreamExt};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use tokio::sync::{mpsc, oneshot};
-use tokio_tungstenite::{connect_async, tungstenite};
-use tracing::{error, info};
+use tracing::error;
 use uuid::Uuid;
 
 use crate::{
     enums::SecurityType,
     errors::BinanceError,
     spot::{account, general, market, trade},
+    web_socket::{ConnectionStatus, WebSocketClient},
     Params, Response,
 };
 use auth::*;
 
-const REQUEST_PARALALISM: usize = 1000;
-
-#[derive(Clone, Copy, Debug)]
-pub enum ConnectionStatus {
-    Connected,
-    PingReceived,
-    PoingSent,
-    Disconnected,
-}
+const CHANNEL_BUFFER: usize = 1024;
 
 #[derive(Debug, Error)]
 pub enum WebSocketApiError {
@@ -76,23 +67,24 @@ impl WebSocketApiClient {
         trade::WebSocketApiHandler::new(self)
     }
 
-    pub fn is_connected(&self) -> bool {
-        self.request_sender
-            .as_ref()
-            .map(|s| !s.is_closed())
-            .unwrap_or(false)
-    }
-
     pub async fn connect(
         &mut self,
-        status: mpsc::Sender<ConnectionStatus>,
+        status_sender: mpsc::Sender<ConnectionStatus>,
     ) -> Result<(), WebSocketApiError> {
-        let (request_sender, mut request_receiver) = mpsc::channel(REQUEST_PARALALISM);
+        let (request_sender, mut request_receiver) = mpsc::channel(CHANNEL_BUFFER);
         self.request_sender = Some(request_sender);
 
-        let (stream, _) = connect_async(&self.endpoint).await?;
-        let (mut write, mut read) = stream.split();
-        let _ = status.send(ConnectionStatus::Connected).await;
+        let (write_channel, peer_read_channel) = mpsc::channel(CHANNEL_BUFFER);
+        let (peer_write_channel, mut read_channel) = mpsc::channel(CHANNEL_BUFFER);
+        let (status_relay_tx, mut status_relay_rx) = mpsc::channel(CHANNEL_BUFFER);
+
+        let client = WebSocketClient::new(
+            &self.endpoint,
+            peer_read_channel,
+            peer_write_channel,
+            status_relay_tx,
+        );
+        client.connect().await?;
 
         let mut pending_requests = HashMap::new();
 
@@ -100,62 +92,38 @@ impl WebSocketApiClient {
             loop {
                 tokio::select! {
                     Some((req, id, channel)) = request_receiver.recv() => {
-                        let frame = tungstenite::Message::Text(req);
-                        match write.send(frame).await {
+                        match write_channel.send(req).await {
                             Ok(_) => {
                                 pending_requests.insert(id, channel);
                             }
                             Err(err) => {
-                                error!("websocket write error: {err}");
+                                error!("write error: {err}");
                                 drop(channel);
                             }
                         }
                     }
-                    Some(frame) = read.next() => {
-                        let frame = match frame {
-                            Ok(frame) => frame,
+                    Some(msg) = read_channel.recv() => {
+                        let res: ResponseFrame<serde_json::Value> = match serde_json::from_str(&msg) {
+                            Ok(res) => res,
                             Err(err) => {
-                                error!("websocket read error: {err}");
-                                break;
+                                error!("json parse error: {err}");
+                                continue;
                             }
                         };
 
-                        match frame {
-                            tungstenite::Message::Text(text) => {
-                                let res: ResponseFrame<serde_json::Value> = match serde_json::from_str(&text) {
-                                    Ok(res) => res,
-                                    Err(err) => {
-                                        error!("json parse error: {err}");
-                                        continue;
-                                    }
-                                };
-
-                                match pending_requests.remove(&res.id) {
-                                    Some(channel) => {
-                                        let _ = channel.send(text);
-                                    }
-                                    None => {
-                                        error!("unexpected response: {text}");
-                                    }
-                                }
+                        match pending_requests.remove(&res.id) {
+                            Some(channel) => {
+                                let _ = channel.send(msg);
                             }
-                            tungstenite::Message::Ping(payload) => {
-                                let _ = status.send(ConnectionStatus::PingReceived).await.unwrap();
-                                info!("ping received");
-
-                                let _ = write.send(tungstenite::Message::Pong(payload)).await;
-                                let _ = status.send(ConnectionStatus::PoingSent).await.unwrap();
-                                info!("pong sent");
-                            }
-                            tungstenite::Message::Close(_) => {
-                                info!("websocket closed by server");
-                                let _ = status.send(ConnectionStatus::Disconnected);
-                                break;
-                            }
-                            _ => {
-                                error!("unexpected message: {frame}")
+                            None => {
+                                error!("unexpected message: {msg}");
                             }
                         }
+                    }
+                    Some(status) = status_relay_rx.recv() => {
+                        status_sender.send(status).await.unwrap_or_else(|err| {
+                            error!("status relay error: {err}");
+                        });
                     }
                 }
             }
