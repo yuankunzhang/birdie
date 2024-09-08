@@ -4,21 +4,33 @@
 //! - [`general`] General endpoints.
 //! - [`market`] Market endpoints.
 //! - [`trade`] Trade endpoints.
+//! - [`user_data_stream`] User data stream endpoints.
 //!
 //! ## How to Use
 //!
-//! The calling of a request is done with the following hierarchical pattern:
+//! To use the REST API client, create a instance of the client first:
+//!
+//! ```rust
+//! let base_url = "https://api.binance.com";
+//! let api_key = "your_api_key";
+//! let api_secret = "your_api_secret";
+//! let client = birdie::rest_api(base_url, api_key, api_secret).unwrap();
+//! ```
+//!
+//! Once you have the client, the calling of a request is done with the
+//! following hierarchical pattern:
 //!
 //! ```txt
-//! birdie.rest_api().general().test_connectivity().request(params).await
-//! ------ ---------- --------- ------------------- ---------------
-//! |      |          |         |                   |
-//! |      |          |         |                   \
-//! |      |          |         \                     The request with params
-//! |      |          \           The endpoint
-//! |      \            The endpoint category
-//! \        The REST API client
-//!   The Birdie instance
+//! let resp = client.general().test_connectivity().request(params).await
+//!     ----   ------ --------- ------------------- ------- ------
+//!     |      |      |         |                   |       |
+//!     |      |      |         |                   |       \
+//!     |      |      |         |                   \        The request params
+//!     |      |      |         \                     The request
+//!     |      |      \           The endpoint
+//!     |      \        The endpoint category
+//!     \        The REST API client
+//!      The response
 //! ```
 //!
 //! There are three important types for each endpoint: [`Endpoint`],
@@ -44,10 +56,10 @@
 //!   let base_url = "https://api.binance.com";
 //!   let api_key = "your_api_key";
 //!   let api_secret = "your_api_secret";
-//!   let birdie = Birdie::new(base_url, api_key, api_secret).unwrap();
+//!   let client = birdie::rest_api(base_url, api_key, api_secret).unwrap();
 //!
 //!   let params = OrderBookParams::new("BTCUSDT").limit(10);
-//!   let resp = birdie.rest_api().market().order_book().request(params).await;
+//!   let resp = client.market().order_book().request(params).await;
 //!   assert!(resp.is_ok());
 //! }
 //! ```

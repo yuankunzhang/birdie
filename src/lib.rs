@@ -18,27 +18,34 @@
 //! part of the Binance API:
 //!
 //! - [`fix_api`] - FIX API client (stub).
-//! - [`rest_api`] - REST API client.
-//! - [`web_socket_api`] - Web Socket API client.
+//! - [`mod@rest_api`] - REST API client.
+//! - [`mod@web_socket_api`] - Web Socket API client.
 //! - [`web_socket_stream`] - Web Socket stream client.
 //!
-//! To start using Birdie, you need to create a instance of the `Birdie`
-//! struct. This struct contains all the components you need to interact with
-//! the Binance API.
+//! ## REST API Client
+//!
+//! To interact with the Binance REST API, create a REST API client first.
 //!
 //! ```rust
-//! use birdie::Birdie;
-//!
 //! let base_url = "https://api.binance.com";
 //! let api_key = "your_api_key";
 //! let api_secret = "your_api_secret";
-//! let birdie = Birdie::new(base_url, api_key, api_secret).unwrap();
+//! let client = birdie::rest_api(base_url, api_key, api_secret).unwrap();
 //! ```
 //!
-//! Once you have a `Birdie` instance, you can access the different components
-//! by calling the corresponding methods. For example, to access the REST API
-//! client: `let rest = birdie.rest_api()`. Read the documentation for each
-//! component to learn how to use them.
+//! Once you have the client, you can access the different categories of the
+//! API and the different endpoints. For example, to access the account
+//! information endpoint (note how the endpoint is accessed):
+//!
+//! ```no_run
+//! use birdie::{rest_api::Endpoint, spot::account::AccountInformationParams};
+//!
+//! let params = AccountInformationParams::new().omit_zero_balances(true);
+//! let resp = client.account().account_information().request(params).await;
+//! assert!(resp.is_ok());
+//! ```
+//!
+//! See the [`mod@rest_api`] module for more information.
 
 pub mod enums;
 pub mod errors;
