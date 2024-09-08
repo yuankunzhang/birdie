@@ -1,7 +1,7 @@
 use futures_util::{SinkExt, StreamExt};
 use tokio::sync::mpsc;
 use tokio_tungstenite::{connect_async, tungstenite};
-use tracing::{error, info};
+use tracing::{debug, error, info};
 
 #[derive(Clone, Copy, Debug)]
 pub enum ConnectionStatus {
@@ -42,12 +42,14 @@ impl WebSocketClient {
             loop {
                 tokio::select! {
                     Some(msg) = self.read_channel.recv() => {
+                        debug!("sending message to websocket: {msg:?}");
                         let msg = tungstenite::Message::Text(msg);
                         write.send(msg).await.unwrap_or_else(|err| {
                             error!("websocket write error: {err}");
                         })
                     }
                     Some(msg) = read.next() => {
+                        debug!("received message from websocket: {msg:?}");
                         let msg = match msg {
                             Ok(msg) => msg,
                             Err(err) => {

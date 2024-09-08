@@ -69,6 +69,8 @@
 use reqwest::{Client, Method, RequestBuilder};
 use serde::Serializer;
 use thiserror::Error;
+use tracing::debug;
+use tracing::error;
 use tracing::info;
 use url::Url;
 
@@ -212,10 +214,12 @@ impl RestApiClient {
     {
         let res = req.send().await?;
         if res.status().is_success() {
+            debug!("response: {res:?}");
             Ok(res.json().await?)
         } else {
             let status = res.status().to_string();
             let error = res.json::<BinanceError>().await.ok();
+            error!("response: {status}, {error:?}");
             Err(RestApiError::Binance(status, error))
         }
     }
