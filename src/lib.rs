@@ -51,7 +51,6 @@ pub mod enums;
 pub mod errors;
 pub mod filters;
 pub mod fix_api;
-pub mod models;
 pub mod rest_api;
 pub mod web_socket;
 pub mod web_socket_api;
