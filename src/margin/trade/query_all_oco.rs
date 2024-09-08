@@ -4,7 +4,7 @@ use serde::Serialize;
 
 use crate::{enums::SecurityType, rest_api::endpoint};
 
-use super::OrderListResult;
+use super::MarginOcoOrder;
 
 endpoint!(
     "/sapi/v1/margin/allOrderList",
@@ -92,4 +92,4 @@ impl QueryAllOcoParams {
     }
 }
 
-pub type QueryAllOcoResponse = Vec<OrderListResult>;
+pub type QueryAllOcoResponse = Vec<MarginOcoOrder>;

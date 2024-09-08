@@ -1,23 +1,37 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::{
-    enums::{
-        ContingencyType, OrderSide, OrderStatus, OrderType, SecurityType, SelfTradePreventionMode,
-        TimeInForce,
-    },
-    rest_api::endpoint,
+    enums::SecurityType,
+    rest_api::{Endpoint, RestApiClient},
+    Params,
 };
 
-endpoint!(
-    "/sapi/v1/margin/orderList",
-    Method::DELETE,
-    SecurityType::Trade,
-    CancelOcoEndpoint,
-    CancelOcoParams,
-    CancelOcoResponse
-);
+use super::MarginOcoOrder;
+
+impl Endpoint for CancelOcoEndpoint<'_> {
+    type Response = CancelOcoResponse;
+    type Params = CancelOcoParams;
+
+    fn client(&self) -> &RestApiClient {
+        self.client
+    }
+
+    fn path(&self) -> &str {
+        "/sapi/v1/margin/orderList"
+    }
+
+    fn method(&self) -> Method {
+        Method::DELETE
+    }
+
+    fn security_type(&self) -> SecurityType {
+        SecurityType::Trade
+    }
+}
+
+impl Params for CancelOcoParams {}
 
 /// Cancel an entire Order List for a margin account.
 ///
@@ -83,50 +97,4 @@ impl CancelOcoParams {
     }
 }
 
-pub type CancelOcoResponse = OrderListResult;
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct OrderListResult {
-    pub order_list_id: i64,
-    pub contingency_type: ContingencyType,
-    pub list_status_type: String,
-    pub list_order_status: String,
-    pub list_client_order_id: String,
-    pub transaction_time: i64,
-    pub symbol: String,
-    pub is_isolated: bool,
-    #[serde(default)]
-    pub orders: Vec<OrderListOrder>,
-    #[serde(default)]
-    pub order_reports: Vec<OrderListOrderReport>,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct OrderListOrder {
-    pub symbol: String,
-    pub order_id: i64,
-    pub client_order_id: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct OrderListOrderReport {
-    pub symbol: String,
-    pub orig_client_order_id: String,
-    pub order_id: i64,
-    pub order_list_id: i64,
-    pub client_order_id: String,
-    pub price: String,
-    pub orig_qty: String,
-    pub executed_qty: String,
-    pub cummulative_quote_qty: String,
-    pub status: OrderStatus,
-    pub time_in_force: TimeInForce,
-    pub r#type: OrderType,
-    pub side: OrderSide,
-    pub iceberg_qty: Option<String>,
-    pub stop_price: Option<String>,
-    pub self_trade_prevention_mode: Option<SelfTradePreventionMode>,
-}
+pub type CancelOcoResponse = MarginOcoOrder;

@@ -149,14 +149,14 @@ impl NewOrderParams {
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
 pub enum NewOrderResponse {
-    Ack(Box<NewOrderAck>),
-    Result(Box<NewOrderResult>),
-    Full(Box<NewOrderFull>),
+    Ack(Box<NewMarginOrderAck>),
+    Result(Box<NewMarginOrderResult>),
+    Full(Box<NewMarginOrderFull>),
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NewOrderAck {
+pub struct NewMarginOrderAck {
     pub symbol: String,
     pub order_id: i64,
     pub client_order_id: String,
@@ -166,7 +166,7 @@ pub struct NewOrderAck {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NewOrderResult {
+pub struct NewMarginOrderResult {
     pub symbol: String,
     pub order_id: i64,
     pub client_order_id: String,
@@ -185,7 +185,7 @@ pub struct NewOrderResult {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct NewOrderFull {
+pub struct NewMarginOrderFull {
     pub symbol: String,
     pub order_id: i64,
     pub order_list_id: i64,
@@ -202,12 +202,12 @@ pub struct NewOrderFull {
     pub margin_buy_borrow_amount: Option<i64>,
     pub margin_buy_borrow_asset: Option<String>,
     pub self_trade_prevention_mode: SelfTradePreventionMode,
-    pub fills: Vec<OrderFill>,
+    pub fills: Vec<MarginOrderFill>,
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct OrderFill {
+pub struct MarginOrderFill {
     pub price: String,
     pub qty: String,
     pub commission: String,

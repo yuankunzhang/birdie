@@ -29,8 +29,8 @@ impl<'r> GetSmallLiabilityExchangeHistoryEndpoint<'r> {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GetSmallLiabilityExchangeHistoryParams {
-    current: i64,
-    size: i64,
+    current: Option<i64>,
+    size: Option<i64>,
     start_time: Option<i64>,
     end_time: Option<i64>,
     recv_window: Option<i64>,
@@ -38,15 +38,25 @@ pub struct GetSmallLiabilityExchangeHistoryParams {
 }
 
 impl GetSmallLiabilityExchangeHistoryParams {
-    pub fn new(current: i64, size: i64) -> Self {
+    pub fn new() -> Self {
         Self {
-            current,
-            size,
+            current: None,
+            size: None,
             start_time: None,
             end_time: None,
             recv_window: None,
             timestamp: Timestamp::now().as_millisecond(),
         }
+    }
+
+    pub fn current(mut self, current: i64) -> Self {
+        self.current = Some(current);
+        self
+    }
+
+    pub fn size(mut self, size: i64) -> Self {
+        self.size = Some(size);
+        self
     }
 
     pub fn start_time(mut self, start_time: i64) -> Self {

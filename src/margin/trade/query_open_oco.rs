@@ -8,7 +8,7 @@ use crate::{
     Params,
 };
 
-use super::OrderListResult;
+use super::MarginOcoOrder;
 
 impl Endpoint for QueryOpenOcoEndpoint<'_> {
     type Response = QueryOpenOcoResponse;
@@ -81,4 +81,4 @@ impl QueryOpenOcoParams {
     }
 }
 
-pub type QueryOpenOcoResponse = Vec<OrderListResult>;
+pub type QueryOpenOcoResponse = Vec<MarginOcoOrder>;

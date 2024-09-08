@@ -82,11 +82,11 @@ impl CancelOrderParams {
     }
 }
 
-pub type CancelOrderResponse = CancelOrderResult;
+pub type CancelOrderResponse = CancelMarginOrderDetail;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CancelOrderResult {
+pub struct CancelMarginOrderDetail {
     pub symbol: String,
     pub is_isolated: bool,
     pub order_id: i64,

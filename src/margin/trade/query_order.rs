@@ -8,7 +8,7 @@ use crate::{
     Params, Response,
 };
 
-use super::OrderResult;
+use super::MarginOrderDetail;
 
 impl Endpoint for QueryOrderEndpoint<'_> {
     type Response = QueryOrderResponse;
@@ -90,6 +90,6 @@ impl QueryOrderParams {
     }
 }
 
-pub type QueryOrderResponse = OrderResult;
+pub type QueryOrderResponse = MarginOrderDetail;
 
 impl Response for QueryOrderResponse {}

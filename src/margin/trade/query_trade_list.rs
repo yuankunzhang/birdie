@@ -91,11 +91,11 @@ impl QueryTradeListParams {
     }
 }
 
-pub type QueryTradeListResponse = Vec<Trade>;
+pub type QueryTradeListResponse = Vec<MarginTrade>;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Trade {
+pub struct MarginTrade {
     pub commission: String,
     pub commission_asset: String,
     pub id: i64,

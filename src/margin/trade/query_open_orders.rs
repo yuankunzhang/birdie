@@ -8,7 +8,7 @@ use crate::{
     Params,
 };
 
-use super::OrderResult;
+use super::MarginOrderDetail;
 
 impl Endpoint for QueryOpenOrdersEndpoint<'_> {
     type Response = QueryOpenOrdersResponse;
@@ -81,4 +81,4 @@ impl QueryOpenOrdersParams {
     }
 }
 
-pub type QueryOpenOrdersResponse = Vec<OrderResult>;
+pub type QueryOpenOrdersResponse = Vec<MarginOrderDetail>;

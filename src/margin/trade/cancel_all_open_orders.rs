@@ -7,7 +7,7 @@ use crate::{
     rest_api::endpoint,
 };
 
-use super::{CancelOrderResult, OrderListOrder, OrderListOrderReport};
+use super::{CancelMarginOrderDetail, MarginOcoOrderListItem, MarginOcoOrderListReport};
 
 endpoint!(
     "/sapi/v1/margin/openOrders",
@@ -68,13 +68,13 @@ pub type CancelAllOpenOrdersResponse = Vec<CancelAllOpenOrdersResult>;
 #[derive(Debug, Deserialize)]
 #[serde(untagged)]
 pub enum CancelAllOpenOrdersResult {
-    CancelOrderResult(CancelOrderResult),
-    CancelOrderListResult(CancelOrderListResult),
+    CancelOrderResult(CancelMarginOrderDetail),
+    CancelOrderListResult(CancelMarginOrderListResult),
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CancelOrderListResult {
+pub struct CancelMarginOrderListResult {
     pub order_list_id: i64,
     pub contingency_type: ContingencyType,
     pub list_status_type: String,
@@ -82,6 +82,6 @@ pub struct CancelOrderListResult {
     pub list_client_order_id: String,
     pub transaction_time: i64,
     pub symbol: String,
-    pub orders: Vec<OrderListOrder>,
-    pub order_reports: Vec<OrderListOrderReport>,
+    pub orders: Vec<MarginOcoOrderListItem>,
+    pub order_reports: Vec<MarginOcoOrderListReport>,
 }

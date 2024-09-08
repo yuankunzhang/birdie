@@ -1,40 +1,23 @@
 use jiff::Timestamp;
 use reqwest::Method;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        NewOrderRespType, OrderSide, SecurityType, SelfTradePreventionMode, SideEffectType,
-        TimeInForce,
+        ContingencyType, NewOrderRespType, OrderSide, OrderStatus, OrderType, SecurityType,
+        SelfTradePreventionMode, SideEffectType, TimeInForce,
     },
-    rest_api::{Endpoint, RestApiClient},
-    Params,
+    rest_api::endpoint,
 };
 
-use super::OrderListResult;
-
-impl Endpoint for NewOcoEndpoint<'_> {
-    type Response = NewOcoResponse;
-    type Params = NewOcoParams;
-
-    fn client(&self) -> &RestApiClient {
-        self.client
-    }
-
-    fn path(&self) -> &str {
-        "/sapi/v1/margin/order/oco"
-    }
-
-    fn method(&self) -> Method {
-        Method::POST
-    }
-
-    fn security_type(&self) -> SecurityType {
-        SecurityType::Trade
-    }
-}
-
-impl Params for NewOcoParams {}
+endpoint!(
+    "/sapi/v1/margin/order/oco",
+    Method::POST,
+    SecurityType::Trade,
+    NewOcoEndpoint,
+    NewOcoParams,
+    NewOcoResponse
+);
 
 /// Send in a new OCO for a margin account.
 ///
@@ -167,4 +150,50 @@ impl NewOcoParams {
     }
 }
 
-pub type NewOcoResponse = OrderListResult;
+pub type NewOcoResponse = MarginOcoOrder;
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MarginOcoOrder {
+    pub order_list_id: i64,
+    pub contingency_type: ContingencyType,
+    pub list_status_type: String,
+    pub list_order_status: String,
+    pub list_client_order_id: String,
+    pub transaction_time: i64,
+    pub symbol: String,
+    pub is_isolated: bool,
+    #[serde(default)]
+    pub orders: Vec<MarginOcoOrderListItem>,
+    #[serde(default)]
+    pub order_reports: Vec<MarginOcoOrderListReport>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MarginOcoOrderListItem {
+    pub symbol: String,
+    pub order_id: i64,
+    pub client_order_id: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MarginOcoOrderListReport {
+    pub symbol: String,
+    pub orig_client_order_id: String,
+    pub order_id: i64,
+    pub order_list_id: i64,
+    pub client_order_id: String,
+    pub price: String,
+    pub orig_qty: String,
+    pub executed_qty: String,
+    pub cummulative_quote_qty: String,
+    pub status: OrderStatus,
+    pub time_in_force: TimeInForce,
+    pub r#type: OrderType,
+    pub side: OrderSide,
+    pub iceberg_qty: Option<String>,
+    pub stop_price: Option<String>,
+    pub self_trade_prevention_mode: Option<SelfTradePreventionMode>,
+}

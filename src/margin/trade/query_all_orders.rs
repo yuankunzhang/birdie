@@ -34,7 +34,7 @@ impl<'r> QueryAllOrdersEndpoint<'r> {
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct QueryAllOrdersParams {
-    symbol: Option<String>,
+    symbol: String,
     is_isolated: Option<String>,
     start_time: Option<i64>,
     end_time: Option<i64>,
@@ -44,9 +44,9 @@ pub struct QueryAllOrdersParams {
 }
 
 impl QueryAllOrdersParams {
-    pub fn new() -> Self {
+    pub fn new(symbol: &str) -> Self {
         Self {
-            symbol: None,
+            symbol: symbol.to_owned(),
             is_isolated: None,
             start_time: None,
             end_time: None,
@@ -54,11 +54,6 @@ impl QueryAllOrdersParams {
             recv_window: None,
             timestamp: Timestamp::now().as_millisecond(),
         }
-    }
-
-    pub fn symbol(mut self, symbol: &str) -> Self {
-        self.symbol = Some(symbol.to_owned());
-        self
     }
 
     pub fn is_isolated(mut self, is_isolated: &str) -> Self {
@@ -87,11 +82,11 @@ impl QueryAllOrdersParams {
     }
 }
 
-pub type QueryAllOrdersResponse = Vec<OrderResult>;
+pub type QueryAllOrdersResponse = Vec<MarginOrderDetail>;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct OrderResult {
+pub struct MarginOrderDetail {
     pub client_order_id: String,
     pub cummulative_quote_qty: String,
     pub executed_qty: String,
