@@ -1,0 +1,42 @@
+use reqwest::Method;
+use serde::{Deserialize, Serialize};
+
+use crate::{enums::SecurityType, rest_api::endpoint};
+
+endpoint!(
+    "/sapi/v1/userDataStream/isolated",
+    Method::DELETE,
+    SecurityType::UserStream,
+    CloseIsolatedMarginUserDataStreamEndpoint,
+    CloseIsolatedMarginUserDataStreamParams,
+    CloseIsolatedMarginUserDataStreamResponse
+);
+
+/// Close a margin user data stream.
+///
+/// - Weght: 3000
+pub struct CloseIsolatedMarginUserDataStreamEndpoint<'r> {
+    client: &'r crate::rest_api::RestApiClient,
+}
+
+impl<'r> CloseIsolatedMarginUserDataStreamEndpoint<'r> {
+    pub fn new(client: &'r crate::rest_api::RestApiClient) -> Self {
+        Self { client }
+    }
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CloseIsolatedMarginUserDataStreamParams {
+    pub listen_key: String,
+}
+
+impl CloseIsolatedMarginUserDataStreamParams {
+    pub fn new(listen_key: String) -> Self {
+        Self { listen_key }
+    }
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CloseIsolatedMarginUserDataStreamResponse {}

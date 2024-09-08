@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use crate::{enums::SecurityType, rest_api::endpoint};
 
 endpoint!(
-    "/api/v3/userDataStream",
+    "/sapi/v1/margin/listen-key",
     Method::POST,
     SecurityType::UserStream,
     StartUserDataStreamEndpoint,
@@ -12,11 +12,9 @@ endpoint!(
     StartUserDataStreamResponse
 );
 
-/// Start a new user data stream. The stream will close after 60 minutes unless
-/// a keepalive is sent.
+/// Start a new user data stream.
 ///
-/// - Weight: 2
-/// - Data Source: Memory
+/// - Weight: 1
 pub struct StartUserDataStreamEndpoint<'r> {
     client: &'r crate::rest_api::RestApiClient,
 }

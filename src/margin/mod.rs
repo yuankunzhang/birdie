@@ -3,13 +3,17 @@
 //! - [`account`] Account endpoints.
 //! - [`borrow_and_repay`] Borrow and repay endpoints.
 //! - [`market`] Market endpoints.
+//! - [`risk_data_stream`] Risk data stream endpoints.
 //! - [`trade`] Trade endpoints.
+//! - [`trade_data_stream`] Trade data stream endpoints.
 //! - [`transfer`] Transfer endpoints.
 //!
 pub mod account;
 pub mod borrow_and_repay;
 pub mod market;
+pub mod risk_data_stream;
 pub mod trade;
+pub mod trade_data_stream;
 pub mod transfer;
 
 use crate::rest_api::RestApiClient;
@@ -35,8 +39,16 @@ impl<'r> RestApiCategory<'r> {
         market::RestApiHandler::new(self.client)
     }
 
+    pub fn risk_data_stream(&self) -> risk_data_stream::RestApiHandler {
+        risk_data_stream::RestApiHandler::new(self.client)
+    }
+
     pub fn trade(&self) -> trade::RestApiHandler {
         trade::RestApiHandler::new(self.client)
+    }
+
+    pub fn trade_data_stream(&self) -> trade_data_stream::RestApiHandler {
+        trade_data_stream::RestApiHandler::new(self.client)
     }
 
     pub fn transfer(&self) -> transfer::RestApiHandler {

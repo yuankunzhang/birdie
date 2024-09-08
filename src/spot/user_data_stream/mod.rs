@@ -4,7 +4,6 @@ mod start_user_data_stream;
 
 pub use close_user_data_stream::*;
 pub use keepalive_user_data_stream::*;
-use serde::Deserialize;
 pub use start_user_data_stream::*;
 
 use crate::{
@@ -15,6 +14,7 @@ use crate::{
     rest_api::{route, RestApiClient},
     web_socket_stream::Payload,
 };
+use serde::Deserialize;
 
 pub struct RestApiHandler<'r> {
     client: &'r RestApiClient,
