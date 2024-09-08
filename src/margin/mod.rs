@@ -1,6 +1,7 @@
 pub mod borrow_and_repay;
 pub mod market;
 pub mod trade;
+pub mod transfer;
 
 use crate::rest_api::RestApiClient;
 
@@ -23,5 +24,9 @@ impl<'r> RestApiCategory<'r> {
 
     pub fn trade(&self) -> trade::RestApiHandler {
         trade::RestApiHandler::new(self.client)
+    }
+
+    pub fn transfer(&self) -> transfer::RestApiHandler {
+        transfer::RestApiHandler::new(self.client)
     }
 }
