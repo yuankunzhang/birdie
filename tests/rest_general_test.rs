@@ -8,62 +8,37 @@ mod common;
 
 #[tokio::test]
 async fn rest_test_connectivity() {
-    let birdie = common::setup();
+    let client = common::setup_rest_api_client();
     let params = TestConnectivityParams::new();
-    let resp = birdie
-        .rest_api()
-        .general()
-        .test_connectivity()
-        .request(params)
-        .await;
+    let resp = client.general().test_connectivity().request(params).await;
     assert!(resp.is_ok());
 }
 
 #[tokio::test]
 async fn rest_check_server_time() {
-    let birdie = common::setup();
+    let client = common::setup_rest_api_client();
     let params = CheckServerTimeParams::new();
-    let resp = birdie
-        .rest_api()
-        .general()
-        .check_server_time()
-        .request(params)
-        .await;
+    let resp = client.general().check_server_time().request(params).await;
     assert!(resp.is_ok());
 }
 
 #[tokio::test]
 async fn rest_exchange_info() {
-    let birdie = common::setup();
+    let client = common::setup_rest_api_client();
 
     // no params
     let params = ExchangeInfoParams::new();
-    let resp = birdie
-        .rest_api()
-        .general()
-        .exchange_info()
-        .request(params)
-        .await;
+    let resp = client.general().exchange_info().request(params).await;
     assert!(resp.is_ok());
 
     // symbol param
     let params = ExchangeInfoParams::new().symbol("BTCUSDT");
-    let resp = birdie
-        .rest_api()
-        .general()
-        .exchange_info()
-        .request(params)
-        .await;
+    let resp = client.general().exchange_info().request(params).await;
     assert!(resp.is_ok());
 
     // invalid symbol param
     let params = ExchangeInfoParams::new().symbol("NONEXIST");
-    let resp = birdie
-        .rest_api()
-        .general()
-        .exchange_info()
-        .request(params)
-        .await;
+    let resp = client.general().exchange_info().request(params).await;
     assert!(resp.is_err());
     let RestApiError::Binance(s, Some(BinanceError { code, msg })) = resp.err().unwrap() else {
         panic!()
@@ -74,24 +49,14 @@ async fn rest_exchange_info() {
 
     // symbols param
     let params = ExchangeInfoParams::new().symbols(&["BTCUSDT", "ETHUSDT"]);
-    let resp = birdie
-        .rest_api()
-        .general()
-        .exchange_info()
-        .request(params)
-        .await;
+    let resp = client.general().exchange_info().request(params).await;
     assert!(resp.is_ok());
     let resp = resp.unwrap();
     assert_eq!(resp.symbols.len(), 2);
 
     // invalid symbols param
     let params = ExchangeInfoParams::new().symbols(&["BTCUSDT", "NONEXIST"]);
-    let resp = birdie
-        .rest_api()
-        .general()
-        .exchange_info()
-        .request(params)
-        .await;
+    let resp = client.general().exchange_info().request(params).await;
     assert!(resp.is_err());
     let RestApiError::Binance(s, Some(BinanceError { code, .. })) = resp.err().unwrap() else {
         panic!()
@@ -103,12 +68,7 @@ async fn rest_exchange_info() {
     let params = ExchangeInfoParams::new()
         .symbol("BTCUSDT")
         .symbols(&["ETHUSDT"]);
-    let resp = birdie
-        .rest_api()
-        .general()
-        .exchange_info()
-        .request(params)
-        .await;
+    let resp = client.general().exchange_info().request(params).await;
     assert!(resp.is_err());
     let RestApiError::Binance(s, Some(BinanceError { code, .. })) = resp.err().unwrap() else {
         panic!()

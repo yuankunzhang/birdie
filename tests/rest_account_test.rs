@@ -11,36 +11,25 @@ mod common;
 
 #[tokio::test]
 async fn rest_account_information() {
-    let birdie = common::setup();
+    let client = common::setup_rest_api_client();
     let params = AccountInformationParams::new().omit_zero_balances(true);
-    let resp = birdie
-        .rest_api()
-        .account()
-        .account_information()
-        .request(params)
-        .await;
+    let resp = client.account().account_information().request(params).await;
     assert!(resp.is_ok());
 }
 
 #[tokio::test]
 async fn rest_account_trade_list() {
-    let birdie = common::setup();
+    let client = common::setup_rest_api_client();
     let params = AccountTradeListParams::new("BTCUSDT");
-    let resp = birdie
-        .rest_api()
-        .account()
-        .account_trade_list()
-        .request(params)
-        .await;
+    let resp = client.account().account_trade_list().request(params).await;
     assert!(resp.is_ok());
 }
 
 #[tokio::test]
 async fn rest_query_unfilled_order_count() {
-    let birdie = common::setup();
+    let client = common::setup_rest_api_client();
     let params = QueryUnfilledOrderCountParams::new();
-    let resp = birdie
-        .rest_api()
+    let resp = client
         .account()
         .query_unfilled_order_count()
         .request(params)
@@ -50,10 +39,9 @@ async fn rest_query_unfilled_order_count() {
 
 #[tokio::test]
 async fn rest_query_prevented_matches() {
-    let birdie = common::setup();
+    let client = common::setup_rest_api_client();
     let params = QueryPreventedMatchesParams::new("BTCUSDT").order_id(1);
-    let resp = birdie
-        .rest_api()
+    let resp = client
         .account()
         .query_prevented_matches()
         .request(params)
@@ -62,8 +50,7 @@ async fn rest_query_prevented_matches() {
 
     // missing param
     let params = QueryPreventedMatchesParams::new("BTCUSDT");
-    let resp = birdie
-        .rest_api()
+    let resp = client
         .account()
         .query_prevented_matches()
         .request(params)
@@ -78,23 +65,17 @@ async fn rest_query_prevented_matches() {
 
 #[tokio::test]
 async fn rest_query_allocations() {
-    let birdie = common::setup();
+    let client = common::setup_rest_api_client();
     let params = QueryAllocationsParams::new("BTCUSDT");
-    let resp = birdie
-        .rest_api()
-        .account()
-        .query_allocations()
-        .request(params)
-        .await;
+    let resp = client.account().query_allocations().request(params).await;
     assert!(resp.is_ok());
 }
 
 #[tokio::test]
 async fn rest_query_commission_rates() {
-    let birdie = common::setup();
+    let client = common::setup_rest_api_client();
     let params = QueryCommissionRatesParams::new("BTCUSDT");
-    let resp = birdie
-        .rest_api()
+    let resp = client
         .account()
         .query_commission_rates()
         .request(params)

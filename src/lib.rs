@@ -20,6 +20,7 @@
 //! - [`fix_api`] - FIX API client (stub).
 //! - [`rest_api`] - REST API client.
 //! - [`web_socket_api`] - Web Socket API client.
+//! - [`web_socket_stream`] - Web Socket stream client.
 //!
 //! To start using Birdie, you need to create a instance of the `Birdie`
 //! struct. This struct contains all the components you need to interact with
@@ -54,38 +55,25 @@ pub mod spot;
 
 use base64::{engine::general_purpose::STANDARD as b64, Engine};
 use ed25519_dalek::{ed25519::signature::SignerMut, pkcs8::DecodePrivateKey, SigningKey};
-use fix_api::FixApiClient;
 use hmac::{Hmac, Mac};
 use rest_api::{RestApiClient, RestApiError};
 use serde::{Deserialize, Serialize};
 use sha2::Sha256;
-use thiserror::Error;
 
-#[derive(Debug, Error)]
-pub enum BirdieError {
-    #[error("RestError: {0}")]
-    RestApi(#[from] RestApiError),
+pub fn rest_api(
+    base_url: &str,
+    api_key: &str,
+    secret_key: &str,
+) -> Result<RestApiClient, RestApiError> {
+    RestApiClient::new(base_url, api_key, secret_key)
 }
 
-pub struct Birdie {
-    fix_api: FixApiClient,
-    rest_api: RestApiClient,
-}
-
-impl Birdie {
-    pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, BirdieError> {
-        let fix_api = FixApiClient::new();
-        let rest_api = RestApiClient::new(base_url, api_key, secret_key)?;
-        Ok(Self { fix_api, rest_api })
-    }
-
-    pub fn fix_api(&self) -> &FixApiClient {
-        &self.fix_api
-    }
-
-    pub fn rest_api(&self) -> &RestApiClient {
-        &self.rest_api
-    }
+pub fn web_socket_api(
+    endpoint: &str,
+    api_key: &str,
+    secret_key: &str,
+) -> web_socket_api::WebSocketApiClient {
+    web_socket_api::WebSocketApiClient::new(endpoint, api_key, secret_key)
 }
 
 pub trait Params: Sized + Send + Serialize {

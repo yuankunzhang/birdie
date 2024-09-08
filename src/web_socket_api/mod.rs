@@ -38,16 +38,17 @@ pub struct WebSocketApiClient {
     request_sender: Option<mpsc::Sender<RequestEnvelope>>,
     endpoint: String,
     api_key: String,
-    ed25519_key: String,
+    /// Only ed25519 key is supported.
+    secret_key: String,
 }
 
 impl WebSocketApiClient {
-    pub fn new(endpoint: &str, api_key: &str, ed25519_key: &str) -> Self {
+    pub fn new(endpoint: &str, api_key: &str, secret_key: &str) -> Self {
         Self {
             request_sender: None,
             endpoint: endpoint.to_owned(),
             api_key: api_key.to_owned(),
-            ed25519_key: ed25519_key.to_owned(),
+            secret_key: secret_key.to_owned(),
         }
     }
 
@@ -135,7 +136,7 @@ impl WebSocketApiClient {
 
     pub async fn logon(&self) -> Result<(), WebSocketApiError> {
         let mut params = LogonParams::new(&self.api_key);
-        params.sign(&self.ed25519_key)?;
+        params.sign(&self.secret_key)?;
         let _: LogonResponse = self.request("session.logon", params).await?;
         Ok(())
     }
