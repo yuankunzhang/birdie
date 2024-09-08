@@ -4,7 +4,7 @@
 //! - [`recent_trades_list`](RecentTradesListEndpoint)
 //! - [`old_trade_lookup`](OldTradeLookupEndpoint)
 //! - [`aggregate_trades_list`](AggregateTradesListEndpoint)
-//! - [`kline_data`](KlineDataEndpoint)
+//! - [`klines`](KlineDataEndpoint)
 //! - [`ui_klines`](UiKlinesEndpoint)
 //! - [`current_average_price`](CurrentAveragePriceEndpoint)
 //! - [`ticker_24hr`](Ticker24hrEndpoint)
@@ -14,7 +14,7 @@
 //! - [`rolling_window_price_change`](RollingWindowPriceChangeEndpoint)
 mod aggregate_trades_list;
 mod current_average_price;
-mod kline_data;
+mod klines;
 mod old_trade_lookup;
 mod order_book;
 mod recent_trades_list;
@@ -27,7 +27,7 @@ mod ui_klines;
 
 pub use aggregate_trades_list::*;
 pub use current_average_price::*;
-pub use kline_data::*;
+pub use klines::*;
 pub use old_trade_lookup::*;
 pub use order_book::*;
 pub use recent_trades_list::*;
