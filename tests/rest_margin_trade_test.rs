@@ -4,7 +4,6 @@ use birdie::{
         GetSmallLiabilityExchangeHistoryParams, QueryAllOcoParams, QueryAllOrdersParams,
         QueryCurrentMarginOrderCountUsageParams, QueryOcoParams, QueryOpenOcoParams,
         QueryOpenOrdersParams, QueryOrderParams, QueryTradeListParams,
-        SmallLiabilityExchangeParams,
     },
     rest_api::Endpoint,
 };

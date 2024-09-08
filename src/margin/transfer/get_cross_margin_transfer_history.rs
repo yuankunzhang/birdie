@@ -106,13 +106,13 @@ impl GetCrossMarginTransferHistoryParams {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GetCrossMarginTransferHistoryResponse {
-    pub rows: Vec<CrossMarginTransferHistory>,
+    pub rows: Vec<MarginTransferRow>,
     pub total: i64,
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct CrossMarginTransferHistory {
+pub struct MarginTransferRow {
     pub amount: String,
     pub asset: String,
     pub status: String,

@@ -2,7 +2,7 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::SecurityType, models::Asset, rest_api::endpoint};
+use crate::{enums::SecurityType, rest_api::endpoint};
 
 endpoint!(
     "/sapi/v1/margin/isolated/account",
@@ -61,4 +61,19 @@ pub struct QueryIsolatedMarginAccountInfoResponse {
     pub total_asset_of_btc: Option<String>,
     pub total_liability_of_btc: Option<String>,
     pub total_net_asset_of_btc: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Asset {
+    pub asset: String,
+    pub borrow_enabled: bool,
+    pub borrowed: String,
+    pub free: String,
+    pub interest: String,
+    pub locked: String,
+    pub net_asset: String,
+    pub net_asset_of_btc: String,
+    pub repay_enabled: bool,
+    pub total_asset: String,
 }

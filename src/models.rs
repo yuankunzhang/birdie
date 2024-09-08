@@ -5,47 +5,6 @@ use crate::spot::account::Balance;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct MarginTransferDetails {
-    pub rows: Vec<MarginTransferRow>,
-    /// Example: `1`
-    pub total: i64,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct MarginTransferRow {
-    /// Example: "0.10000000"
-    pub amount: String,
-    /// Example: "BNB"
-    pub asset: String,
-    /// Example: "CONFIRMED"
-    pub status: String,
-    /// Example: 1566898617000
-    pub timestamp: i64,
-    /// Example: 5240372201
-    pub tx_id: i64,
-    /// Example: "ROLL_IN"
-    pub r#type: String,
-    /// Example: "SPOT"
-    pub trans_from: String,
-    /// Example: "ISOLATED_MARGIN"
-    pub trans_to: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct IsolatedMarginAccountInfo {
-    pub assets: Vec<IsolatedMarginAccountAsset>,
-    /// Example: `"0.00000000"`
-    pub total_asset_of_btc: String,
-    /// Example: `"0.00000000"`
-    pub total_liability_of_btc: String,
-    /// Example: `"0.00000000"`
-    pub total_net_asset_of_btc: String,
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct IsolatedMarginAccountAsset {
     pub base_asset: Asset,
     pub quote_asset: Asset,
