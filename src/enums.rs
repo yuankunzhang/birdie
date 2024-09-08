@@ -124,6 +124,15 @@ pub enum NewOrderRespType {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum SideEffectType {
+    NoSideEffect,
+    MarginBuy,
+    AutoRepay,
+    AutoBorrowRepay,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum OrderRateLimitExceededMode {
     DoNothing,
     CancelOnly,
