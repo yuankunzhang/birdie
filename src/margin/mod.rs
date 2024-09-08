@@ -1,3 +1,4 @@
+pub mod account;
 pub mod borrow_and_repay;
 pub mod market;
 pub mod trade;
@@ -12,6 +13,10 @@ pub struct RestApiCategory<'r> {
 impl<'r> RestApiCategory<'r> {
     pub fn new(client: &'r RestApiClient) -> Self {
         RestApiCategory { client }
+    }
+
+    pub fn account(&self) -> account::RestApiHandler {
+        account::RestApiHandler::new(self.client)
     }
 
     pub fn borrow_and_repay(&self) -> borrow_and_repay::RestApiHandler {
