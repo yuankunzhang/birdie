@@ -1,34 +1,10 @@
 //! Data models.
 use serde::Deserialize;
 
-use crate::{
-    enums::OrderType,
-    spot::{
-        account::Balance,
-        trade::{OrderListItem, OrderListReport},
-    },
+use crate::spot::{
+    account::Balance,
+    trade::{OrderListItem, OrderListReport},
 };
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Symbol {
-    pub symbol: String,
-    pub status: String,
-    pub base_asset: String,
-    pub base_asset_precision: i64,
-    pub quote_asset: String,
-    pub quote_asset_precision: i64,
-    pub base_commission_precision: i64,
-    pub quote_commission_precision: i64,
-    pub order_types: Vec<OrderType>,
-    pub iceberg_allowed: bool,
-    pub oco_allowed: bool,
-    pub oto_allowed: bool,
-    pub quote_order_qty_market_allowed: bool,
-    pub allow_trailing_stop: bool,
-    pub is_spot_trading_allowed: bool,
-    pub is_margin_trading_allowed: bool,
-}
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
