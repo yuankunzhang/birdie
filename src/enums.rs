@@ -160,7 +160,7 @@ pub enum TimeInForce {
     Fok, // Fill or kill
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum SelfTradePreventionMode {
     ExpireTaker,

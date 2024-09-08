@@ -81,6 +81,7 @@ use crate::spot::account;
 use crate::spot::general;
 use crate::spot::market;
 use crate::spot::trade;
+use crate::spot::user_data_stream;
 use crate::Params;
 use crate::Response;
 
@@ -134,6 +135,10 @@ impl RestApiClient {
         trade::RestApiHandler::new(self)
     }
 
+    pub fn user_data_stream(&self) -> user_data_stream::RestApiHandler {
+        user_data_stream::RestApiHandler::new(self)
+    }
+
     pub fn margin(&self) -> margin::RestApiCategory {
         margin::RestApiCategory::new(self)
     }
@@ -153,6 +158,27 @@ impl RestApiClient {
         info!("send request to {url}");
 
         let req = self.client.request(method, url);
+        Self::send_request(req).await
+    }
+
+    pub(self) async fn auth_request<P, R>(
+        &self,
+        method: Method,
+        endpoint: &str,
+        params: P,
+    ) -> Result<R, RestApiError>
+    where
+        P: Params,
+        R: Response,
+    {
+        let mut url = self.base_url.join(endpoint)?;
+        url.set_query(Some(&params.as_query()?));
+        info!("send auth request to {url}");
+
+        let req = self
+            .client
+            .request(method, url)
+            .header("X-MBX-APIKEY", &self.api_key);
         Self::send_request(req).await
     }
 
@@ -225,6 +251,11 @@ pub trait Endpoint {
             SecurityType::None => {
                 self.client()
                     .request(self.method(), self.path(), params)
+                    .await
+            }
+            SecurityType::UserStream => {
+                self.client()
+                    .auth_request(self.method(), self.path(), params)
                     .await
             }
             _ => {

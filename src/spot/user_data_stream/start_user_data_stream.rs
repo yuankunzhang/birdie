@@ -30,6 +30,18 @@ impl<'r> StartUserDataStreamEndpoint<'r> {
 #[serde(rename_all = "camelCase")]
 pub struct StartUserDataStreamParams {}
 
+impl Default for StartUserDataStreamParams {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl StartUserDataStreamParams {
+    pub fn new() -> Self {
+        Self {}
+    }
+}
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct StartUserDataStreamResponse {

@@ -14,9 +14,34 @@ pub enum WebSocketStreamError {
     WebSocket(#[from] tungstenite::Error),
 }
 
-pub async fn connect_streams<P>(
+pub async fn connect_combined_streams<P>(
     endpoint: &str,
     streams: &[&str],
+    data_channel: mpsc::Sender<P>,
+    status_channel: mpsc::Sender<ConnectionStatus>,
+) -> Result<(), WebSocketStreamError>
+where
+    P: Payload,
+{
+    let endpoint = format!("{endpoint}/stream?streams={}", streams.join("/"));
+    connect_stream(&endpoint, data_channel, status_channel).await
+}
+
+pub async fn connect_raw_stream<P>(
+    endpoint: &str,
+    stream: &str,
+    data_channel: mpsc::Sender<P>,
+    status_channel: mpsc::Sender<ConnectionStatus>,
+) -> Result<(), WebSocketStreamError>
+where
+    P: Payload,
+{
+    let endpoint = format!("{endpoint}/ws/{}", stream);
+    connect_stream(&endpoint, data_channel, status_channel).await
+}
+
+pub async fn connect_stream<P>(
+    endpoint: &str,
     data_channel: mpsc::Sender<P>,
     status_channel: mpsc::Sender<ConnectionStatus>,
 ) -> Result<(), WebSocketStreamError>
@@ -28,7 +53,7 @@ where
     let (status_relay_tx, mut status_relay_rx) = mpsc::channel(CHANNEL_BUFFER);
 
     let client = WebSocketClient::new(
-        &format!("{endpoint}/stream?streams={}", streams.join("/")),
+        endpoint,
         peer_read_channel,
         peer_write_channel,
         status_relay_tx,
@@ -39,7 +64,6 @@ where
         loop {
             tokio::select! {
                 Some(msg) = read_channel.recv() => {
-                    println!("msg: {msg}");
                     let payload = match serde_json::from_str::<P>(&msg) {
                         Ok(payload) => payload,
                         Err(err) => {
