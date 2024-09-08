@@ -9,7 +9,7 @@ use birdie::{
 mod common;
 
 #[tokio::test]
-async fn rest_get_future_hourly_interest_rate() {
+async fn rest_margin_get_future_hourly_interest_rate() {
     let client = common::setup_rest_api_client();
     let params = GetFutureHourlyInterestRateParams::new("BTCUSDT", "FALSE");
     let resp = client
@@ -22,7 +22,7 @@ async fn rest_get_future_hourly_interest_rate() {
 }
 
 #[tokio::test]
-async fn rest_get_interest_history() {
+async fn rest_margin_get_interest_history() {
     let client = common::setup_rest_api_client();
     let params = GetInterestHistoryParams::new();
     let resp = client
@@ -35,7 +35,7 @@ async fn rest_get_interest_history() {
 }
 
 #[tokio::test]
-async fn rest_query_borrow_repay_records() {
+async fn rest_margin_query_borrow_repay_records() {
     let client = common::setup_rest_api_client();
     let params = QueryBorrowRepayRecordsParams::new("BORROW");
     let resp = client
@@ -48,7 +48,7 @@ async fn rest_query_borrow_repay_records() {
 }
 
 #[tokio::test]
-async fn rest_query_margin_interest_rate_history() {
+async fn rest_margin_query_margin_interest_rate_history() {
     let client = common::setup_rest_api_client();
     let params = QueryMarginInterestRateHistoryParams::new("BTC");
     let resp = client
@@ -61,7 +61,7 @@ async fn rest_query_margin_interest_rate_history() {
 }
 
 #[tokio::test]
-async fn rest_query_max_borrow() {
+async fn rest_margin_query_max_borrow() {
     let client = common::setup_rest_api_client();
     let params = QueryMaxBorrowParams::new("BTC");
     let resp = client
