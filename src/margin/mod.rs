@@ -1,3 +1,11 @@
+//! # Binance's Margin Trading REST API.
+//!
+//! - [`account`] Account endpoints.
+//! - [`borrow_and_repay`] Borrow and repay endpoints.
+//! - [`market`] Market endpoints.
+//! - [`trade`] Trade endpoints.
+//! - [`transfer`] Transfer endpoints.
+//!
 pub mod account;
 pub mod borrow_and_repay;
 pub mod market;

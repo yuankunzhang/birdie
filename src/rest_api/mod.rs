@@ -1,10 +1,12 @@
 //! # Binance's REST API.
 //!
-//! - [`account`] Account endpoints.
-//! - [`general`] General endpoints.
-//! - [`market`] Market endpoints.
-//! - [`trade`] Trade endpoints.
-//! - [`user_data_stream`] User data stream endpoints.
+//! - Spot trading API
+//!   - [`account`] Account endpoints.
+//!   - [`general`] General endpoints.
+//!   - [`market`] Market endpoints.
+//!   - [`trade`] Trade endpoints.
+//!   - [`user_data_stream`] User data stream endpoints.
+//! - [Margin trading API](`mod@margin`)
 //!
 //! ## How to Use
 //!

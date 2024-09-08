@@ -105,7 +105,7 @@ pub struct CrossIsolatedMarginCapitalFlow {
     pub tran_id: i64,
     pub timestamp: i64,
     pub asset: String,
-    pub symbol: String,
+    pub symbol: Option<String>,
     pub r#type: String,
     pub amount: String,
 }

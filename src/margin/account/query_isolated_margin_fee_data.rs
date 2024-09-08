@@ -14,7 +14,7 @@ endpoint!(
 );
 
 /// Get isolated margin fee data collection with any vip level or user's current
-/// specific data as https://www.binance.com/en/margin-fee.
+/// specific data as <https://www.binance.com/en/margin-fee>.
 ///
 /// - Weight:
 ///   - when symbol is specified: 1
@@ -71,7 +71,7 @@ pub type QueryIsolatedMarginFeeDataResponse = Vec<IsolatedMarginFee>;
 pub struct IsolatedMarginFee {
     pub vip_level: i64,
     pub symbol: String,
-    pub leverage: i64,
+    pub leverage: String,
     pub data: Vec<IsolatedMarginFeeData>,
 }
 

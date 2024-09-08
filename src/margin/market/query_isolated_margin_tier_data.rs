@@ -14,7 +14,7 @@ endpoint!(
 );
 
 /// Get isolated margin tier data collection with any tier as
-/// https://www.binance.com/en/margin-data.
+/// <https://www.binance.com/en/margin-data>.
 ///
 /// - Weight: 1
 pub struct QueryIsolatedMarginTierDataEndpoint<'r> {

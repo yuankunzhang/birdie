@@ -66,7 +66,7 @@ impl ToggleBnbBurnOnSpotTradeAndMarginInterestParams {
 #[derive(Debug, Deserialize)]
 pub struct ToggleBnbBurnOnSpotTradeAndMarginInterestResponse {
     #[serde(rename = "spotBNBBurn")]
-    pub spot_bnb_burn: String,
+    pub spot_bnb_burn: bool,
     #[serde(rename = "interestBNBBurn")]
-    pub interest_bnb_burn: String,
+    pub interest_bnb_burn: bool,
 }

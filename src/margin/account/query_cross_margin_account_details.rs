@@ -57,7 +57,7 @@ pub struct QueryCrossMarginAccountDetailsResponse {
     pub total_asset_of_btc: String,
     pub total_liability_of_btc: String,
     pub total_net_asset_of_btc: String,
-    pub total_collateral_value_in_usdt: String,
+    pub total_collateral_value_in_usdt: Option<String>,
     pub trade_enabled: bool,
     pub transfer_enabled: bool,
     pub account_type: String,
