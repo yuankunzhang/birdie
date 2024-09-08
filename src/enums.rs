@@ -9,8 +9,10 @@ use serde::{Deserialize, Serialize};
 pub enum SecurityType {
     None,
     Trade,
+    Margin,
     UserData,
     UserStream,
+    MarketData,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

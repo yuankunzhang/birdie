@@ -64,6 +64,7 @@ use crate::enums::SecurityType;
 use crate::errors::BinanceError;
 use crate::hmac_signature;
 
+use crate::margin;
 use crate::spot::account;
 use crate::spot::general;
 use crate::spot::market;
@@ -119,6 +120,10 @@ impl RestApiClient {
 
     pub fn trade(&self) -> trade::RestApiHandler {
         trade::RestApiHandler::new(self)
+    }
+
+    pub fn margin(&self) -> margin::RestApiCategory {
+        margin::RestApiCategory::new(self)
     }
 
     pub(self) async fn request<P, R>(

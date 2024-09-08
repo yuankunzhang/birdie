@@ -49,6 +49,7 @@ pub mod web_socket;
 pub mod web_socket_api;
 pub mod web_socket_stream;
 
+pub mod margin;
 pub mod spot;
 
 use base64::{engine::general_purpose::STANDARD as b64, Engine};
