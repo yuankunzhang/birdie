@@ -1,6 +1,7 @@
 //! Enums that apply for both Rest API and WebSocket API.
 //!
 //! See [docs](https://developers.binance.com/docs/binance-spot-api-docs/enums)
+pub mod futures;
 
 use serde::{Deserialize, Serialize};
 
@@ -116,7 +117,7 @@ pub enum OrderType {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum NewOrderRespType {
+pub enum ResponseType {
     Ack,
     Result,
     Full,
@@ -167,14 +168,6 @@ pub enum SelfTradePreventionMode {
     ExpireMaker,
     ExpireBoth,
     None,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum RateLimitType {
-    RequestWeight(RateLimit),
-    Orders(RateLimit),
-    RawRequests(RateLimit),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

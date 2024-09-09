@@ -2,7 +2,7 @@ use birdie::{
     enums::KlineInterval,
     rest_api::Endpoint,
     spot::market::{
-        AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams,
+        AggregateTradesListParams, CurrentAveragePriceParams, KlinesParams,
         OldTradeLookupParams, OrderBookParams, RecentTradesListParams,
         RollingWindowPriceChangeParams, SymbolOrderBookTickerParams, SymbolPriceTickerParams,
         Ticker24hrParams, TradingDayTickerParams, UiKlinesParams,
@@ -50,7 +50,7 @@ async fn rest_aggregate_trades_list() {
 #[tokio::test]
 async fn rest_kline_data() {
     let client = common::setup_rest_api_client();
-    let params = KlineDataParams::new("BTCUSDT", KlineInterval::OneHour).limit(10);
+    let params = KlinesParams::new("BTCUSDT", KlineInterval::OneHour).limit(10);
     let resp = client.market().kline_data().request(params).await;
     assert!(resp.is_ok());
 }

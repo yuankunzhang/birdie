@@ -1,10 +1,10 @@
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{enums::KlineInterval, rest_api::endpoint, web_socket_api::web_socket};
+use crate::{enums::KlineInterval, rest_api::endpoint};
 
 endpoint!(
-    "/api/v3/klines",
+    "/fapi/v1/klines",
     Method::GET,
     KlinesEndpoint,
     KlinesParams,
@@ -14,8 +14,11 @@ endpoint!(
 /// Kline/candlestick bars for a symbol. Klines are uniquely identified by their
 /// open time.
 ///
-/// - Weight: 2
-/// - Data Source: Database
+/// - Weight:
+///   - limit [1,100): 1
+///   - limit [100,500): 2
+///   - limit [500,1000): 5
+///   - limit [1000,): 10
 pub struct KlinesEndpoint<'r> {
     client: &'r crate::rest_api::RestApiClient,
 }
@@ -93,15 +96,3 @@ pub struct Kline(
     pub String, // Taker buy quote asset volume
     pub String, // Unused field, ignore.
 );
-
-web_socket!("klines", KlinesWebSocket, KlinesParams, KlinesResponse);
-
-pub struct KlinesWebSocket<'w> {
-    client: &'w crate::web_socket_api::WebSocketApiClient,
-}
-
-impl<'w> KlinesWebSocket<'w> {
-    pub fn new(client: &'w crate::web_socket_api::WebSocketApiClient) -> Self {
-        Self { client }
-    }
-}

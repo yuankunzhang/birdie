@@ -86,6 +86,7 @@ use crate::spot::general;
 use crate::spot::market;
 use crate::spot::trade;
 use crate::spot::user_data_stream;
+use crate::usd_futures;
 use crate::Params;
 use crate::Response;
 
@@ -107,17 +108,17 @@ pub enum RestApiError {
 
 pub struct RestApiClient {
     pub(self) client: Client,
-    pub(self) base_url: Url,
+    pub(self) endpoint: Url,
     api_key: String,
     secret_key: String,
 }
 
 impl RestApiClient {
-    pub fn new(base_url: &str, api_key: &str, secret_key: &str) -> Result<Self, RestApiError> {
-        let base_url = Url::parse(base_url)?;
+    pub fn new(endpoint: &str, api_key: &str, secret_key: &str) -> Result<Self, RestApiError> {
+        let base_url = Url::parse(endpoint)?;
         Ok(Self {
             client: Client::new(),
-            base_url,
+            endpoint: base_url,
             api_key: api_key.to_string(),
             secret_key: secret_key.to_string(),
         })
@@ -147,6 +148,10 @@ impl RestApiClient {
         margin::RestApiCategory::new(self)
     }
 
+    pub fn usd_futures(&self) -> usd_futures::RestApiCategory {
+        usd_futures::RestApiCategory::new(self)
+    }
+
     pub(self) async fn request<P, R>(
         &self,
         method: Method,
@@ -157,7 +162,7 @@ impl RestApiClient {
         P: Params,
         R: Response,
     {
-        let mut url = self.base_url.join(endpoint)?;
+        let mut url = self.endpoint.join(endpoint)?;
         url.set_query(Some(&params.as_query()?));
         info!("send request to {url}");
 
@@ -175,7 +180,7 @@ impl RestApiClient {
         P: Params,
         R: Response,
     {
-        let mut url = self.base_url.join(endpoint)?;
+        let mut url = self.endpoint.join(endpoint)?;
         url.set_query(Some(&params.as_query()?));
         info!("send auth request to {url}");
 
@@ -196,7 +201,7 @@ impl RestApiClient {
         P: Params,
         R: Response,
     {
-        let mut url = self.base_url.join(endpoint)?;
+        let mut url = self.endpoint.join(endpoint)?;
         let query = params.as_query()?;
         let signature = hmac_signature(&self.secret_key, &query)?;
         let query = format!("{query}&signature={signature}");

@@ -3,7 +3,7 @@ use serde::Deserialize;
 use crate::web_socket_stream::Payload;
 
 #[derive(Clone, Debug)]
-pub enum StreamPayload {
+pub enum SpotStreamPayload {
     AggregatedTrade(AggregatedTrade),
     Trade(Trade),
     Kline(Kline),
@@ -16,9 +16,9 @@ pub enum StreamPayload {
     Depth(Depth),
 }
 
-impl Payload for StreamPayload {}
+impl Payload for SpotStreamPayload {}
 
-impl<'de> Deserialize<'de> for StreamPayload {
+impl<'de> Deserialize<'de> for SpotStreamPayload {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -32,43 +32,43 @@ impl<'de> Deserialize<'de> for StreamPayload {
         let helper = Helper::deserialize(deserializer)?;
 
         if helper.stream.ends_with("@aggTrade") {
-            Ok(StreamPayload::AggregatedTrade(
+            Ok(SpotStreamPayload::AggregatedTrade(
                 AggregatedTrade::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@trade") {
-            Ok(StreamPayload::Trade(
+            Ok(SpotStreamPayload::Trade(
                 Trade::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.contains("@kline_") {
-            Ok(StreamPayload::Kline(
+            Ok(SpotStreamPayload::Kline(
                 Kline::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@miniTicker") {
-            Ok(StreamPayload::MiniTicker(
+            Ok(SpotStreamPayload::MiniTicker(
                 MiniTicker::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@ticker") {
-            Ok(StreamPayload::Ticker(
+            Ok(SpotStreamPayload::Ticker(
                 Ticker::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.contains("@ticker_") {
-            Ok(StreamPayload::RollingWindowTicker(
+            Ok(SpotStreamPayload::RollingWindowTicker(
                 RollingWindowTicker::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@bookTicker") {
-            Ok(StreamPayload::BookTicker(
+            Ok(SpotStreamPayload::BookTicker(
                 BookTicker::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@avgPrice") {
-            Ok(StreamPayload::AvgPrice(
+            Ok(SpotStreamPayload::AvgPrice(
                 AvgPrice::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@depth") {
-            Ok(StreamPayload::Depth(
+            Ok(SpotStreamPayload::Depth(
                 Depth::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if !helper.stream.ends_with("@depth") && helper.stream.contains("@depth") {
-            Ok(StreamPayload::PartialBookDepth(
+            Ok(SpotStreamPayload::PartialBookDepth(
                 PartialBookDepth::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else {
@@ -103,6 +103,8 @@ pub struct AggregatedTrade {
     pub ignore: bool,
 }
 
+impl Payload for AggregatedTrade {}
+
 #[derive(Clone, Debug, Deserialize)]
 pub struct Trade {
     #[serde(rename = "e")]
@@ -125,6 +127,8 @@ pub struct Trade {
     pub ignore: bool,
 }
 
+impl Payload for Trade {}
+
 #[derive(Clone, Debug, Deserialize)]
 pub struct Kline {
     #[serde(rename = "e")]
@@ -136,6 +140,8 @@ pub struct Kline {
     #[serde(rename = "k")]
     pub kline: KlineData,
 }
+
+impl Payload for Kline {}
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct KlineData {
@@ -197,6 +203,8 @@ pub struct MiniTicker {
     pub quote_asset_volume: String,
 }
 
+impl Payload for MiniTicker {}
+
 #[derive(Clone, Debug, Deserialize)]
 pub struct Ticker {
     #[serde(rename = "e")]
@@ -247,6 +255,8 @@ pub struct Ticker {
     pub number_of_trades: i64,
 }
 
+impl Payload for Ticker {}
+
 #[derive(Clone, Debug, Deserialize)]
 pub struct RollingWindowTicker {
     #[serde(rename = "e")]
@@ -285,6 +295,8 @@ pub struct RollingWindowTicker {
     pub number_of_trades: i64,
 }
 
+impl Payload for RollingWindowTicker {}
+
 #[derive(Clone, Debug, Deserialize)]
 pub struct BookTicker {
     #[serde(rename = "u")]
@@ -300,6 +312,8 @@ pub struct BookTicker {
     #[serde(rename = "A")]
     pub best_ask_quantity: String,
 }
+
+impl Payload for BookTicker {}
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct AvgPrice {
@@ -317,6 +331,8 @@ pub struct AvgPrice {
     pub last_trade_time: i64,
 }
 
+impl Payload for AvgPrice {}
+
 #[derive(Clone, Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PartialBookDepth {
@@ -324,6 +340,8 @@ pub struct PartialBookDepth {
     pub bids: Vec<(String, String)>,
     pub asks: Vec<(String, String)>,
 }
+
+impl Payload for PartialBookDepth {}
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Depth {
@@ -342,3 +360,5 @@ pub struct Depth {
     #[serde(rename = "a")]
     pub asks: Vec<(String, String)>,
 }
+
+impl Payload for Depth {}

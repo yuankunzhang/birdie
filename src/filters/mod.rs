@@ -4,6 +4,7 @@
 //!
 //! See [docs](https://developers.binance.com/docs/binance-spot-api-docs/filters)
 //! for more information.
+pub mod futures;
 
 use serde::{Deserialize, Serialize};
 
@@ -14,7 +15,8 @@ pub enum SymbolFilter {
     PercentPrice(PercentPrice),
     PercentPriceBySide(PercentPriceBySide),
     LotSize(LotSize),
-    MinNotional(Notional),
+    MinNotional(MinNotional),
+    Notional(Notional),
     IcebergParts(IcebergParts),
     MarketLotSize(MarketLotSize),
     MaxNumOrders(MaxNumOrders),
@@ -64,6 +66,15 @@ pub struct PercentPriceBySide {
 /// [Lot Size](https://developers.binance.com/docs/binance-spot-api-docs/filters#lot_size)
 #[derive(Debug, Serialize, Deserialize)]
 pub struct LotSize {
+    filter_type: String,
+    min_notional: String,
+    apply_to_market: bool,
+    avg_price_mins: i64,
+}
+
+// [Min Notional](https://developers.binance.com/docs/binance-spot-api-docs/filters#min_notional)
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MinNotional {
     filter_type: String,
     min_notional: String,
     apply_to_market: bool,

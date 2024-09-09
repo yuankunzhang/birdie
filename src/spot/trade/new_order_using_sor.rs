@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        NewOrderRespType, OrderSide, OrderStatus, OrderType, SecurityType, SelfTradePreventionMode,
-        TimeInForce,
+        OrderSide, OrderStatus, OrderType, ResponseType, SecurityType, SelfTradePreventionMode,
+        TimeInForce, WorkingFloor,
     },
     rest_api::endpoint,
     web_socket_api::web_socket,
@@ -55,7 +55,7 @@ pub struct NewOrderUsingSorParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     iceberg_qty: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    new_order_resp_type: Option<NewOrderRespType>,
+    new_order_resp_type: Option<ResponseType>,
     #[serde(skip_serializing_if = "Option::is_none")]
     self_trade_prevention_mode: Option<SelfTradePreventionMode>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -123,7 +123,7 @@ impl NewOrderUsingSorParams {
         self
     }
 
-    pub fn new_order_resp_type(mut self, new_order_resp_type: NewOrderRespType) -> Self {
+    pub fn new_order_resp_type(mut self, new_order_resp_type: ResponseType) -> Self {
         self.new_order_resp_type = Some(new_order_resp_type);
         self
     }
@@ -161,7 +161,7 @@ pub struct NewOrderUsingSorResponse {
     pub side: OrderSide,
     pub working_time: i64,
     pub fills: Vec<SorOrderFill>,
-    pub working_floor: String,
+    pub working_floor: Option<WorkingFloor>,
     pub self_trade_prevention_mode: SelfTradePreventionMode,
     pub used_sor: bool,
 }

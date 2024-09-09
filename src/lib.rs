@@ -58,6 +58,7 @@ pub mod web_socket_stream;
 
 pub mod margin;
 pub mod spot;
+pub mod usd_futures;
 
 use base64::{engine::general_purpose::STANDARD as b64, Engine};
 use ed25519_dalek::{ed25519::signature::SignerMut, pkcs8::DecodePrivateKey, SigningKey};

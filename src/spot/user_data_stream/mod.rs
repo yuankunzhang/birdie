@@ -9,7 +9,7 @@ pub use start_user_data_stream::*;
 use crate::{
     enums::{
         ContingencyType, OrderListOrderStatus, OrderListStatus, OrderSide, OrderType,
-        SelfTradePreventionMode, TimeInForce,
+        SelfTradePreventionMode, TimeInForce, WorkingFloor,
     },
     rest_api::{route, RestApiClient},
     web_socket_stream::Payload,
@@ -180,7 +180,7 @@ pub struct ConditionalData {
     #[serde(rename = "a")]
     pub allocation_id: Option<i64>,
     #[serde(rename = "k")]
-    pub working_floor: Option<String>,
+    pub working_floor: Option<WorkingFloor>,
     #[serde(rename = "uS")]
     pub used_sor: Option<bool>,
 }

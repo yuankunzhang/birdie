@@ -4,7 +4,7 @@ use serde::Serialize;
 
 use crate::{
     enums::{
-        NewOrderRespType, OrderSide, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
+        OrderSide, OrderType, ResponseType, SecurityType, SelfTradePreventionMode, TimeInForce,
     },
     rest_api::{Endpoint, RestApiClient},
     web_socket_api::web_socket,
@@ -71,7 +71,7 @@ pub struct NewOrderListOtocoParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     list_client_order_id: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    new_order_resp_type: Option<NewOrderRespType>,
+    new_order_resp_type: Option<ResponseType>,
     #[serde(skip_serializing_if = "Option::is_none")]
     self_trade_prevention_mode: Option<SelfTradePreventionMode>,
     working_type: OrderType,
@@ -185,7 +185,7 @@ impl NewOrderListOtocoParams {
         self
     }
 
-    pub fn new_order_resp_type(mut self, new_order_resp_type: NewOrderRespType) -> Self {
+    pub fn new_order_resp_type(mut self, new_order_resp_type: ResponseType) -> Self {
         self.new_order_resp_type = Some(new_order_resp_type);
         self
     }

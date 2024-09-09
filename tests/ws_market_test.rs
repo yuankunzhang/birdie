@@ -1,7 +1,7 @@
 use birdie::{
     enums::KlineInterval,
     spot::market::{
-        AggregateTradesListParams, CurrentAveragePriceParams, KlineDataParams,
+        AggregateTradesListParams, CurrentAveragePriceParams, KlinesParams,
         OldTradeLookupParams, OrderBookParams, RecentTradesListParams,
         RollingWindowPriceChangeParams, SymbolOrderBookTickerParams, SymbolPriceTickerParams,
         Ticker24hrParams, TradingDayTickerParams, UiKlinesParams,
@@ -76,7 +76,7 @@ async fn ws_kline_data() {
     client.connect(tx).await.unwrap();
     assert!(matches!(rx.recv().await, Some(ConnectionStatus::Connected)));
 
-    let params = KlineDataParams::new("BTCUSDT", KlineInterval::OneHour).limit(10);
+    let params = KlinesParams::new("BTCUSDT", KlineInterval::OneHour).limit(10);
     let resp = client.market().kline_data().request(params).await;
     assert!(resp.is_ok());
 }

@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        NewOrderRespType, OrderSide, OrderStatus, OrderType, SecurityType, SelfTradePreventionMode,
+        OrderSide, OrderStatus, OrderType, ResponseType, SecurityType, SelfTradePreventionMode,
         SideEffectType, TimeInForce,
     },
     rest_api::endpoint,
@@ -45,7 +45,7 @@ pub struct NewOrderParams {
     stop_price: Option<f64>,
     new_client_order_id: Option<String>,
     iceberg_qty: Option<f64>,
-    new_order_resp_type: Option<NewOrderRespType>,
+    new_order_resp_type: Option<ResponseType>,
     side_effect_type: Option<SideEffectType>,
     time_in_force: Option<TimeInForce>,
     self_trade_prevention_mode: Option<SelfTradePreventionMode>,
@@ -112,7 +112,7 @@ impl NewOrderParams {
         self
     }
 
-    pub fn new_order_resp_type(mut self, new_order_resp_type: NewOrderRespType) -> Self {
+    pub fn new_order_resp_type(mut self, new_order_resp_type: ResponseType) -> Self {
         self.new_order_resp_type = Some(new_order_resp_type);
         self
     }

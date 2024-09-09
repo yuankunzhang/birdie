@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        ContingencyType, NewOrderRespType, OrderListOrderStatus, OrderListStatus, OrderSide,
-        OrderStatus, OrderType, SecurityType, SelfTradePreventionMode, TimeInForce,
+        ContingencyType, OrderListOrderStatus, OrderListStatus, OrderSide, OrderStatus, OrderType,
+        ResponseType, SecurityType, SelfTradePreventionMode, TimeInForce,
     },
     rest_api::endpoint,
     web_socket_api::web_socket,
@@ -89,7 +89,7 @@ pub struct NewOrderListOcoParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     below_strategy_type: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    new_order_resp_type: Option<NewOrderRespType>,
+    new_order_resp_type: Option<ResponseType>,
     #[serde(skip_serializing_if = "Option::is_none")]
     self_trade_prevention_mode: Option<SelfTradePreventionMode>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -237,7 +237,7 @@ impl NewOrderListOcoParams {
 
     /// Set the response JSON. ACK, RESULT, or FULL; MARKET and LIMIT order types
     /// default to FULL, all other orders default to ACK.
-    pub fn new_order_resp_type(mut self, new_order_resp_type: NewOrderRespType) -> Self {
+    pub fn new_order_resp_type(mut self, new_order_resp_type: ResponseType) -> Self {
         self.new_order_resp_type = Some(new_order_resp_type);
         self
     }

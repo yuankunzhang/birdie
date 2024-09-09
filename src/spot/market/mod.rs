@@ -56,7 +56,7 @@ impl<'r> RestApiHandler<'r> {
     route!(recent_trades_list, RecentTradesListEndpoint);
     route!(old_trade_lookup, OldTradeLookupEndpoint);
     route!(aggregate_trades_list, AggregateTradesListEndpoint);
-    route!(kline_data, KlineDataEndpoint);
+    route!(kline_data, KlinesEndpoint);
     route!(ui_klines, UiKlinesEndpoint);
     route!(current_average_price, CurrentAveragePriceEndpoint);
     route!(ticker_24hr, Ticker24hrEndpoint);
@@ -82,7 +82,7 @@ impl<'w> WebSocketApiHandler<'w> {
     ws_route!(recent_trades_list, RecentTradesListWebSocket);
     ws_route!(old_trade_lookup, OldTradeLookupWebSocket);
     ws_route!(aggregate_trades_list, AggregateTradesListWebSocket);
-    ws_route!(kline_data, KlineDataWebSocket);
+    ws_route!(kline_data, KlinesWebSocket);
     ws_route!(ui_klines, UiKlinesWebSocket);
     ws_route!(current_average_price, CurrentAveragePriceWebSocket);
     ws_route!(ticker_24hr, Ticker24hrWebSocket);

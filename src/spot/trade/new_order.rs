@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     enums::{
-        NewOrderRespType, OrderSide, OrderStatus, OrderType, SecurityType, SelfTradePreventionMode,
-        TimeInForce,
+        OrderSide, OrderStatus, OrderType, ResponseType, SecurityType, SelfTradePreventionMode,
+        TimeInForce, WorkingFloor,
     },
     rest_api::endpoint,
     web_socket_api::web_socket,
@@ -74,7 +74,7 @@ pub struct NewOrderParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     iceberg_qty: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    new_order_resp_type: Option<NewOrderRespType>,
+    new_order_resp_type: Option<ResponseType>,
     #[serde(skip_serializing_if = "Option::is_none")]
     self_trade_prevention_mode: Option<SelfTradePreventionMode>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -159,7 +159,7 @@ impl NewOrderParams {
         self
     }
 
-    pub fn new_order_resp_type(mut self, new_order_resp_type: NewOrderRespType) -> Self {
+    pub fn new_order_resp_type(mut self, new_order_resp_type: ResponseType) -> Self {
         self.new_order_resp_type = Some(new_order_resp_type);
         self
     }
@@ -287,7 +287,7 @@ pub struct ConditionalFields {
     /// Field that determines whether the order is being filled by the SOR or by
     /// the order book the order was submitted to. Appears when placing orders
     /// using SOR
-    pub working_floor: Option<String>,
+    pub working_floor: Option<WorkingFloor>,
 }
 
 web_socket!(
