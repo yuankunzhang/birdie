@@ -1,36 +1,44 @@
 //! # Binance's REST API.
 //!
-//! - Spot trading API
-//!   - [`account`] Account endpoints.
-//!   - [`general`] General endpoints.
-//!   - [`market`] Market endpoints.
-//!   - [`trade`] Trade endpoints.
-//!   - [`user_data_stream`] User data stream endpoints.
+//! - [Spot trading API](`mod@spot`)
+//!   - [`spot::account`] Account endpoints.
+//!   - [`spot::general`] General endpoints.
+//!   - [`spot::market`] Market endpoints.
+//!   - [`spot::trade`] Trade endpoints.
+//!   - [`spot::user_data_stream`] User data stream endpoints.
 //! - [Margin trading API](`mod@margin`)
+//!   - [`margin::account`] Account endpoints.
+//!   - [`margin::borrow_and_repay`] Borrow and repay endpoints.
+//!   - [`margin::market`] Market endpoints.
+//!   - [`margin::risk_data_stream`] Risk data stream endpoints.
+//!   - [`margin::trade`] Trade endpoints.
+//!   - [`margin::trade_data_stream`] Trade data stream endpoints.
+//!   - [`margin::transfer`] Transfer endpoints.
 //!
 //! ## How to Use
 //!
 //! To use the REST API client, create a instance of the client first:
 //!
 //! ```rust
-//! let base_url = "https://api.binance.com";
+//! let endpoint = "https://api.binance.com";
 //! let api_key = "your_api_key";
 //! let api_secret = "your_api_secret";
-//! let client = birdie::rest_api(base_url, api_key, api_secret).unwrap();
+//! let client = birdie::rest_api(endpoint, api_key, api_secret).unwrap();
 //! ```
 //!
 //! Once you have the client, the calling of a request is done with the
 //! following hierarchical pattern:
 //!
 //! ```txt
-//! let resp = client.general().test_connectivity().request(params).await
-//!     ----   ------ --------- ------------------- ------- ------
-//!     |      |      |         |                   |       |
-//!     |      |      |         |                   |       \
-//!     |      |      |         |                   \        The request params
-//!     |      |      |         \                     The request
-//!     |      |      \           The endpoint
-//!     |      \        The endpoint category
+//! let resp = client.spot().general().test_connectivity().request(params).await
+//!     ----   ------ ------ --------- ------------------- ------- ------
+//!     |      |      |      |         |                   |       |
+//!     |      |      |      |         |                   |       \
+//!     |      |      |      |         |                   \        The request params
+//!     |      |      |      |         \                     The request
+//!     |      |      |      \           The endpoint
+//!     |      |      \        The endpoint category
+//!     |      \        The API category
 //!     \        The REST API client
 //!      The response
 //! ```
@@ -81,6 +89,7 @@ use crate::errors::BinanceError;
 use crate::hmac_signature;
 
 use crate::margin;
+use crate::spot;
 use crate::spot::account;
 use crate::spot::general;
 use crate::spot::market;
@@ -142,6 +151,10 @@ impl RestApiClient {
 
     pub fn user_data_stream(&self) -> user_data_stream::RestApiHandler {
         user_data_stream::RestApiHandler::new(self)
+    }
+
+    pub fn spot(&self) -> spot::RestApiCategory {
+        spot::RestApiCategory::new(self)
     }
 
     pub fn margin(&self) -> margin::RestApiCategory {

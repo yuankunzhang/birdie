@@ -3,49 +3,89 @@
 //! Birdie is a third party Binance API client, allowing you to easily interact
 //! with the Binance API using Rust.
 //!
-//! ## Read First
+//! ## Disclaimer
 //!
+//! - This is a third party client and is not affiliated with Binance. Use at
+//!   your own risk.
+//! - While we will try to keep this client aligned with the official Binance
+//!   API specification, please refer to the official Binance API documentation
+//!   for the most up-to-date information.
 //! - Always test your code.
-//! - This is a third part client, please refer to the official Binance API
-//!   documentation for the most up-to-date information.
-//! - Since the API specification doesn't specify number sizes or signedness,
-//!   all integer fields are treated as `i64`, all floating point fields are
-//!   treated as `f64`.
 //!
 //! ## Components
 //!
 //! Birdie is divided into several components, each representing a different
 //! part of the Binance API:
 //!
-//! - [`fix_api`] - FIX API client (stub).
+//! - [`mod@fix_api`] - FIX API client (stub).
 //! - [`mod@rest_api`] - REST API client.
+//!   - [`mod@spot`] - Spot API.
+//!   - [`mod@margin`] - Margin API.
+//!   - [`mod@usd_futures`] - USD Futures API (WIP).
 //! - [`mod@web_socket_api`] - Web Socket API client.
-//! - [`web_socket_stream`] - Web Socket stream client.
+//! - [`mod@web_socket_stream`] - Web Socket stream client.
 //!
 //! ## REST API Client
 //!
+//! See the [`mod@rest_api`] module for more information.
+//!
 //! To interact with the Binance REST API, create a REST API client first.
 //!
-//! ```rust
-//! let base_url = "https://api.binance.com";
+//! ```no_run
+//! let endpoint = "https://api.binance.com";
 //! let api_key = "your_api_key";
 //! let api_secret = "your_api_secret";
-//! let client = birdie::rest_api(base_url, api_key, api_secret).unwrap();
+//! let client = birdie::rest_api(endpoint, api_key, api_secret).unwrap();
 //! ```
 //!
 //! Once you have the client, you can access the different categories of the
-//! API and the different endpoints. For example, to access the account
-//! information endpoint (note how the endpoint is accessed):
+//! API and the different endpoints.
+//!
+//! ### Example 1: retrieve account information
+//!
+//! Also see the `account_balances.rs` example in the `examples/` directory.
 //!
 //! ```no_run
 //! use birdie::{rest_api::Endpoint, spot::account::AccountInformationParams};
 //!
 //! let params = AccountInformationParams::new().omit_zero_balances(true);
-//! let resp = client.account().account_information().request(params).await;
+//! let resp = client.spot().account().account_information().request(params).await;
 //! assert!(resp.is_ok());
 //! ```
 //!
-//! See the [`mod@rest_api`] module for more information.
+//! ### Example 2: retrieve klines of a symbol
+//!
+//! Also see the `klines.rs` example in the `examples/` directory.
+//!
+//! ```no_run
+//! use birdie::{enums::KlineInterval, rest_api::Endpoint, spot::market::KlinesParams};
+//!
+//! let params = KlinesParams::new("BTCUSDT", KlineInterval::OneMinute).limit(5);
+//! let klines = client.spot().market().klines().request(params).await;
+//! assert!(klines.is_ok());
+//! ```
+//!
+//! ### Example 3: place a limit order
+//!
+//! ```no_run
+//! use birdie::{
+//!     enums::{OrderSide, OrderType},
+//!     rest_api::Endpoint,
+//!     spot::trade::NewOrderParams,
+//! };
+//!
+//! let params = NewOrderParams::new("SOLUSDT", OrderSide::Buy, OrderType::Limit)
+//!     .time_in_force(birdie::enums::TimeInForce::Gtc)
+//!     .new_order_resp_type(birdie::enums::ResponseType::Result)
+//!     .quantity(1.0)
+//!     .price(100.0);
+//! let resp = client.trade().new_order().request(params).await;
+//! assert!(resp.is_ok());
+//! ````
+//!
+//! ## Web Socket API Client
+//!
+//! ## Web Socket Streams
 
 pub mod enums;
 pub mod errors;

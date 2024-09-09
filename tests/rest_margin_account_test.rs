@@ -11,7 +11,7 @@ use birdie::{
 mod common;
 
 #[tokio::test]
-async fn rest_margin_get_bnb_burn_statu() {
+async fn rest_margin_get_bnb_burn_status() {
     let client = common::setup_rest_api_client();
     let params = GetBnbBurnStatusParams::new();
     let resp = client

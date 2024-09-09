@@ -3,7 +3,7 @@ use serde::Deserialize;
 use crate::web_socket_stream::Payload;
 
 #[derive(Clone, Debug)]
-pub enum SpotStreamPayload {
+pub enum SpotStreamPayloadload {
     AggregatedTrade(AggregatedTrade),
     Trade(Trade),
     Kline(Kline),
@@ -16,9 +16,9 @@ pub enum SpotStreamPayload {
     Depth(Depth),
 }
 
-impl Payload for SpotStreamPayload {}
+impl Payload for SpotStreamPayloadload {}
 
-impl<'de> Deserialize<'de> for SpotStreamPayload {
+impl<'de> Deserialize<'de> for SpotStreamPayloadload {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -32,43 +32,43 @@ impl<'de> Deserialize<'de> for SpotStreamPayload {
         let helper = Helper::deserialize(deserializer)?;
 
         if helper.stream.ends_with("@aggTrade") {
-            Ok(SpotStreamPayload::AggregatedTrade(
+            Ok(SpotStreamPayloadload::AggregatedTrade(
                 AggregatedTrade::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@trade") {
-            Ok(SpotStreamPayload::Trade(
+            Ok(SpotStreamPayloadload::Trade(
                 Trade::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.contains("@kline_") {
-            Ok(SpotStreamPayload::Kline(
+            Ok(SpotStreamPayloadload::Kline(
                 Kline::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@miniTicker") {
-            Ok(SpotStreamPayload::MiniTicker(
+            Ok(SpotStreamPayloadload::MiniTicker(
                 MiniTicker::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@ticker") {
-            Ok(SpotStreamPayload::Ticker(
+            Ok(SpotStreamPayloadload::Ticker(
                 Ticker::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.contains("@ticker_") {
-            Ok(SpotStreamPayload::RollingWindowTicker(
+            Ok(SpotStreamPayloadload::RollingWindowTicker(
                 RollingWindowTicker::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@bookTicker") {
-            Ok(SpotStreamPayload::BookTicker(
+            Ok(SpotStreamPayloadload::BookTicker(
                 BookTicker::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@avgPrice") {
-            Ok(SpotStreamPayload::AvgPrice(
+            Ok(SpotStreamPayloadload::AvgPrice(
                 AvgPrice::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if helper.stream.ends_with("@depth") {
-            Ok(SpotStreamPayload::Depth(
+            Ok(SpotStreamPayloadload::Depth(
                 Depth::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else if !helper.stream.ends_with("@depth") && helper.stream.contains("@depth") {
-            Ok(SpotStreamPayload::PartialBookDepth(
+            Ok(SpotStreamPayloadload::PartialBookDepth(
                 PartialBookDepth::deserialize(helper.data).map_err(serde::de::Error::custom)?,
             ))
         } else {
