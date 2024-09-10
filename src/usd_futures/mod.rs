@@ -1,7 +1,7 @@
 // pub mod account;
 pub mod convert;
 pub mod market;
-// pub mod trade;
+pub mod trade;
 
 use crate::rest_api::RestApiClient;
 
@@ -26,7 +26,7 @@ impl<'r> RestApiCategory<'r> {
         market::RestApiHandler::new(self.client)
     }
 
-    // pub fn trade(&self) -> trade::RestApiHandler {
-    //     trade::RestApiHandler::new(self.client)
-    // }
+    pub fn trade(&self) -> trade::RestApiHandler {
+        trade::RestApiHandler::new(self.client)
+    }
 }
