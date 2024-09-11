@@ -2,14 +2,7 @@ use jiff::Timestamp;
 use reqwest::Method;
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    enums::{
-        futures::{OrderSide, OrderStatus, PositionSide, TimeInForce, WorkingType},
-        OrderType, SecurityType, SelfTradePreventionMode,
-    },
-    errors::BinanceError,
-    rest_api::endpoint,
-};
+use crate::{enums::SecurityType, errors::BinanceError, rest_api::endpoint};
 
 use super::{ModifyOrderDetail, ModifyOrderInput};
 

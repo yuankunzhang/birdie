@@ -69,11 +69,11 @@ impl<'r> RestApiHandler<'r> {
     route!(modify_multiple_orders, ModifyMultipleOrdersEndpoint);
     route!(get_order_modify_history, GetOrderModifyHistoryEndpoint);
     route!(cancel_order, CancelOrderEndpoint);
-    // route!(cancel_multiple_orders, CancelMultipleOrdersEndpoint);
-    // route!(cancel_all_open_orders, CancelAllOpenOrdersEndpoint);
-    // route!(auto_cancel_all_open_orders, AutoCancelAllOpenOrdersEndpoint);
-    // route!(query_order, QueryOrderEndpoint);
-    // route!(query_all_orders, QueryAllOrdersEndpoint);
+    route!(cancel_multiple_orders, CancelMultipleOrdersEndpoint);
+    route!(cancel_all_open_orders, CancelAllOpenOrdersEndpoint);
+    route!(auto_cancel_all_open_orders, AutoCancelAllOpenOrdersEndpoint);
+    route!(query_order, QueryOrderEndpoint);
+    route!(query_all_orders, QueryAllOrdersEndpoint);
     // route!(
     //     query_current_all_open_orders,
     //     QueryCurrentAllOpenOrdersEndpoint
