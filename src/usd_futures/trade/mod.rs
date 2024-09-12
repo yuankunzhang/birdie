@@ -1,5 +1,3 @@
-#![allow(unused_imports)]
-
 mod auto_cancel_all_open_orders;
 mod cancel_all_open_orders;
 mod cancel_multiple_orders;
@@ -21,9 +19,9 @@ mod position_informatin_v3;
 mod query_account_trade_list;
 mod query_all_orders;
 mod query_current_all_open_orders;
-mod query_current_open_orders;
+mod query_current_open_order;
+mod query_force_orders;
 mod query_order;
-mod query_users_force_orders;
 mod test_new_order;
 
 pub use auto_cancel_all_open_orders::*;
@@ -47,9 +45,9 @@ pub use position_informatin_v3::*;
 pub use query_account_trade_list::*;
 pub use query_all_orders::*;
 pub use query_current_all_open_orders::*;
-pub use query_current_open_orders::*;
+pub use query_current_open_order::*;
+pub use query_force_orders::*;
 pub use query_order::*;
-pub use query_users_force_orders::*;
 pub use test_new_order::*;
 
 use crate::rest_api::{route, RestApiClient};
@@ -74,12 +72,12 @@ impl<'r> RestApiHandler<'r> {
     route!(auto_cancel_all_open_orders, AutoCancelAllOpenOrdersEndpoint);
     route!(query_order, QueryOrderEndpoint);
     route!(query_all_orders, QueryAllOrdersEndpoint);
-    // route!(
-    //     query_current_all_open_orders,
-    //     QueryCurrentAllOpenOrdersEndpoint
-    // );
-    // route!(query_current_open_orders, QueryCurrentOpenOrdersEndpoint);
-    // route!(query_users_force_orders, QueryUsersForceOrdersEndpoint);
+    route!(
+        query_current_all_open_orders,
+        QueryCurrentAllOpenOrdersEndpoint
+    );
+    route!(query_current_open_orders, QueryCurrentOpenOrderEndpoint);
+    route!(query_users_force_orders, QueryForceOrdersEndpoint);
     // route!(query_account_trade_list, QueryAccountTradeListEndpoint);
     // route!(change_margin_type, ChangeMarginTypeEndpoint);
     // route!(change_position_mode, ChangePositionModeEndpoint);

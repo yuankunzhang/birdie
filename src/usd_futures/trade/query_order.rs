@@ -13,7 +13,7 @@ use crate::{
 endpoint!(
     "/fapi/v1/order",
     Method::GET,
-    SecurityType::Trade,
+    SecurityType::UserData,
     QueryOrderEndpoint,
     QueryOrderParams,
     QueryOrderResponse
