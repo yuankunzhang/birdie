@@ -1,3 +1,4 @@
+mod account_trade_list;
 mod auto_cancel_all_open_orders;
 mod cancel_all_open_orders;
 mod cancel_multiple_orders;
@@ -16,7 +17,6 @@ mod place_multiple_orders;
 mod position_adl_quantile_estimation;
 mod position_informatin_v2;
 mod position_informatin_v3;
-mod query_account_trade_list;
 mod query_all_orders;
 mod query_current_all_open_orders;
 mod query_current_open_order;
@@ -24,6 +24,7 @@ mod query_force_orders;
 mod query_order;
 mod test_new_order;
 
+pub use account_trade_list::*;
 pub use auto_cancel_all_open_orders::*;
 pub use cancel_all_open_orders::*;
 pub use cancel_multiple_orders::*;
@@ -42,7 +43,6 @@ pub use place_multiple_orders::*;
 pub use position_adl_quantile_estimation::*;
 pub use position_informatin_v2::*;
 pub use position_informatin_v3::*;
-pub use query_account_trade_list::*;
 pub use query_all_orders::*;
 pub use query_current_all_open_orders::*;
 pub use query_current_open_order::*;
@@ -78,24 +78,24 @@ impl<'r> RestApiHandler<'r> {
     );
     route!(query_current_open_orders, QueryCurrentOpenOrderEndpoint);
     route!(query_users_force_orders, QueryForceOrdersEndpoint);
-    // route!(query_account_trade_list, QueryAccountTradeListEndpoint);
-    // route!(change_margin_type, ChangeMarginTypeEndpoint);
-    // route!(change_position_mode, ChangePositionModeEndpoint);
-    // route!(change_initial_leverage, ChangeInitialLeverageEndpoint);
-    // route!(change_multi_assets_mode, ChangeMultiAssetsModeEndpoint);
-    // route!(
-    //     modify_isolated_position_margin,
-    //     ModifyIsolatedPositionMarginEndpoint
-    // );
-    // route!(position_informatin_v2, PositionInformationV2Endpoint);
-    // route!(position_informatin_v3, PositionInformationV3Endpoint);
-    // route!(
-    //     position_adl_quantile_estimation,
-    //     PositionAdlQuantileEstimationEndpoint
-    // );
-    // route!(
-    //     get_position_margin_change_history,
-    //     GetPositionMarginChangeHistoryEndpoint
-    // );
-    // route!(test_new_order, TestNewOrderEndpoint);
+    route!(account_trade_list, AccountTradeListEndpoint);
+    route!(change_margin_type, ChangeMarginTypeEndpoint);
+    route!(change_position_mode, ChangePositionModeEndpoint);
+    route!(change_initial_leverage, ChangeInitialLeverageEndpoint);
+    route!(change_multi_assets_mode, ChangeMultiAssetsModeEndpoint);
+    route!(
+        modify_isolated_position_margin,
+        ModifyIsolatedPositionMarginEndpoint
+    );
+    route!(position_informatin_v2, PositionInformationV2Endpoint);
+    route!(position_informatin_v3, PositionInformationV3Endpoint);
+    route!(
+        position_adl_quantile_estimation,
+        PositionAdlQuantileEstimationEndpoint
+    );
+    route!(
+        get_position_margin_change_history,
+        GetPositionMarginChangeHistoryEndpoint
+    );
+    route!(test_new_order, TestNewOrderEndpoint);
 }
